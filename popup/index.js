@@ -2,22 +2,20 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
-import { Router, browserHistory } from 'react-router'
 
-import Routes from './Routes';
+import App from './components/App';
 
-import './styles/index.less';
+const proxyStore = new Store({ portName: 'messaging' });
 
+const anchor = document.createElement('div');
+anchor.id = 'anchor';
 
-const proxyStore = new Store({
-    portName: 'careerscore'
-});
+document.body.insertBefore(anchor, document.body.childNodes[0]);
 
-render( 
+render(
     <Provider store={proxyStore}>
-        <Router history={browserHistory}>
-            {Routes}
-        </Router>
-    </Provider>,
-    document.getElementById('container')
+        <App/>
+    </Provider>
+    ,
+    document.getElementById('anchor')
 );

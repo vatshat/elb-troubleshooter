@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
-import sampleState from './sampleState';
+import count from './count';
 
 export default combineReducers({
-    sampleState
+    count
 });

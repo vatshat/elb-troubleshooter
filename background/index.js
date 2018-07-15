@@ -16,7 +16,7 @@ const store = compose(
 )(createStore)(rootReducer);
 
 wrapStore(store, {
-    portName: 'example'
+    portName: 'messaging'
 });
 
 chrome.tabs.onActivated.addListener(function(tabId, changeInfo, tab) {
