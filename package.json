@@ -34,7 +34,7 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "commander": "^2.9.0",
-    "css-loader": "^0.25.0",
+    "css-loader": "^0.28.11",
     "fs-extra": "^2.0.0",
     "imports-loader": "^0.6.5",
     "less": "^2.7.1",
@@ -46,7 +46,7 @@
     "react-hot-loader": "^3.0.0-beta.5",
     "redux-logger": "^2.7.0",
     "redux-thunk": "^2.1.0",
-    "style-loader": "^0.13.1",
-    "webpack": "^1.13.2"
+    "style-loader": "^0.21.0",
+    "webpack": "^3.12.0"
   }
 }

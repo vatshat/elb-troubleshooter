@@ -19,10 +19,10 @@ class Layout extends Component {
 
         return (
             <div>
-                            
+
                 <Nav location={location} />
 
-                <div className='container'>
+                <div className='container' style={containerStyle}>
                     <div className='row'>
                         <div className='col-lg-12'>
 
