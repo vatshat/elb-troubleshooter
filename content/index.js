@@ -2,9 +2,9 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
-import { Router, browserHistory } from 'react-router'
+import { BrowserRouter } from 'react-router-dom'
 
-import Routes from './Routes';
+import App from './components/App.js';
 
 const proxyStore = new Store({
     portName: 'messaging'
@@ -12,9 +12,9 @@ const proxyStore = new Store({
 
 render(
     <Provider store={proxyStore}>
-        <Router history={browserHistory}>
-            {Routes}
-        </Router>
+        <BrowserRouter>            
+            <App />
+        </BrowserRouter>
     </Provider>,
     document.getElementById('app')
 );

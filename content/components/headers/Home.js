@@ -13,18 +13,11 @@ class App extends Component {
             });
         });
     }
-    
-    openApp() {
-        chrome.tabs.create({
-            url: chrome.runtime.getURL('index.html')
-        });
-    }
 
     render() {
         return (
             <div>
                 Click Count: {this.props.count}
-                <button type='button' className='navbar-toggle' onClick={this.openApp.bind(this)} />
             </div>
         );
     }

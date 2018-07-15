@@ -14,7 +14,7 @@ class App extends Component {
         });
     }
     
-    openApp() {
+    clickHanlder() {
         chrome.tabs.create({
             url: chrome.runtime.getURL('index.html')
         });
@@ -24,7 +24,9 @@ class App extends Component {
         return (
             <div>
                 Click Count: {this.props.count}
-                <button type='button' className='navbar-toggle' onClick={this.openApp.bind(this)} />
+                <button type='button' className='navbar-toggle' onClick={this.clickHanlder.bind(this)}>
+                    Open App
+                </button>
             </div>
         );
     }
