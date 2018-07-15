@@ -1,12 +1,14 @@
 import React from 'react';
-import Route from 'react-router/lib/Route';
-import IndexRoute from 'react-router/lib/IndexRoute';
+//import Route from 'react-router/lib/Route';
+//import IndexRoute from 'react-router/lib/IndexRoute';
 
-import Layout from './components/Layout.js';
-import Test from './components/Base.js';
+import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+
+import Layout from './components/layout/Layout.js';
+import Headers from './components/headers/Headers.js';
 
 export default(
-    <Route path='/popup.html' component={Layout}>
-        <IndexRoute component={Test}/>
+    <Route path='/index.html' component={Layout}>
+        <IndexRoute component={Headers}/>
     </Route>
 )

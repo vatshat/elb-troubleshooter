@@ -16,7 +16,7 @@ class App extends Component {
     
     openApp() {
         chrome.tabs.create({
-            url: chrome.runtime.getURL('popup.html')
+            url: chrome.runtime.getURL('index.html')
         });
     }
 

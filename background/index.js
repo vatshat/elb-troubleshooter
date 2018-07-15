@@ -18,7 +18,3 @@ const store = compose(
 wrapStore(store, {
     portName: 'messaging'
 });
-
-chrome.tabs.onActivated.addListener(function(tabId, changeInfo, tab) {
-    chrome.tabs.executeScript(null, { file: 'content.js' });
-});

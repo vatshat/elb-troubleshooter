@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-class Layout extends Component {
+class App extends Component {
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     componentDidMount() {
@@ -15,24 +14,21 @@ class Layout extends Component {
         });
     }
     
-    toggleCollapse() {
+    openApp() {
         chrome.tabs.create({
-            url: chrome.runtime.getURL('popup.html')
+            url: chrome.runtime.getURL('index.html')
         });
     }
-    
+
     render() {
-        console.log(this.props);
         return (
-            <div className='App'>
-                Hello World
-                Click Count: {this.props.count}              
-                <button type='button' className='navbar-toggle' onClick={this.toggleCollapse.bind(this)} />
+            <div>
+                Click Count: {this.props.count}
+                <button type='button' className='navbar-toggle' onClick={this.openApp.bind(this)} />
             </div>
         );
     }
 }
-
 
 const mapStateToProps = (state) => {
     return {
@@ -40,4 +36,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(Layout);
+export default connect(mapStateToProps)(App);

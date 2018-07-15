@@ -16,5 +16,5 @@ render(
             {Routes}
         </Router>
     </Provider>,
-    document.getElementById('container')
+    document.getElementById('app')
 );
