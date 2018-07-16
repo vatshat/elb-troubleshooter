@@ -1,20 +1,19 @@
-import { createStore, compose, applyMiddleware } from 'redux';
-import rootReducer from './reducers';
-import createLogger from 'redux-logger';
-import thunk from 'redux-thunk';
-import { alias, wrapStore } from 'react-chrome-redux';
+import { wrapStore } from 'react-chrome-redux';
+import configureStore from './configureStore';
 
-const logger = createLogger({
-    level: 'info',
-    collapsed: true
-});
-
-const middleware = [thunk, logger];
-
-const store = compose(
-    applyMiddleware(...middleware)
-)(createStore)(rootReducer);
+const store = configureStore();
 
 wrapStore(store, {
     portName: 'messaging'
 });
+
+chrome.webRequest.onBeforeRequest.addListener(
+    (requestDetails) => {
+        store.dispatch({
+            type: 'ADD_HEADER',
+            payload: requestDetails
+        });
+    }, {
+        urls: ['<all_urls>']
+    }
+);

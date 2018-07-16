@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
 import { BrowserRouter } from 'react-router-dom'
 
-import App from './components/App.js';
+import Layout from './components/App.js';
 
 const proxyStore = new Store({
     portName: 'messaging'
@@ -13,7 +13,7 @@ const proxyStore = new Store({
 render(
     <Provider store={proxyStore}>
         <BrowserRouter>            
-            <App />
+            <Layout />
         </BrowserRouter>
     </Provider>,
     document.getElementById('app')

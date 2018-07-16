@@ -1,30 +1,44 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { Home, Page1, Page2, Page3 } from './headers/Pages';
+import { Headers, AccessLogs } from './Pages';
+import Home from './Home';
 
 import { connect } from 'react-redux';
 
 import Nav from './layout/Nav';
 import Footer from './layout/Footer';
 
-const Main = () => (
-    <main>
-        <Switch>
-            <Route exact path='/index.html' component={Home} />
-            <Route exact path='/1' component={Page1}/>
-            <Route exact path='/2' component={Page2} />
-            <Route exact path='/3' component={Page3} />
-        </Switch>
-    </main>
-)
+class Main extends React.Component {
+    render() {
+        const containerStyle = {
+            marginTop: '60px'
+        };
+    
+        return(
+            <main className="container" style={containerStyle}>
+                <div className="row">
+                    <div className="col-lg-12">
+                        <Switch>
+                            <Route exact path='/' component={Home} />
+                            <Route exact path='/index.html' component={Home} />
+                            <Route exact path='/headers' component={Headers}/>
+                            <Route exact path='/access_logs' component={AccessLogs} />
+                        </Switch>
+                    </div>
+                </div>
+            </main>
+        )
 
-class App extends React.Component {
+    }
+}
+
+class Layout extends React.Component {
     constructor(){
         super()
     }
     render() {
         const { location } = this.props;
-
+        
         return (
             <div>
                 <Nav />
@@ -35,4 +49,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default Layout;
