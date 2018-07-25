@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Headers, AccessLogs } from './Pages';
+import TempPage from './tempPage/TempPage.js';
+
 import Home from './Home';
 
 import { connect } from 'react-redux';
@@ -23,6 +25,7 @@ class Main extends React.Component {
                             <Route exact path='/index.html' component={Home} />
                             <Route exact path='/headers' component={Headers}/>
                             <Route exact path='/access_logs' component={AccessLogs} />
+                            <Route exact path='/temp_page' component={TempPage} />
                         </Switch>
                     </div>
                 </div>

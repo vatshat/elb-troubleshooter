@@ -8,15 +8,3 @@ a.nav_a_img {
 img.nav_img {
     height: 100%;
 }
-
-:local(a.nav_link:hover) {
-    background-color: yellow;
-}
-
-:local(a.nav_link) {
-    color: yellow;
-}
-
-#test:hover {
-    background-color: red;
-}

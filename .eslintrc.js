@@ -3,7 +3,13 @@ module.exports = {
         "browser": true,
         "commonjs": true,
         "es6": true,
-        "webextensions": true
+        "webextensions": true,
+        "node": true
+    },
+    "globals": {
+        "module": false,
+        "inject": false,
+        "document": false
     },
     "extends": [
         "eslint:recommended",

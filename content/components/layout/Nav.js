@@ -46,6 +46,11 @@ class Header extends React.Component {
                                 <NavLink id="nav3" to='/access_logs' activeStyle={{ background: '#151d27' }}>
                                     Access Logs
                                 </NavLink>
+                            </li>                           
+                            <li>
+                                <NavLink id="nav4" to='/temp_page' activeStyle={{ background: '#151d27' }}>
+                                    Temp page
+                                </NavLink>
                             </li>
                         </ul>
                     </div>
