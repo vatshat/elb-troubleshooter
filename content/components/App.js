@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { Headers, AccessLogs } from './Pages';
-import TempPage from './tempPage/TempPage.js';
+import { AccessLogs } from './Pages';
+import Headers from './headers/PreHeaders';
+import TempPage from './tempPage/TempPage';
 
 import Home from './Home';
 
-import { connect } from 'react-redux';
-
-import Nav from './layout/Nav';
+import  Nav from './layout/Nav';
 import Footer from './layout/Footer';
 
 class Main extends React.Component {
@@ -39,9 +38,7 @@ class Layout extends React.Component {
     constructor(){
         super()
     }
-    render() {
-        const { location } = this.props;
-        
+    render() {        
         return (
             <div>
                 <Nav />

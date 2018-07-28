@@ -16,18 +16,20 @@
   "author": "Bernardo Garciarivas",
   "license": "ISC",
   "dependencies": {
+    "classnames": "2.2.5",
     "core-js": "^2.4.1",
+    "prop-types": "15.5.10",
     "react": "16.0.0",
-    "react-dom": "16.0.0",
+    "react-bootstrap-table2-overlay": "^0.1.2",
+    "react-bootstrap-table2-paginator": "^0.1.6",
     "react-chrome-redux": "0.0.8",
+    "react-dom": "16.0.0",
     "react-redux": "^4.4.5",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^4.0.6",
     "redux": "^3.6.0",
-    "styled-components": "^3.3.3",
-    "classnames": "2.2.5",
-    "prop-types": "15.5.10"
+    "styled-components": "^3.3.3"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
