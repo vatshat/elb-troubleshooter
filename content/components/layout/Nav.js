@@ -9,8 +9,6 @@ class Header extends React.Component {
     }
     
     render () {
-        const { location } = this.props;        
-
         /*
         https://stackoverflow.com/questions/28365233/inline-css-styles-in-react-how-to-implement-ahover
             alternative to this is simply stick to css using... :local(.li:hover){ background: yellow; }
@@ -19,7 +17,7 @@ class Header extends React.Component {
             <nav className={'navbar navbar-inverse navbar-fixed-top bg-dark navbar-dark ' + styles.nav_bar}  role='navigation' >            
                 <div className='container'>
                     <Link className={'navbar-brand ' + styles.nav_a_img} to='/index.html'>
-                        <img className={styles.nav_img} src='static/aws.jpg' alt='logo' />
+                        <img className={styles.nav_img} src='img/aws.jpg' alt='logo' />
                     </Link>
 
                     <div className='navbar-header'>
@@ -38,7 +36,7 @@ class Header extends React.Component {
                                 </NavLink>
                             </li>                           
                             <li>
-                                <NavLink id="nav2" className={styles.nav_link} to='/headers'activeStyle={{ background: '#151d27' }}>
+                                <NavLink id="nav2" to='/headers'activeStyle={{ background: '#151d27' }}>
                                     Headers
                                 </NavLink>
                             </li>                           
@@ -48,7 +46,7 @@ class Header extends React.Component {
                                 </NavLink>
                             </li>                           
                             <li>
-                                <NavLink id="nav4" to='/temp_page' activeStyle={{ background: '#151d27' }}>
+                                <NavLink id="nav4" to='/temp_page.html' activeStyle={{ background: '#151d27' }}>
                                     Temp page
                                 </NavLink>
                             </li>

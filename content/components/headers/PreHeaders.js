@@ -59,7 +59,7 @@ class PreHeader extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        preHeadersStoreList: state.headers
+        preHeadersStoreList: state.headers.actualHeaders
     };
 };
 

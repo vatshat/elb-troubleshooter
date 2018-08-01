@@ -1,13 +1,11 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { AccessLogs } from './Pages';
-import Headers from './headers/PreHeaders';
-import TempPage from './tempPage/TempPage';
+import { Home, AccessLogs } from '../components/tempPage/TempPages';
+import Headers from './HeadersReduxConnect';
+import TempPage from '../components/headers/PreHeaders';
 
-import Home from './Home';
-
-import  Nav from './layout/Nav';
-import Footer from './layout/Footer';
+import Nav from '../components/layout/Nav';
+import Footer from '../components/layout/Footer';
 
 class Main extends React.Component {
     render() {
@@ -16,7 +14,7 @@ class Main extends React.Component {
         };
     
         return(
-            <main className="container" style={containerStyle}>
+            <main style={containerStyle}>
                 <div className="row">
                     <div className="col-lg-12">
                         <Switch>
@@ -24,10 +22,20 @@ class Main extends React.Component {
                             <Route exact path='/index.html' component={Home} />
                             <Route exact path='/headers' component={Headers}/>
                             <Route exact path='/access_logs' component={AccessLogs} />
-                            <Route exact path='/temp_page' component={TempPage} />
+                            <Route exact path='/temp_page.html' component={TempPage} />
                         </Switch>
                     </div>
                 </div>
+                { /* http://blog.instance-factory.com/?p=1165 */ }
+                <div 
+                    id="footer-filler"
+                    className="navbar navbar-default" 
+                    style={{ 
+                        background:'white',
+                        borderColor: 'white',
+                        boxShadow:'none',
+                    }}
+                />
             </main>
         )
 
@@ -40,7 +48,7 @@ class Layout extends React.Component {
     }
     render() {        
         return (
-            <div>
+            <div className="container">
                 <Nav />
                 <Main />
                 <Footer />

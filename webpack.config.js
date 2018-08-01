@@ -37,7 +37,7 @@ module.exports = {
         ]
     },
     output: {
-        path: __dirname + '/assets/',
+        path: __dirname + '/assets/js',
         filename: '[name].min.js',
         publicPath: '/assets'
     },
