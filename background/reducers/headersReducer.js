@@ -29,10 +29,28 @@ const pageChangeReducer = (state=initState, action) => {
     }
 }
 
+const pageTempChangeReducer = (state = 1, action) => {
+    if (action.type === 'TEMP_PAGE_CHANGE') {
+        return action.currentTempTablePage
+    } else {
+        return state
+    }
+}
+
+const pageSizeTempChangeRedcuer = (state = 10, action) => {
+    if (action.type === 'TEMP_PAGE_SIZE_CHANGE') {
+        return action.sizePerTempTablePage
+    } else {
+        return state
+    }
+}
+
 const headerManager = (state = {}, action) => {
     return {
         actualHeaders: addHeaderReducer(state.actualHeaders, action),
         pagination: pageChangeReducer(state.pagination, action),
+        currentPageStore: pageTempChangeReducer(state.currentTempTablePage, action),
+        currentPageSize: pageSizeTempChangeRedcuer(state.sizePerTempTablePage, action),
     }
 }
 

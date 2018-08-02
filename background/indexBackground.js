@@ -8,18 +8,29 @@ wrapStore(store, {
     portName: 'messaging'
 });
 
-var pattern = chrome.runtime.getURL('/');
+/*
+let pattern = chrome.runtime.getURL('/');
 
 chrome.webRequest.onBeforeRequest.addListener(
     (requestDetails) => {
-        return {
-            redirectUrl: chrome.runtime.getURL('index.html')
+        //alert(pattern.slice(0, -1) + 'popup.html')
+        
+        if (requestDetails.url === pattern.slice(0, -1) + 'popup.html') 
+        {
+            return {
+                redirectUrl: chrome.runtime.getURL('popup.html')
+            }
+            
+        } else { 
+            return {
+                redirectUrl: chrome.runtime.getURL('index.html')
+            }
         }
     },
-    { urls:[pattern] },
+    { urls:[pattern, pattern + '#'] },
     ['blocking']
 );
-
+*/
 chrome.webRequest.onBeforeSendHeaders.addListener(
     (requestDetails) => {
         store.dispatch(

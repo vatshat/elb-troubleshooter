@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 
 import Layout from './containers/App.js';
 
@@ -12,9 +12,9 @@ const proxyStore = new Store({
 
 render(
     <Provider store={proxyStore}>
-        <BrowserRouter>            
+        <HashRouter>            
             <Layout />
-        </BrowserRouter>
+        </HashRouter>
     </Provider>,
     document.getElementById('app')
 );

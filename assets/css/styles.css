@@ -4,3 +4,7 @@
 #nav4:hover {
     background: #151d27;
 }
+
+.react-bs-table-sizePerPage-dropdown {
+    display: block
+}

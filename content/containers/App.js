@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { Home, AccessLogs } from '../components/tempPage/TempPages';
 import Headers from './HeadersReduxConnect';
 //import TempPage from '../components/headers/PreHeaders';
-import TempPage from '../components/tempPage/TempHeaders';
+import TempPage from './TempHeadersReduxConnect';
 
 import Nav from '../components/layout/Nav';
 import Footer from '../components/layout/Footer';
