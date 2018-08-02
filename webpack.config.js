@@ -6,9 +6,9 @@ module.exports = {
     context: path.join(__dirname),
     devtool: debug ? 'inline-sourcemap' : null,
     entry: {
-        popup: './popup/index.js',
-        background: './background/index.js',
-        content: './content/index.js'
+        popup: './popup/indexPopup.js',
+        background: './background/indexBackground.js',
+        content: './content/indexContent.js'
     },
     module: {
         rules: [

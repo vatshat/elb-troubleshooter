@@ -15,16 +15,10 @@ class App extends Component {
     }
     
     // https://stackoverflow.com/questions/35834622/chrome-extensions-creating-a-html-page-accessible-by-clicking-browser-action
-    clickHandler() {
-        /*
+    clickHandler() {       
+        
         chrome.tabs.create({
-            active: true,
-            url: 'http://localhost:5000/'
-        });
-        */
-       
-        chrome.tabs.create({
-            url: chrome.runtime.getURL('index.html')
+            url: chrome.runtime.getURL('/')
         });
     }
 

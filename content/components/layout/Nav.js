@@ -31,7 +31,7 @@ class Header extends React.Component {
                     <div className="collapse navbar-collapse">
                         <ul className="nav navbar-nav">                            
                             <li>
-                                <NavLink id="nav1" to='/index.html'activeStyle={{ background: '#151d27' }}>
+                                <NavLink id="nav1" to='/'activeStyle={{ background: '#151d27' }}>
                                     Home
                                 </NavLink>
                             </li>                           
@@ -46,7 +46,7 @@ class Header extends React.Component {
                                 </NavLink>
                             </li>                           
                             <li>
-                                <NavLink id="nav4" to='/temp_page.html' activeStyle={{ background: '#151d27' }}>
+                                <NavLink id="nav4" to='/temp_page' activeStyle={{ background: '#151d27' }}>
                                     Temp page
                                 </NavLink>
                             </li>

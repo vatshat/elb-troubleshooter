@@ -2,7 +2,8 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Home, AccessLogs } from '../components/tempPage/TempPages';
 import Headers from './HeadersReduxConnect';
-import TempPage from '../components/headers/PreHeaders';
+//import TempPage from '../components/headers/PreHeaders';
+import TempPage from '../components/tempPage/TempHeaders';
 
 import Nav from '../components/layout/Nav';
 import Footer from '../components/layout/Footer';
@@ -18,11 +19,10 @@ class Main extends React.Component {
                 <div className="row">
                     <div className="col-lg-12">
                         <Switch>
-                            <Route exact path='/' component={Home} />
-                            <Route exact path='/index.html' component={Home} />
                             <Route exact path='/headers' component={Headers}/>
                             <Route exact path='/access_logs' component={AccessLogs} />
-                            <Route exact path='/temp_page.html' component={TempPage} />
+                            <Route exact path='/temp_page' component={TempPage} />
+                            <Route path='/' component={Home} />
                         </Switch>
                     </div>
                 </div>
