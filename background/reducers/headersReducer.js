@@ -11,6 +11,16 @@ const addHeaderReducer =  (state=[], action) => {
     }
 };
 
+const captureToggleReducer = (state=[], action) => {
+    switch (action.type) {
+    case 'CAPTURE_TOGGLE': {        
+        return state.concat([{ metaHeaders: action.captureToggle }])        
+    }
+    default:
+        return state;
+    }
+}
+
 const initState = { 
     currentTablePage: 1,
     sizePerTablePage: 10
@@ -40,14 +50,6 @@ const pageTempChangeReducer = (state = 1, action) => {
 const pageSizeTempChangeRedcuer = (state = 10, action) => {
     if (action.type === 'TEMP_PAGE_SIZE_CHANGE') {
         return action.sizePerTempTablePage
-    } else {
-        return state
-    }
-}
-
-const captureToggleReducer = (state=[], action) => {
-    if (action.type === 'CAPTURE_TOGGLE') {
-        return state.concat([{ toggle: action.captureToggle }])
     } else {
         return state
     }

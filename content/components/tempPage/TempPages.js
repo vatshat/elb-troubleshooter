@@ -11,14 +11,6 @@ export class Home extends React.Component{
         this.props.history.push('/')
     }
 
-    componentDidMount() {
-        document.addEventListener('click', () => {
-            this.props.dispatch({
-                type: 'ADD_COUNT'
-            });
-        });
-    }
-
     render() {
         return (
             <div onClick={ this.changeURLHandler } onLoad={ this.changeURLHandler }>
