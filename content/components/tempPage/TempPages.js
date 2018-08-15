@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 export class Home extends React.Component{
     constructor(props) {
@@ -8,6 +9,14 @@ export class Home extends React.Component{
 
     changeURLHandler() {
         this.props.history.push('/')
+    }
+
+    componentDidMount() {
+        document.addEventListener('click', () => {
+            this.props.dispatch({
+                type: 'ADD_COUNT'
+            });
+        });
     }
 
     render() {
@@ -25,3 +34,11 @@ export const AccessLogs = () => (
         <h1>Access Logs</h1>
     </div>
 )
+
+const mapStateToProps = (state) => {
+    return {
+        count: state.count
+    };
+};
+
+export default connect(mapStateToProps)(Home);

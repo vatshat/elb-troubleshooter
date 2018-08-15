@@ -13,3 +13,8 @@ export const pageSizeTempChangeAction = (sizePerPageProps) => ({
     type: 'TEMP_PAGE_SIZE_CHANGE',
     sizePerTempTablePage: sizePerPageProps
 })
+
+export const captureToggleAction = (captureToggleProps) => ({
+    type: 'CAPTURE_TOGGLE',
+    captureToggle: captureToggleProps
+})

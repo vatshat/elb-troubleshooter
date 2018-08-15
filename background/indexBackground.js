@@ -4,6 +4,8 @@ import { addHeaderAction } from './actions/headersAction';
 
 const store = configureStore();
 
+window.backgroundStore = store;
+
 wrapStore(store, {
     portName: 'messaging'
 });

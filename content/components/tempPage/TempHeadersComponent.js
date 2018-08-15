@@ -1,29 +1,50 @@
 import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import PropTypes from 'prop-types';
+import Toggle from 'react-toggle';
 
 export class TitleComponent extends React.Component {
     
     render() {
-        const { handleTableRefresh } = this.props;
-        
+        const enable = 'enabled. Please disable capturing to stop the table from auto refreshing in order to view the table';
+
         return (
             <div>
-                <div className="page-header">
+                <div className='page-header'>
                     <h1> Headers </h1>
-                    <button 
-                        type="button" 
-                        className="btn btn-default" 
-                        onClick={ handleTableRefresh} > 
-                        Refresh Table
-                    </button>
+                </div>
+
+                
+                <div id='captureToggle'>
+                    { /* 
+                        https://reactjs.org/docs/conditional-rendering.html 
+                        https://github.com/aaronshaf/react-toggle/blob/master/src/docs/index.js
+
+                    */ }
+
+                    <Toggle
+                        id='toggleCaptures'
+                        checked={ this.props.toggleCapture }
+                        name='toggleCapture'
+                        value='yes'
+                        onChange={ this.props.handleCaptureToggleChange } />
+
+                    <h5 
+                        style={{
+                            color: this.props.toggleCapture ? '#f99829' : '#151d27'
+                        }}
+                        htmlFor='toggleCapture' > 
+                        Capturing { this.props.toggleCapture? enable : 'disabled'} 
+                    </h5>
+
                 </div>
             </div>
         );
     }
 }
 TitleComponent.propTypes = {
-    handleTableRefresh: PropTypes.func.isRequired,
+    handleCaptureToggleChange: PropTypes.func.isRequired,
+    toggleCapture: PropTypes.bool.isRequired,
 };
 
 export class RemotePaging extends React.Component {
@@ -43,7 +64,7 @@ export class RemotePaging extends React.Component {
         const options = {
             sizePerPage: this.props.sizePerPage,
             onPageChange: this.props.onPageChange,
-            sizePerPageList: [5, 10, 25, 50],
+            sizePerPageList: [10, 25, 50, 100],
             page: this.props.currentPage,
             onSizePerPageList: this.props.onSizePerPageList,
             paginationShowsTotal: true
@@ -76,5 +97,4 @@ RemotePaging.propTypes = {
     currentPage: PropTypes.number.isRequired,
     onPageChange: PropTypes.func.isRequired,
     onSizePerPageList: PropTypes.func.isRequired,
-    loading: PropTypes.bool.isRequired,
 };

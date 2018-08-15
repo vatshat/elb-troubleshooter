@@ -1,6 +1,10 @@
 import { connect } from 'react-redux'
 import HeadersTableContainer from './TempHeadersContainer'
-import { pageTempChangeAction,  pageSizeTempChangeAction } from '../actions/pageAction'
+import {
+    pageTempChangeAction,
+    pageSizeTempChangeAction,
+    captureToggleAction
+} from '../actions/pageAction'
 
 const mapStateToProps = (state) => {
     let headersRowList = (headersList) => {
@@ -10,9 +14,11 @@ const mapStateToProps = (state) => {
     }
     
     if (state.headers) {    
-        const sizePerTablePage = state.headers.currentPageSize;
-        const currentTablePage = state.headers.currentPageStore;
+        const sizePerTablePage = typeof state.headers.currentPageSize === 'undefined' ? 10 : state.headers.currentPageSize;
+        const currentTablePage = typeof state.headers.currentPageStore === 'undefined' ? 1 : state.headers.currentPageStore;
         const headersLen = state.headers.actualHeaders.length;
+        
+        const toggleCapture = state.headers.toggleCapture.length === 0 ? false : state.headers.toggleCapture[state.headers.toggleCapture.length - 1 ].toggle;
 
         let currentIndex = currentTablePage < 1 ? 1 : (currentTablePage - 1) * sizePerTablePage;
         
@@ -25,14 +31,16 @@ const mapStateToProps = (state) => {
                 ),
                 headersLength: headersLen,
                 sizePerPage: sizePerTablePage,
-                page: currentTablePage
+                page: currentTablePage,
+                toggleCapture: toggleCapture,
             };
         } else {
             return {
                 headersRowList: state.headers.actualHeaders,
                 headersLength: headersLen,
                 sizePerPage: sizePerTablePage,
-                page: currentTablePage
+                page: currentTablePage,
+                toggleCapture: toggleCapture,
             };
         }
     } else {
@@ -40,14 +48,16 @@ const mapStateToProps = (state) => {
             headersRowList: [],
             headersLength: 0,
             sizePerPage: 10,
-            page: 1
+            page: 1,
+            toggleCapture: false,
         };
     }
 };
 
 const mapDispatchToProps = dispatch => ({
     pageTableIndex: (currentTableIndex) => dispatch(pageTempChangeAction(currentTableIndex)),
-    pageSize: (sizePerTablePage) => dispatch(pageSizeTempChangeAction(sizePerTablePage))
+    pageSize: (sizePerTablePage) => dispatch(pageSizeTempChangeAction(sizePerTablePage)),
+    captureToggleDispatch: (toggleCapture) => dispatch(captureToggleAction(toggleCapture))
 })
 
 export default connect(

@@ -45,12 +45,21 @@ const pageSizeTempChangeRedcuer = (state = 10, action) => {
     }
 }
 
+const captureToggleReducer = (state=[], action) => {
+    if (action.type === 'CAPTURE_TOGGLE') {
+        return state.concat([{ toggle: action.captureToggle }])
+    } else {
+        return state
+    }
+}
+
 const headerManager = (state = {}, action) => {
     return {
         actualHeaders: addHeaderReducer(state.actualHeaders, action),
         pagination: pageChangeReducer(state.pagination, action),
         currentPageStore: pageTempChangeReducer(state.currentTempTablePage, action),
         currentPageSize: pageSizeTempChangeRedcuer(state.sizePerTempTablePage, action),
+        toggleCapture: captureToggleReducer(state.captureToggle, action),
     }
 }
 
