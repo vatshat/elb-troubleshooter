@@ -1,14 +1,11 @@
 import { connect } from 'react-redux'
 import HeadersTableContainer from './TempHeadersContainer'
-import {
-    pageTempChangeAction,
-    pageSizeTempChangeAction,
-    captureToggleAction
-} from '../actions/pageAction'
+import * as pageAction from '../actions/pageAction'
 
 const mapStateToProps = (state) => {
     let headersRowList = (headersList) => {
         return headersList.map((headerList) => {
+            headerList.metaHeaders.timeStamp = new Date(headerList.metaHeaders.timeStamp).toLocaleString();
             return headerList.metaHeaders;
         });
     }
@@ -18,7 +15,7 @@ const mapStateToProps = (state) => {
         const currentTablePage = typeof state.headers.currentPageStore === 'undefined' ? 1 : state.headers.currentPageStore;
         const headersLen = state.headers.actualHeaders.length;
         
-        const toggleCapture = state.headers.toggleCapture.length === 0 ? false : state.headers.toggleCapture[state.headers.toggleCapture.length - 1 ].toggle;
+        const toggleCapture = typeof state.headers.toggleCapture === 'undefined' ? false : state.headers.toggleCapture;
 
         let currentIndex = currentTablePage < 1 ? 1 : (currentTablePage - 1) * sizePerTablePage;
         
@@ -55,9 +52,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    pageTableIndex: (currentTableIndex) => dispatch(pageTempChangeAction(currentTableIndex)),
-    pageSize: (sizePerTablePage) => dispatch(pageSizeTempChangeAction(sizePerTablePage)),
-    captureToggleDispatch: (toggleCapture) => dispatch(captureToggleAction(toggleCapture))
+    pageTableIndexDispatch: (currentTableIndex) => dispatch(pageAction.pageTempChangeAction(currentTableIndex)),
+    pageSizeDispatch: (sizePerTablePage) => dispatch(pageAction.pageSizeTempChangeAction(sizePerTablePage)),
+    captureToggleDispatch: (toggleCapture) => dispatch(pageAction.captureToggleAction(toggleCapture))
 })
 
 export default connect(

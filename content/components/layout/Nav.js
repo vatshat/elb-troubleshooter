@@ -15,7 +15,7 @@ class Header extends React.Component {
         */
         return (
             <nav className={'navbar navbar-inverse navbar-fixed-top bg-dark navbar-dark ' + styles.nav_bar}  role='navigation' >            
-                <div className='container'>
+                <div style={{width:'90%'}}>
                     <Link className={'navbar-brand ' + styles.nav_a_img} to='/index.html'>
                         <img className={styles.nav_img} src='img/aws.jpg' alt='logo' />
                     </Link>

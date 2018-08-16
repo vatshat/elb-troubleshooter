@@ -1,24 +1,31 @@
 var headerId = 0;
 
+function headersFormat(headers, id) {
+
+    headers.id = id;
+
+    if (typeof headers.initiator === 'undefined') {
+        headers.initiator = 'N/A'
+    }
+
+    if (typeof headers.statusCode === 'undefined') {
+        headers.statusCode = 'N/A'
+    }
+
+    if (typeof headers.statusLine === 'undefined') {
+        headers.statusLine = 'N/A'
+    }
+
+    return headers;
+}
+
 function formatHeaders(headerRaw, id) {
-    const headersFormatted = (({ id, requestId, initiator, timeStamp, type, url, statusCode, statusLine }) => (
-        { id, requestId, initiator, timeStamp, type, url, statusCode, statusLine })
+    const headersFormatted = (({ id, requestId, initiator, timeStamp, type, url, statusCode, statusLine, requestHeaders }) => (
+        { id, requestId, initiator, timeStamp, type, url, statusCode, statusLine, requestHeaders })
     )(headerRaw);
 
-    headersFormatted.id = id;
-
-    if (typeof headersFormatted.initiator === 'undefined') {
-        headersFormatted.initiator = 'N/A'
-    }
-
-    if (typeof headersFormatted.statusCode === 'undefined') {
-        headersFormatted.statusCode = 'N/A'
-    }
-
-    if (typeof headersFormatted.statusLine === 'undefined') {
-        headersFormatted.statusLine = 'N/A'
-    }
-
+    headersFormat(headersFormatted, id);
+    
     return headersFormatted;
 }
 

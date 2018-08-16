@@ -11,7 +11,8 @@ import Footer from '../components/layout/Footer';
 class Main extends React.Component {
     render() {
         const containerStyle = {
-            marginTop: '60px'
+            marginTop: '60px',
+            textAlign: 'left'
         };
     
         return(
@@ -48,7 +49,7 @@ class Layout extends React.Component {
     }
     render() {        
         return (
-            <div className="container">
+            <div style={{width:'90%'}} >
                 <Nav />
                 <Main />
                 <Footer />

@@ -1,5 +1,12 @@
 
-// https://flaviocopes.com/redux/
+/* 
+    Alternative to YouTube version
+    
+    a reducer for every part of the state
+
+    https://flaviocopes.com/redux
+
+*/
 
 const addHeaderReducer =  (state=[], action) => {
     switch (action.type) {
@@ -10,16 +17,6 @@ const addHeaderReducer =  (state=[], action) => {
         return state;
     }
 };
-
-const captureToggleReducer = (state=[], action) => {
-    switch (action.type) {
-    case 'CAPTURE_TOGGLE': {        
-        return state.concat([{ metaHeaders: action.captureToggle }])        
-    }
-    default:
-        return state;
-    }
-}
 
 const initState = { 
     currentTablePage: 1,
@@ -55,13 +52,21 @@ const pageSizeTempChangeRedcuer = (state = 10, action) => {
     }
 }
 
+const captureToggleReducer = (state=false, action) => {
+    if (action.type === 'CAPTURE_TOGGLE') {
+        return action.captureToggle
+    } else {
+        return state
+    }
+}
+
 const headerManager = (state = {}, action) => {
     return {
         actualHeaders: addHeaderReducer(state.actualHeaders, action),
         pagination: pageChangeReducer(state.pagination, action),
-        currentPageStore: pageTempChangeReducer(state.currentTempTablePage, action),
-        currentPageSize: pageSizeTempChangeRedcuer(state.sizePerTempTablePage, action),
-        toggleCapture: captureToggleReducer(state.captureToggle, action),
+        currentPageStore: pageTempChangeReducer(state.currentPageStore, action),
+        currentPageSize: pageSizeTempChangeRedcuer(state.currentPageSize, action),
+        toggleCapture: captureToggleReducer(state.toggleCapture, action),
     }
 }
 

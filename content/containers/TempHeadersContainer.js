@@ -1,6 +1,5 @@
 import React from 'react';
 import { RemotePaging, TitleComponent } from '../components/tempPage/TempHeadersComponent';
-import Toggle from 'react-toggle';
 
 export default class TempPage extends React.Component {
     constructor(props) {
@@ -9,25 +8,19 @@ export default class TempPage extends React.Component {
     }
 
     onPageChange(page, sizePerPage) {
-        window.pageTableIndex(page);
+        window.pageTableIndexDispatch(page);
     }
 
     onSizePerPageList(sizePerPage) {
-        window.pageSize(sizePerPage);
+        window.pageSizeDispatch(sizePerPage);
     }
     toggleHandler(key, event) {
         window.captureToggleDispatch(event.target.checked);
     }
-
-    handleChange(key, event) {
-        this.setState({
-            [key]: event.target.checked
-        })
-    }
     
     render() {
-        window.pageTableIndex = this.props.pageTableIndex;
-        window.pageSize = this.props.pageSize;
+        window.pageTableIndexDispatch = this.props.pageTableIndexDispatch;
+        window.pageSizeDispatch = this.props.pageSizeDispatch;
         window.captureToggleDispatch = this.props.captureToggleDispatch;
 
         return ( 

@@ -60,6 +60,16 @@ export class RemotePaging extends React.Component {
         );
     }
 
+    customTitle(cell, row, rowIndex, colIndex) {
+        return `${row.name} for ${cell}`;
+    }
+
+    remote(remoteObj) {
+        // Only cell editing, insert and delete row will be handled by remote store
+        remoteObj.pagination = true;
+        return remoteObj;
+    }
+
     render() {
         const options = {
             sizePerPage: this.props.sizePerPage,
@@ -71,20 +81,22 @@ export class RemotePaging extends React.Component {
         }
 
         return (        
-            <BootstrapTable data={ this.props.data } 
-                remote={ true } 
+            <BootstrapTable data={ this.props.data }                 
+                remote={ this.remote }
                 pagination={ true }
                 fetchInfo={ { dataTotalSize: this.props.totalDataSize } }
-                options={ options }>
+                options={ options }
+                bordered={ false }
+                search>
 
-                <TableHeaderColumn dataField='id' isKey={ true }>Request #</TableHeaderColumn>
-                <TableHeaderColumn dataField='requestId'>Request ID</TableHeaderColumn>
-                <TableHeaderColumn dataField='initiator'>Initiator</TableHeaderColumn>
-                <TableHeaderColumn dataField='timeStamp'>Timestamp</TableHeaderColumn>
-                <TableHeaderColumn dataField='type'>Type</TableHeaderColumn>
-                <TableHeaderColumn dataField='url'>URL</TableHeaderColumn>
-                <TableHeaderColumn dataField='statusCode'>Status Code</TableHeaderColumn>
-                <TableHeaderColumn dataField='statusLine'>Status Line</TableHeaderColumn>
+                <TableHeaderColumn dataField='id' isKey={ true } width='5%' headerAlign='center' dataAlign='center'>#</TableHeaderColumn>
+                <TableHeaderColumn dataField='requestId' headerAlign='center' dataAlign='center'    >Request ID</TableHeaderColumn>
+                <TableHeaderColumn dataField='initiator' columnTitle={ true } width='15%'>Initiator</TableHeaderColumn>
+                <TableHeaderColumn dataField='timeStamp' columnTitle={ true } width='10%'>Timestamp</TableHeaderColumn>
+                <TableHeaderColumn dataField='type' headerAlign='center' dataAlign='center'>Type</TableHeaderColumn>
+                <TableHeaderColumn dataField='url' columnTitle={ true } width='30%'>URL</TableHeaderColumn>
+                <TableHeaderColumn dataField='statusCode' headerAlign='center' dataAlign='center'>Status Code</TableHeaderColumn>
+                <TableHeaderColumn dataField='statusLine' columnTitle={ true } width='10%'>Status Line</TableHeaderColumn>
             </BootstrapTable>
         );
     }

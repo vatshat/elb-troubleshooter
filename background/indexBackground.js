@@ -4,8 +4,6 @@ import { addHeaderAction } from './actions/headersAction';
 
 const store = configureStore();
 
-window.backgroundStore = store;
-
 wrapStore(store, {
     portName: 'messaging'
 });
@@ -33,23 +31,41 @@ chrome.webRequest.onBeforeRequest.addListener(
     ['blocking']
 );
 */
-chrome.webRequest.onBeforeSendHeaders.addListener(
-    (requestDetails) => {
-        store.dispatch(
-            addHeaderAction(requestDetails)
-        );
-    }, 
-    { urls: ['<all_urls>'] },
-    ['requestHeaders']
-);
 
-chrome.webRequest.onHeadersReceived.addListener(
-    (responseDetails) => {
-        store.dispatch(
-            addHeaderAction(responseDetails)
-        );
-    }, {
-        urls: ['<all_urls>']
-    }, ['responseHeaders']
+function headerListenerCallback(headerDetails) { 
+    store.dispatch(
+        addHeaderAction(headerDetails)
+    );
+}
 
-)
+store.subscribe(() => {
+    if(store.getState().headers.toggleCapture === true) {
+
+        if (chrome.webRequest.onBeforeSendHeaders.hasListener(headerListenerCallback) === false) {
+            chrome.webRequest.onBeforeSendHeaders.addListener(
+                headerListenerCallback, {
+                    urls: ['<all_urls>']
+                }, ['requestHeaders']
+            );
+        }
+
+        if (chrome.webRequest.onHeadersReceived.hasListener(headerListenerCallback) === false) {
+            chrome.webRequest.onHeadersReceived.addListener(
+                headerListenerCallback, {
+                    urls: ['<all_urls>']
+                }, ['responseHeaders']
+    
+            )
+        }        
+    } else {
+        if (chrome.webRequest.onBeforeSendHeaders.hasListener(headerListenerCallback) === true) {
+            chrome.webRequest.onBeforeSendHeaders.removeListener(headerListenerCallback);
+        }
+
+        
+        if (chrome.webRequest.onHeadersReceived.hasListener(headerListenerCallback) === true) {
+            chrome.webRequest.onHeadersReceived.removeListener(headerListenerCallback);
+        }
+    }
+
+})
