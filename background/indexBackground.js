@@ -1,6 +1,9 @@
 import { wrapStore } from 'react-chrome-redux';
 import configureStore from './configureStore';
-import { addHeaderAction } from './actions/headersAction';
+import {
+    addRequestHeaderAction,
+    addResponseHeaderAction
+} from './actions/headersAction';
 
 const store = configureStore();
 
@@ -32,39 +35,44 @@ chrome.webRequest.onBeforeRequest.addListener(
 );
 */
 
-function headerListenerCallback(headerDetails) { 
+function requestListenerCallback(headerDetails) { 
     store.dispatch(
-        addHeaderAction(headerDetails)
+        addRequestHeaderAction(headerDetails)
+    );
+}
+
+function responseListenerCallback(headerDetails) {
+    store.dispatch(
+        addResponseHeaderAction(headerDetails)
     );
 }
 
 store.subscribe(() => {
     if(store.getState().headers.toggleCapture === true) {
 
-        if (chrome.webRequest.onBeforeSendHeaders.hasListener(headerListenerCallback) === false) {
+        if (chrome.webRequest.onBeforeSendHeaders.hasListener(requestListenerCallback) === false) {
             chrome.webRequest.onBeforeSendHeaders.addListener(
-                headerListenerCallback, {
+                requestListenerCallback, {
                     urls: ['<all_urls>']
                 }, ['requestHeaders']
             );
         }
 
-        if (chrome.webRequest.onHeadersReceived.hasListener(headerListenerCallback) === false) {
+        if (chrome.webRequest.onHeadersReceived.hasListener(responseListenerCallback) === false) {
             chrome.webRequest.onHeadersReceived.addListener(
-                headerListenerCallback, {
+                responseListenerCallback, {
                     urls: ['<all_urls>']
                 }, ['responseHeaders']
     
             )
         }        
     } else {
-        if (chrome.webRequest.onBeforeSendHeaders.hasListener(headerListenerCallback) === true) {
-            chrome.webRequest.onBeforeSendHeaders.removeListener(headerListenerCallback);
+        if (chrome.webRequest.onBeforeSendHeaders.hasListener(requestListenerCallback) === true) {
+            chrome.webRequest.onBeforeSendHeaders.removeListener(requestListenerCallback);
         }
-
         
-        if (chrome.webRequest.onHeadersReceived.hasListener(headerListenerCallback) === true) {
-            chrome.webRequest.onHeadersReceived.removeListener(headerListenerCallback);
+        if (chrome.webRequest.onHeadersReceived.hasListener(responseListenerCallback) === true) {
+            chrome.webRequest.onHeadersReceived.removeListener(responseListenerCallback);
         }
     }
 

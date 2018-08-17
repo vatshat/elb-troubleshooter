@@ -134,6 +134,10 @@
     border-color: #f99829;
 }
 
+.td-header-style {
+    color: #fb9828
+}
+
 #captureToggle .react-toggle--focus .react-toggle-thumb {
     -webkit-box-shadow: 0px 0px 3px 2px #0099E0;
     -moz-box-shadow: 0px 0px 3px 2px #0099E0;

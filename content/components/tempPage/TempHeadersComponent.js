@@ -11,10 +11,18 @@ export class TitleComponent extends React.Component {
         return (
             <div>
                 <div className='page-header'>
-                    <h1> Headers </h1>
+                    <h1 style= {{ color: '#fb9828' }}> Headers </h1>
+                </div>
+                
+                <div className="row">
+                    <div className="input-group col-sm-4">
+                        <span className="input-group-addon"> URL </span>
+                        <input id="msg" type="text" className="form-control" name="msg" placeholder="Please enter url of HTTP endpoint" />
+                    </div>
+                    <br />
+                    { /* <button type="submit" className={'btn btn-default ' + styles.url_submit} onClick={this.reloadHeaders.bind(this)}>Send request</button> */ }
                 </div>
 
-                
                 <div id='captureToggle'>
                     { /* 
                         https://reactjs.org/docs/conditional-rendering.html 
@@ -47,6 +55,17 @@ TitleComponent.propTypes = {
     toggleCapture: PropTypes.bool.isRequired,
 };
 
+
+class ActualHeaders extends React.Component {    
+    render() {
+        return (
+            <pre style={{wordWrap:'normal'}} className='col-sm-12'>
+                {JSON.stringify(this.props.data, null, 2)}
+            </pre>
+        );
+    }
+}
+
 export class RemotePaging extends React.Component {
     constructor(props) {
         super(props);
@@ -59,44 +78,57 @@ export class RemotePaging extends React.Component {
             </p>
         );
     }
+    
+    expandComponent(row) {
+        const propData = typeof row.requestHeaders === 'undefined' ? row.responseHeaders : row.requestHeaders;
 
-    customTitle(cell, row, rowIndex, colIndex) {
-        return `${row.name} for ${cell}`;
-    }
+        let dataProp = {};
 
-    remote(remoteObj) {
-        // Only cell editing, insert and delete row will be handled by remote store
-        remoteObj.pagination = true;
-        return remoteObj;
+        propData.map((header) => {
+            dataProp = {
+                ...dataProp,
+                [header.name]:header.value
+            }            
+        });
+
+        return (
+            <ActualHeaders data={ dataProp } />
+        );
     }
 
     render() {
         const options = {
-            sizePerPage: this.props.sizePerPage,
-            onPageChange: this.props.onPageChange,
             sizePerPageList: [10, 25, 50, 100],
-            page: this.props.currentPage,
-            onSizePerPageList: this.props.onSizePerPageList,
             paginationShowsTotal: true
         }
 
+        const selectRow = {
+            mode: 'checkbox',
+            //clickToSelect: true, // click to select, default is false
+            clickToExpand: true // click to expand row, default is false
+        };
+
         return (        
-            <BootstrapTable data={ this.props.data }                 
-                remote={ this.remote }
+            <BootstrapTable data={ this.props.data }
                 pagination={ true }
-                fetchInfo={ { dataTotalSize: this.props.totalDataSize } }
                 options={ options }
                 bordered={ false }
-                search>
+                search
 
-                <TableHeaderColumn dataField='id' isKey={ true } width='5%' headerAlign='center' dataAlign='center'>#</TableHeaderColumn>
-                <TableHeaderColumn dataField='requestId' headerAlign='center' dataAlign='center'    >Request ID</TableHeaderColumn>
-                <TableHeaderColumn dataField='initiator' columnTitle={ true } width='15%'>Initiator</TableHeaderColumn>
-                <TableHeaderColumn dataField='timeStamp' columnTitle={ true } width='10%'>Timestamp</TableHeaderColumn>
-                <TableHeaderColumn dataField='type' headerAlign='center' dataAlign='center'>Type</TableHeaderColumn>
-                <TableHeaderColumn dataField='url' columnTitle={ true } width='30%'>URL</TableHeaderColumn>
-                <TableHeaderColumn dataField='statusCode' headerAlign='center' dataAlign='center'>Status Code</TableHeaderColumn>
-                <TableHeaderColumn dataField='statusLine' columnTitle={ true } width='10%'>Status Line</TableHeaderColumn>
+                expandableRow={ () => { return true; } }
+                expandComponent={ this.expandComponent }
+                expandColumnOptions={ { expandColumnVisible: true, expandColumnBeforeSelectColumn: false } }
+                selectRow={ selectRow }>
+
+                <TableHeaderColumn dataField='id' className='td-header-style' isKey={ true } width='5%' headerAlign='center' dataAlign='center'>#</TableHeaderColumn>
+                <TableHeaderColumn dataField='requestId' className='td-header-style' headerAlign='center' dataAlign='center'    >Request ID</TableHeaderColumn>
+                <TableHeaderColumn dataField='initiator' className='td-header-style' columnTitle={ true } width='15%'>Initiator</TableHeaderColumn>
+                <TableHeaderColumn dataField='headerType' className='td-header-style' headerAlign='center' dataAlign='center'>HTTP Type</TableHeaderColumn>
+                <TableHeaderColumn dataField='timeStamp' className='td-header-style' columnTitle={ true } width='10%'>Timestamp</TableHeaderColumn>
+                <TableHeaderColumn dataField='type' className='td-header-style' headerAlign='center' dataAlign='center'>Type</TableHeaderColumn>
+                <TableHeaderColumn dataField='url' className='td-header-style' columnTitle={ true } width='30%'>URL</TableHeaderColumn>
+                <TableHeaderColumn dataField='statusCode' className='td-header-style' headerAlign='center' dataAlign='center'>Status Code</TableHeaderColumn>
+                <TableHeaderColumn dataField='statusLine' className='td-header-style' columnTitle={ true } width='10%'>Status Line</TableHeaderColumn>
             </BootstrapTable>
         );
     }
@@ -104,9 +136,4 @@ export class RemotePaging extends React.Component {
 
 RemotePaging.propTypes = {
     data: PropTypes.array.isRequired,
-    totalDataSize: PropTypes.number.isRequired,
-    sizePerPage: PropTypes.number.isRequired,
-    currentPage: PropTypes.number.isRequired,
-    onPageChange: PropTypes.func.isRequired,
-    onSizePerPageList: PropTypes.func.isRequired,
 };
