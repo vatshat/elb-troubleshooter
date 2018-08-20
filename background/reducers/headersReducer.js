@@ -82,7 +82,7 @@ const preHeadersReducer = (state = initialState, action) => {
         else {                        
             return {
                 ...state,
-                preHeaderCount: action.position + 1,
+                preHeaderCount: state.preHeaderCount + 1,
                 selectedHeaders: state.selectedHeaders.concat([{
                     id: action.id,
                     position: action.position,

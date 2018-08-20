@@ -12,18 +12,6 @@ class TableExpandComponent extends React.Component {
     }
 }
 
-function onSelectAll(isSelected, rows) {
-    alert(`is select all: ${isSelected}`);
-    if (isSelected) {
-        alert('Current display and selected data: ');
-    } else {
-        alert('unselect rows: ');
-    }
-    for (let i = 0; i < rows.length; i++) {
-        alert(rows[i].id);
-    }
-}
-
 export class TableBootstrapComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -66,7 +54,7 @@ export class TableBootstrapComponent extends React.Component {
             clickToExpand: true, // click to expand row, default is false
             //clickToSelect: true, // click to select, default is false
             onSelect: this.props.rowSelectHandler,
-            onSelectAll: onSelectAll
+            onSelectAll: this.props.rowSelectAllHandler
         };
 
         return (        
@@ -98,5 +86,6 @@ export class TableBootstrapComponent extends React.Component {
 
 TableBootstrapComponent.propTypes = {
     data: PropTypes.array.isRequired,
-    rowSelectHandler: PropTypes.func.isRequired
+    rowSelectHandler: PropTypes.func.isRequired,
+    rowSelectAllHandler: PropTypes.func.isRequired
 };

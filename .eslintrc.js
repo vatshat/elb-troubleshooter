@@ -31,6 +31,6 @@ module.exports = {
         "linebreak-style": ["error","windows"],
         "quotes": ["error", "single"],
         'react/prop-types': 'off',
-        'no-unused-vars': 'off',
+        'no-unused-vars': 'on',
     }
 };

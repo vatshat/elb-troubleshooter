@@ -48,7 +48,8 @@ export default class HeadersTableContainer extends React.Component {
                 />
 
                 <TableBootstrapComponent  
-                    rowSelectHandler= { this.rowSelectHandler.bind(this) } 
+                    rowSelectHandler={ this.rowSelectHandler.bind(this) } 
+                    rowSelectAllHandler = { this.rowSelectAllHandler.bind(this) } 
                     data={ this.props.headersRowList } 
                 />
 
