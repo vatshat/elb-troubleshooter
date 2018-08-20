@@ -21,18 +21,85 @@ const addHeaderReducer =  (state=[], action) => {
     }
 };
 
-const captureToggleReducer = (state=false, action) => {
-    if (action.type === 'CAPTURE_TOGGLE') {
-        return action.captureToggle
-    } else {
-        return state
+const initialState = {
+    toggleCapture: false,
+    selectedHeaders: [],
+    preHeaderCount: 0,
+}
+
+const preHeadersReducer = (state = initialState, action) => {
+    switch (action.type) {
+    case 'CAPTURE_TOGGLE': {        
+        return { 
+            ...state,
+            toggleCapture: action.captureToggle 
+        }
+    }
+
+    case 'DISABLE_PRE_HEADERS': {
+        const newSelectedHeaders = state.selectedHeaders.map((e) => { 
+            if (e.id === action.id) {
+                e = {
+                    ...e,
+                    display: action.display,
+                }
+            }
+
+            return e;
+        });
+
+        return {
+            ...state,
+            selectedHeaders: newSelectedHeaders
+        }        
+    }
+
+    case 'ADD_PRE_HEADERS': {        
+        let idAlreadyExists = false;
+        // // https://stackoverflow.com/questions/35789221/redux-reducer-check-if-value-exists-in-state-array-and-update-state
+
+        const newSelectedHeaders = state.selectedHeaders.map((e) => { 
+            if (e.id === action.id) {
+                // https://medium.com/front-end-hacking/immutability-in-array-of-objects-using-map-method-dd61584c7188#a6a6
+
+                idAlreadyExists = true;
+                e = {
+                    ...e,
+                    display: action.display,
+                    position: action.position
+                }
+            }
+
+            return e;
+        });
+
+        if (idAlreadyExists) {
+            return {
+                ...state,
+                selectedHeaders: newSelectedHeaders
+            }
+        } 
+        else {                        
+            return {
+                ...state,
+                preHeaderCount: action.position + 1,
+                selectedHeaders: state.selectedHeaders.concat([{
+                    id: action.id,
+                    position: action.position,
+                    display: action.display
+                }])
+            }
+        }
+    }
+    default:
+        return state;
     }
 }
 
 const headerManager = (state = {}, action) => {
     return {
         actualHeaders: addHeaderReducer(state.actualHeaders, action),
-        toggleCapture: captureToggleReducer(state.toggleCapture, action),
+        preHeaders: preHeadersReducer(state.preHeaders, action),
     }
 }
 

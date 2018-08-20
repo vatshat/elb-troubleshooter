@@ -48,7 +48,7 @@ function responseListenerCallback(headerDetails) {
 }
 
 store.subscribe(() => {
-    if(store.getState().headers.toggleCapture === true) {
+    if(store.getState().headers.preHeaders.toggleCapture === true) {
 
         if (chrome.webRequest.onBeforeSendHeaders.hasListener(requestListenerCallback) === false) {
             chrome.webRequest.onBeforeSendHeaders.addListener(

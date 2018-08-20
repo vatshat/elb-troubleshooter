@@ -1,52 +1,36 @@
 import { connect } from 'react-redux'
-import HeadersTableContainer from './HeadersTableContainer'
-import { pageChangeAction } from '../actions/pageAction'
+import HeadersTableContainer from './HeadersContainer'
+import * as pageAction from '../actions/pageAction'
 
 const mapStateToProps = (state) => {
     let headersRowList = (headersList) => {
         return headersList.map((headerList) => {
+            headerList.metaHeaders.timeStamp = new Date(headerList.metaHeaders.timeStamp).toLocaleString();
             return headerList.metaHeaders;
         });
     }
+    
+    if (state.headers) {    
+        const toggleCapture = typeof state.headers.preHeaders.toggleCapture === 'undefined' ? false : state.headers.preHeaders.toggleCapture;
 
-    const { currentTablePage, sizePerTablePage } = state.headers.pagination;
-
-    if (state.headers) {
-        const headersLen = state.headers.actualHeaders.length;
-
-        let currentIndex = currentTablePage < 1 ? (currentTablePage - 1) * sizePerTablePage : 1;
-        
-        if ( headersLen > 10) {
-            // https://stackoverflow.com/questions/17781472/how-to-get-a-subset-of-a-javascript-objects-properties
-            
-            return {                
-                headersRowList: headersRowList(
-                    state.headers.actualHeaders.slice(currentIndex, currentIndex + sizePerTablePage)
-                ),
-                headersLength: headersLen,
-                sizePerPage: sizePerTablePage,
-                page: currentTablePage
-            };
-        } else {
-            return {
-                headersRowList: state.headers.actualHeaders,
-                headersLength: headersLen,
-                sizePerPage: sizePerTablePage,
-                page: currentTablePage
-            };
-        }
+        return {
+            headersRowList: headersRowList(state.headers.actualHeaders),
+            toggleCapture: toggleCapture,
+            selectedHeaders: state.headers.preHeaders.selectedHeaders,
+            preHeaderCount: state.headers.preHeaders.preHeaderCount,
+        };        
     } else {
         return {
             headersRowList: [],
-            headersLength: 0,
-            sizePerPage: sizePerTablePage,
-            page: currentTablePage
+            toggleCapture: false,
         };
     }
 };
 
 const mapDispatchToProps = dispatch => ({
-    pageChange: (currentTableIndex, sizePerTablePage) => dispatch(pageChangeAction(currentTableIndex, sizePerTablePage))
+    captureToggleDispatch: (toggleCapture) => dispatch(pageAction.captureToggleAction(toggleCapture)),
+    addPreHeadersDispatch: (id, preHeaderCount) => dispatch(pageAction.addPreHeadersAction(id, preHeaderCount)),
+    disablePreHeadersDispatch: (id) => dispatch(pageAction.disablePreHeadersAction(id))
 })
 
 export default connect(

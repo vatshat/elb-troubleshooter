@@ -21,6 +21,12 @@ export class Home extends React.Component{
     }
 }
 
+export const PageTemp = () => (
+    <div>
+        <h1>Temporary Page</h1>
+    </div>
+)
+
 export const AccessLogs = () => (
     <div>
         <h1>Access Logs</h1>
