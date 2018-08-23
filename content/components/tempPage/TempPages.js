@@ -13,8 +13,8 @@ export class Home extends React.Component{
 
     render() {
         return (
-            <div onClick={ this.changeURLHandler } onLoad={ this.changeURLHandler }>
-                <h1>Headers</h1>
+            <div>
+                <h1>Home</h1>
             </div>
     
         )

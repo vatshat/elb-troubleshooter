@@ -4,15 +4,15 @@ import { Link, NavLink } from 'react-router-dom';
 import styles from './Nav.css';
 
 class Header extends React.Component { 
-    constructor(props) {
-        super(props);
-    }
     
     render () {
         /*
         https://stackoverflow.com/questions/28365233/inline-css-styles-in-react-how-to-implement-ahover
-            alternative to this is simply stick to css using... :local(.li:hover){ background: yellow; }
+        alternative to this is simply stick to css using... :local(.li:hover){ background: yellow; }
         */
+
+        const styleActive = location.hash === '#/' ? { background: '#151d27' } : {};
+
         return (
             <nav className={'navbar navbar-inverse navbar-fixed-top bg-dark navbar-dark ' + styles.nav_bar}  role='navigation' >            
                 <div style={{width:'90%'}}>
@@ -31,7 +31,7 @@ class Header extends React.Component {
                     <div className="collapse navbar-collapse">
                         <ul className="nav navbar-nav">                            
                             <li>
-                                <NavLink id="nav1" to='/'activeStyle={{ background: '#151d27' }}>
+                                <NavLink id="nav1" to='/'activeStyle={ styleActive }>
                                     Home
                                 </NavLink>
                             </li>                           

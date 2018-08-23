@@ -1,56 +1,77 @@
 import React from 'react';
-import { TitleComponent } from '../components/headers/HeadersComponent';
+import { ContentComponent } from '../components/headers/HeadersComponent';
 import { TableBootstrapComponent } from '../components/headers/TableBootstrapComponent';
 
 export default class HeadersTableContainer extends React.Component {
     constructor(props) {
         super(props);
         this.handlerToggle = this.toggleHandler.bind(this, 'toggleCapture');
+        this.captureToggleDispatch = this.props.captureToggleDispatch;
+        this.addPreHeadersDispatch = this.props.addPreHeadersDispatch;
+        this.disablePreHeadersDispatch = this.props.disablePreHeadersDispatch;
+        this.preHeaderCount = this.props.preHeaderCount;
+    }
+
+    componentDidMount() {
+        this.props.clearPreHeadersDispatch();
     }
 
     toggleHandler(key, event) {
-        window.captureToggleDispatch(event.target.checked);
-    }
-    
+        this.captureToggleDispatch(event.target.checked);
+    }    
+
     rowSelectHandler(row, isSelected, e, rowIndex) {
         if (isSelected) { 
-            window.addPreHeadersDispatch(row.id, window.preHeaderCount); 
+            this.addPreHeadersDispatch(row.id, this.preHeaderCount); 
         }
         else { 
-            window.disablePreHeadersDispatch(row.id);
+            this.disablePreHeadersDispatch(row.id);
         }
     }
 
     rowSelectAllHandler(isSelected, rows) {
         if (isSelected) {
             for (let i = 0; i < rows.length; i++) {
-                window.addPreHeadersDispatch(rows[i].id, window.preHeaderCount);
+                this.addPreHeadersDispatch(rows[i].id, this.preHeaderCount);
             }
         } else {
             for (let i = 0; i < rows.length; i++) {
-                window.disablePreHeadersDispatch(rows[i].id);
+                this.disablePreHeadersDispatch(rows[i].id);
             }
         }
     }
-
+    
     render() {
-        window.captureToggleDispatch = this.props.captureToggleDispatch;
-        window.addPreHeadersDispatch = this.props.addPreHeadersDispatch;
-        window.disablePreHeadersDispatch = this.props.disablePreHeadersDispatch;
-        window.preHeaderCount = this.props.preHeaderCount;
-        // https://stackoverflow.com/questions/5063878/how-to-cleanly-deal-with-global-variables
+        const { headersRowList, selectedHeaders, toggleCapture } = this.props;
+        let displayedHeaders = selectedHeaders.
+            sort((a, b) => {
+                if (a.position < b.position) { return -1; }
+                if (a.position > b.position) { return 1; }
+                return 0;
+            }).
+            map((selectedHeader) => {
+                if (selectedHeader.display) {
+                    return headersRowList[selectedHeader.id]
+                }
+            }).
+            filter((selectedHeader) => {
+                return typeof selectedHeader !== 'undefined'
+            });
 
         return ( 
             <div>            
-                <TitleComponent 
+                <ContentComponent 
                     handleCaptureToggleChange={ this.handlerToggle }
-                    toggleCapture={ this.props.toggleCapture }
+                    toggleCapture={ toggleCapture }
+                    selectedHeaders={ typeof headersRowList === 'undefined'? [] : displayedHeaders }
                 />
 
                 <TableBootstrapComponent  
                     rowSelectHandler={ this.rowSelectHandler.bind(this) } 
-                    rowSelectAllHandler = { this.rowSelectAllHandler.bind(this) } 
-                    data={ this.props.headersRowList } 
+                    rowSelectAllHandler={ this.rowSelectAllHandler.bind(this) } 
+                    toggleCapture={ toggleCapture }
+                    headersLength={ headersRowList.length }
+                    data={ toggleCapture? [] : headersRowList } 
                 />
 
             </div>

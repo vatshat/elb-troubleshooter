@@ -36,6 +36,13 @@ const preHeadersReducer = (state = initialState, action) => {
         }
     }
 
+    case 'CLEAR_PRE_HEADERS': {
+        return {
+            ...state,
+            selectedHeaders: []
+        }
+    }
+
     case 'DISABLE_PRE_HEADERS': {
         const newSelectedHeaders = state.selectedHeaders.map((e) => { 
             if (e.id === action.id) {

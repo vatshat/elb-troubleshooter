@@ -2,19 +2,16 @@ import { connect } from 'react-redux'
 import HeadersTableContainer from './HeadersContainer'
 import * as pageAction from '../actions/pageAction'
 
-const mapStateToProps = (state) => {
-    let headersRowList = (headersList) => {
-        return headersList.map((headerList) => {
-            headerList.metaHeaders.timeStamp = new Date(headerList.metaHeaders.timeStamp).toLocaleString();
-            return headerList.metaHeaders;
-        });
-    }
-    
+const mapStateToProps = (state) => {    
     if (state.headers) {    
         const toggleCapture = typeof state.headers.preHeaders.toggleCapture === 'undefined' ? false : state.headers.preHeaders.toggleCapture;
 
         return {
-            headersRowList: headersRowList(state.headers.actualHeaders),
+            headersRowList: state.headers.actualHeaders.map((headerList) => {
+                let time = new Date(headerList.metaHeaders.timeStamp);
+                headerList.metaHeaders.timeStamp = `${time.toLocaleTimeString()} ${time.toLocaleDateString()}`;
+                return headerList.metaHeaders;
+            }),
             toggleCapture: toggleCapture,
             selectedHeaders: state.headers.preHeaders.selectedHeaders,
             preHeaderCount: state.headers.preHeaders.preHeaderCount,
@@ -23,6 +20,7 @@ const mapStateToProps = (state) => {
         return {
             headersRowList: [],
             toggleCapture: false,
+            selectedHeaders: [],
         };
     }
 };
@@ -30,7 +28,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
     captureToggleDispatch: (toggleCapture) => dispatch(pageAction.captureToggleAction(toggleCapture)),
     addPreHeadersDispatch: (id, preHeaderCount) => dispatch(pageAction.addPreHeadersAction(id, preHeaderCount)),
-    disablePreHeadersDispatch: (id) => dispatch(pageAction.disablePreHeadersAction(id))
+    disablePreHeadersDispatch: (id) => dispatch(pageAction.disablePreHeadersAction(id)),
+    clearPreHeadersDispatch: () => dispatch(pageAction.clearPreHeadersAction())
 })
 
 export default connect(

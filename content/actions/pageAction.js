@@ -15,3 +15,7 @@ export const disablePreHeadersAction = (id) => ({
     id: id,
     display: false,
 });
+
+export const clearPreHeadersAction = () => ({
+    type: 'CLEAR_PRE_HEADERS',
+});
