@@ -1,6 +1,6 @@
 import React from 'react';
-import { ContentComponent } from '../components/headers/HeadersComponent';
-import { TableBootstrapComponent } from '../components/headers/TableBootstrapComponent';
+import ContentComponent from '../components/headers/HeadersComponent';
+import TableBootstrapComponent from '../components/headers/TableBootstrapComponent';
 
 export default class HeadersTableContainer extends React.Component {
     constructor(props) {

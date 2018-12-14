@@ -19,7 +19,7 @@ class TableExpandComponent extends React.Component {
     }
 }
 
-class ActualBootTableComponent extends React.Component {
+export class ActualBootTableComponent extends React.Component {
     renderPaginationShowsTotal(start, to, total) {
         return (
             <p style={ { color: 'blue' } }>
@@ -160,7 +160,7 @@ class ExportCSVComponent extends React.Component {
     }
 }
 
-export class TableBootstrapComponent extends React.Component {    
+export default class TableBootstrapComponent extends React.Component {    
     render() {
         return (      
             <div>  

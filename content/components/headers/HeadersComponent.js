@@ -4,7 +4,7 @@ import Toggle from 'react-toggle';
 import ReactJson from 'react-json-view'
 import { Panel, Well } from 'react-bootstrap';
 
-class ToggleComponent extends React.Component {    
+export class ToggleComponent extends React.Component {    
     render() {
         
         const { toggleCapture } = this.props;
@@ -51,7 +51,7 @@ ToggleComponent.propTypes = {
         toggleCapture: PropTypes.bool.isRequired,
 }
 
-class SelectedHeadersComponent extends React.Component {
+export class SelectedHeadersComponent extends React.Component {
     constructor(props, context) {
         super(props, context);
 
@@ -147,7 +147,7 @@ SelectedHeadersComponent.propTypes = {
     selectedHeaders: PropTypes.array.isRequired,
 }
 
-export class ContentComponent extends React.Component {
+export default class ContentComponent extends React.Component {
     render() { 
         
         return (
