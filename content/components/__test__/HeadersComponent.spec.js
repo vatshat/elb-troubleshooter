@@ -1,12 +1,9 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
 import toJson from 'enzyme-to-json';
-import {shallow} from 'enzyme';
+import { shallow } from 'enzyme';
 
-import {
-    ToggleComponent,
-    SelectedHeadersComponent
-} from '../headers/HeadersComponent'
+import { ToggleComponent, SelectedHeadersComponent } from '../headers/HeadersComponent'
 
 import { ActualBootTableComponent } from '../headers/TableBootstrapComponent'
 
@@ -43,14 +40,13 @@ describe('>>> Snapshots of Components', () => {
         expect(renderedValue).toMatchSnapshot();
     });
 
-    it('+++ check if header table is initialized correctly', () => {        
+    it('+++ check if header table is initialized at all', () => {        
         // react tets renderer doesn't work switching to enzyme - https://github.com/AllenFang/react-bootstrap-table/issues/1160
-
 
         const wrapper = shallow(
             <ActualBootTableComponent 
                 data = { [] }
-                headersLength = { 1 }
+                headersLength = { 10 }
                 rowSelectHandler = { mockFunction }
                 rowSelectAllHandler = { mockFunction }
                 toggleCapture = { false }

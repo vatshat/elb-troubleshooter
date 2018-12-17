@@ -1,0 +1,24 @@
+{
+    "atomKeymap.promptV3Features": false,
+    "cSpell.language": "en-GB",
+    "editor.detectIndentation": false,
+    "editor.formatOnPaste": true,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "files.autoSave": "off",
+    "git.autofetch": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "npm.enableScriptExplorer": true,
+    "python.pythonPath": "C:\\ProgramData\\Anaconda3",
+    "terminal.external.windowsExec": "C:\\Windows\\System32\\bash.exe",
+    "terminal.integrated.rendererType": "dom",
+    "terminal.integrated.shell.windows": "C:\\Windows\\System32\\cmd.exe",
+    "typescript.autoImportSuggestions.enabled": false,
+    "vs-kubernetes": {
+        "vs-kubernetes.kubectl-path": "C:\\Users\\vatshat\\.vs-kubernetes\\tools\\kubectl\\kubectl.exe"
+    },
+    "window.zoomLevel": 0,
+    "workbench.colorTheme": "Solarized Dark",
+    "workbench.sideBar.location": "left",
+    "terminal.integrated.confirmOnExit": true,
+    "eslint.enable": true
+}

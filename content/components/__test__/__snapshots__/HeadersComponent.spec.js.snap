@@ -22,6 +22,308 @@ exports[`>>> Snapshots of Components +++ check if header panel is initialized co
 </div>
 `;
 
+exports[`>>> Snapshots of Components +++ check if header table is initialized at all 1`] = `
+<BootstrapTable
+  autoCollapse={
+    Object {
+      "filter": false,
+      "search": false,
+      "sort": false,
+    }
+  }
+  bodyContainerClass={null}
+  bordered={false}
+  cellEdit={
+    Object {
+      "afterSaveCell": undefined,
+      "beforeSaveCell": undefined,
+      "blurToEscape": false,
+      "blurToSave": false,
+      "mode": "none",
+      "nonEditableRows": undefined,
+    }
+  }
+  columnFilter={false}
+  condensed={false}
+  containerClass={null}
+  csvFileName="spreadsheet.csv"
+  data={Array []}
+  deleteRow={false}
+  expandColumnOptions={
+    Object {
+      "expandColumnBeforeSelectColumn": false,
+      "expandColumnVisible": true,
+    }
+  }
+  expandComponent={[Function]}
+  expandableRow={[Function]}
+  exportCSV={false}
+  fetchInfo={
+    Object {
+      "dataTotalSize": 0,
+    }
+  }
+  footer={false}
+  headerContainerClass={null}
+  headerStyle={
+    Object {
+      "color": "rgb(203, 75, 22)",
+      "whiteSpace": "normal",
+    }
+  }
+  height="100%"
+  hover={false}
+  id="temp"
+  ignoreSinglePage={false}
+  insertRow={false}
+  keyBoardNav={false}
+  multiColumnSearch={false}
+  multiColumnSort={1}
+  options={
+    Object {
+      "defaultSortName": "id",
+      "defaultSortOrder": "asc",
+      "noDataText": "There are no headers captured",
+      "paginationShowsTotal": true,
+      "sizePerPageList": Array [
+        10,
+        25,
+        50,
+        100,
+      ],
+    }
+  }
+  pagination={true}
+  printable={false}
+  renderAlert={true}
+  replace={false}
+  search={true}
+  searchPlaceholder="Filter below table based on any column"
+  selectRow={
+    Object {
+      "clickToExpand": true,
+      "mode": "checkbox",
+      "onSelect": [Function],
+      "onSelectAll": [Function],
+    }
+  }
+  striped={false}
+  tableBodyClass={null}
+  tableContainerClass={null}
+  tableFooterClass={null}
+  tableHeaderClass={null}
+  trClassName=""
+  version="3"
+  withoutTabIndex={false}
+>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={false}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="id"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={true}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="5%"
+  >
+    #
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={false}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="requestId"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width={null}
+  >
+    Request ID
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={true}
+    csvFieldType="string"
+    dataAlign="left"
+    dataField="initiator"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="15%"
+  >
+    Initiator
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={false}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="headerType"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width={null}
+  >
+    HTTP Type
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={true}
+    csvFieldType="string"
+    dataAlign="left"
+    dataField="timeStamp"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="10%"
+  >
+    Timestamp
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={true}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="type"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="10%"
+  >
+    Type
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={true}
+    csvFieldType="string"
+    dataAlign="left"
+    dataField="url"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="30%"
+  >
+    URL
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={false}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="statusCode"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width={null}
+  >
+    Status Code
+  </TableHeaderColumn>
+</BootstrapTable>
+`;
+
 exports[`>>> Snapshots of Components +++ check if header table is initialized correctly 1`] = `
 <BootstrapTable
   autoCollapse={

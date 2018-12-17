@@ -1,0 +1,52 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "chrome against localhost",
+            "url": "http://localhost:8080",
+            "webRoot": "${env:vsWorkspaceRoot}/assets"
+        },{
+            "type": "chrome",
+            "request": "launch",
+            "name": "chrome against file",
+            "url": "http://localhost:8080",
+            "file": "${env:vsWorkspaceRoot}/assets/index.html"
+        }, {
+            "type": "node",
+            "request": "launch",
+            "name": "node sandbox",
+            "program": "${env:vsWorkspaceRoot}/sandbox.js",
+            "outFiles": ["${env:vsWorkspaceRoot}/.compiled/**/*.js"],
+        }, {
+            "type": "node",
+            "request": "launch",
+            "name": "nodemon sandbox",
+            "runtimeExecutable": "nodemon",
+            "program": "${env:vsWorkspaceRoot}/sandbox.js",
+            "restart": true,
+            "console": "integratedTerminal",
+            "args": [
+                "--exec", 
+                "babel-node"
+            ]
+        }, {
+            "name": "jest",
+            "type": "node",
+            "request": "launch",
+            "runtimeArgs": [
+                "--inspect-brk",
+                "${env:vsWorkspaceRoot}/node_modules/jest/bin/jest.js",
+                "--runInBand"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "port": 9229,
+            "cwd": "${env:vsWorkspaceRoot}"
+        }
+    ]
+}

@@ -27,7 +27,7 @@ const initialState = {
     preHeaderCount: 0,
 }
 
-const preHeadersReducer = (state = initialState, action) => {
+export const preHeadersReducer = (state = initialState, action) => {
     switch (action.type) {
     case 'CAPTURE_TOGGLE': {        
         return { 

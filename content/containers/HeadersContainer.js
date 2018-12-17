@@ -1,6 +1,7 @@
 import React from 'react';
 import ContentComponent from '../components/headers/HeadersComponent';
 import TableBootstrapComponent from '../components/headers/TableBootstrapComponent';
+import PropTypes from 'prop-types';
 
 export default class HeadersTableContainer extends React.Component {
     constructor(props) {
@@ -78,3 +79,11 @@ export default class HeadersTableContainer extends React.Component {
         );
     }
 }
+
+HeadersTableContainer.propTypes = {
+    captureToggleDispatch: PropTypes.func.isRequired,
+    addPreHeadersDispatch: PropTypes.func.isRequired,
+    disablePreHeadersDispatch: PropTypes.func.isRequired,
+    preHeaderCount: PropTypes.number.isRequired,
+    clearPreHeadersDispatch: PropTypes.func.isRequired
+};
