@@ -6,9 +6,9 @@ module.exports = {
     context: path.join(__dirname),
     devtool: debug ? 'inline-sourcemap' : null,
     entry: {
-        popup: './popup/indexPopup.js',
-        background: './background/indexBackground.js',
-        content: './content/indexContent.js'
+        popup: './src/popup/indexPopup.js',
+        background: './src/background/indexBackground.js',
+        content: './src/content/indexContent.js'
     },
     module: {
         rules: [
@@ -37,9 +37,9 @@ module.exports = {
         ]
     },
     output: {
-        path: __dirname + '/assets/js',
+        path: __dirname + '/src/assets/js',
         filename: '[name].min.js',
-        publicPath: '/assets'
+        publicPath: '/src/assets'
     },
     watch: true,
     node: {

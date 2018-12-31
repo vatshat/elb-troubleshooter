@@ -1,0 +1,791 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`>>> Snapshots of Components +++ check if header panel is initialized correctly 1`] = `
+<div
+  className="well"
+>
+  <h4
+    style={
+      Object {
+        "color": "rgb(203, 75, 22)",
+        "cursor": "pointer",
+      }
+    }
+  >
+    <p>
+      No headers selected 
+      <small>
+        ...select checkbox in any row in the below table to view header details
+      </small>
+    </p>
+  </h4>
+</div>
+`;
+
+exports[`>>> Snapshots of Components +++ check if header table is initialized at all 1`] = `
+<BootstrapTable
+  autoCollapse={
+    Object {
+      "filter": false,
+      "search": false,
+      "sort": false,
+    }
+  }
+  bodyContainerClass={null}
+  bordered={false}
+  cellEdit={
+    Object {
+      "afterSaveCell": undefined,
+      "beforeSaveCell": undefined,
+      "blurToEscape": false,
+      "blurToSave": false,
+      "mode": "none",
+      "nonEditableRows": undefined,
+    }
+  }
+  columnFilter={false}
+  condensed={false}
+  containerClass={null}
+  csvFileName="spreadsheet.csv"
+  data={Array []}
+  deleteRow={false}
+  expandColumnOptions={
+    Object {
+      "expandColumnBeforeSelectColumn": false,
+      "expandColumnVisible": true,
+    }
+  }
+  expandComponent={[Function]}
+  expandableRow={[Function]}
+  exportCSV={false}
+  fetchInfo={
+    Object {
+      "dataTotalSize": 0,
+    }
+  }
+  footer={false}
+  headerContainerClass={null}
+  headerStyle={
+    Object {
+      "color": "rgb(203, 75, 22)",
+      "whiteSpace": "normal",
+    }
+  }
+  height="100%"
+  hover={false}
+  id="temp"
+  ignoreSinglePage={false}
+  insertRow={false}
+  keyBoardNav={false}
+  multiColumnSearch={false}
+  multiColumnSort={1}
+  options={
+    Object {
+      "defaultSortName": "id",
+      "defaultSortOrder": "asc",
+      "noDataText": "There are no headers captured",
+      "paginationShowsTotal": true,
+      "sizePerPageList": Array [
+        10,
+        25,
+        50,
+        100,
+      ],
+    }
+  }
+  pagination={true}
+  printable={false}
+  renderAlert={true}
+  replace={false}
+  search={true}
+  searchPlaceholder="Filter below table based on any column"
+  selectRow={
+    Object {
+      "clickToExpand": true,
+      "mode": "checkbox",
+      "onSelect": [Function],
+      "onSelectAll": [Function],
+    }
+  }
+  striped={false}
+  tableBodyClass={null}
+  tableContainerClass={null}
+  tableFooterClass={null}
+  tableHeaderClass={null}
+  trClassName=""
+  version="3"
+  withoutTabIndex={false}
+>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={false}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="id"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={true}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="5%"
+  >
+    #
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={false}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="requestId"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width={null}
+  >
+    Request ID
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={true}
+    csvFieldType="string"
+    dataAlign="left"
+    dataField="initiator"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="15%"
+  >
+    Initiator
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={false}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="headerType"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width={null}
+  >
+    HTTP Type
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={true}
+    csvFieldType="string"
+    dataAlign="left"
+    dataField="timeStamp"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="10%"
+  >
+    Timestamp
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={true}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="type"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="10%"
+  >
+    Type
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={true}
+    csvFieldType="string"
+    dataAlign="left"
+    dataField="url"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="30%"
+  >
+    URL
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={false}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="statusCode"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width={null}
+  >
+    Status Code
+  </TableHeaderColumn>
+</BootstrapTable>
+`;
+
+exports[`>>> Snapshots of Components +++ check if header table is initialized correctly 1`] = `
+<BootstrapTable
+  autoCollapse={
+    Object {
+      "filter": false,
+      "search": false,
+      "sort": false,
+    }
+  }
+  bodyContainerClass={null}
+  bordered={false}
+  cellEdit={
+    Object {
+      "afterSaveCell": undefined,
+      "beforeSaveCell": undefined,
+      "blurToEscape": false,
+      "blurToSave": false,
+      "mode": "none",
+      "nonEditableRows": undefined,
+    }
+  }
+  columnFilter={false}
+  condensed={false}
+  containerClass={null}
+  csvFileName="spreadsheet.csv"
+  data={Array []}
+  deleteRow={false}
+  expandColumnOptions={
+    Object {
+      "expandColumnBeforeSelectColumn": false,
+      "expandColumnVisible": true,
+    }
+  }
+  expandComponent={[Function]}
+  expandableRow={[Function]}
+  exportCSV={false}
+  fetchInfo={
+    Object {
+      "dataTotalSize": 0,
+    }
+  }
+  footer={false}
+  headerContainerClass={null}
+  headerStyle={
+    Object {
+      "color": "rgb(203, 75, 22)",
+      "whiteSpace": "normal",
+    }
+  }
+  height="100%"
+  hover={false}
+  id="temp"
+  ignoreSinglePage={false}
+  insertRow={false}
+  keyBoardNav={false}
+  multiColumnSearch={false}
+  multiColumnSort={1}
+  options={
+    Object {
+      "defaultSortName": "id",
+      "defaultSortOrder": "asc",
+      "noDataText": "There are no headers captured",
+      "paginationShowsTotal": true,
+      "sizePerPageList": Array [
+        10,
+        25,
+        50,
+        100,
+      ],
+    }
+  }
+  pagination={true}
+  printable={false}
+  renderAlert={true}
+  replace={false}
+  search={true}
+  searchPlaceholder="Filter below table based on any column"
+  selectRow={
+    Object {
+      "clickToExpand": true,
+      "mode": "checkbox",
+      "onSelect": [Function],
+      "onSelectAll": [Function],
+    }
+  }
+  striped={false}
+  tableBodyClass={null}
+  tableContainerClass={null}
+  tableFooterClass={null}
+  tableHeaderClass={null}
+  trClassName=""
+  version="3"
+  withoutTabIndex={false}
+>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={false}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="id"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={true}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="5%"
+  >
+    #
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={false}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="requestId"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width={null}
+  >
+    Request ID
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={true}
+    csvFieldType="string"
+    dataAlign="left"
+    dataField="initiator"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="15%"
+  >
+    Initiator
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={false}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="headerType"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width={null}
+  >
+    HTTP Type
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={true}
+    csvFieldType="string"
+    dataAlign="left"
+    dataField="timeStamp"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="10%"
+  >
+    Timestamp
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={true}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="type"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="10%"
+  >
+    Type
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={true}
+    csvFieldType="string"
+    dataAlign="left"
+    dataField="url"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width="30%"
+  >
+    URL
+  </TableHeaderColumn>
+  <TableHeaderColumn
+    className=""
+    columnClassName=""
+    columnTitle={false}
+    csvFieldType="string"
+    dataAlign="center"
+    dataField="statusCode"
+    dataSort={true}
+    defaultASC={false}
+    editColumnClassName=""
+    editable={true}
+    expandable={true}
+    filterFormatted={false}
+    headerAlign="center"
+    headerTitle={true}
+    hidden={false}
+    hiddenOnInsert={false}
+    invalidEditColumnClassName=""
+    isKey={false}
+    keyValidator={false}
+    searchable={true}
+    sortIndicator={true}
+    width={null}
+  >
+    Status Code
+  </TableHeaderColumn>
+</BootstrapTable>
+`;
+
+exports[`>>> Snapshots of Components +++ check if toggle button is showing blue 1`] = `
+<div
+  id="captureToggle"
+>
+  <div
+    className="react-toggle react-toggle--checked"
+    onClick={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
+    onTouchStart={[Function]}
+  >
+    <div
+      className="react-toggle-track"
+    >
+      <div
+        className="react-toggle-track-check"
+      >
+        <svg
+          height="11"
+          viewBox="0 0 14 11"
+          width="14"
+        >
+          <title>
+            switch-check
+          </title>
+          <path
+            d="M11.264 0L5.26 6.004 2.103 2.847 0 4.95l5.26 5.26 8.108-8.107L11.264 0"
+            fill="#fff"
+            fillRule="evenodd"
+          />
+        </svg>
+      </div>
+      <div
+        className="react-toggle-track-x"
+      >
+        <svg
+          height="10"
+          viewBox="0 0 10 10"
+          width="10"
+        >
+          <title>
+            switch-x
+          </title>
+          <path
+            d="M9.9 2.12L7.78 0 4.95 2.828 2.12 0 0 2.12l2.83 2.83L0 7.776 2.123 9.9 4.95 7.07 7.78 9.9 9.9 7.776 7.072 4.95 9.9 2.12"
+            fill="#fff"
+            fillRule="evenodd"
+          />
+        </svg>
+      </div>
+    </div>
+    <div
+      className="react-toggle-thumb"
+    />
+    <input
+      checked={true}
+      className="react-toggle-screenreader-only"
+      id="toggleCaptures"
+      name="toggleCapture"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      type="checkbox"
+      value="yes"
+    />
+  </div>
+  <h4
+    htmlFor="toggleCapture"
+    style={
+      Object {
+        "color": "#2fa4e7",
+      }
+    }
+  >
+    Capturing enabled 
+    <small>
+      ...Please disable capturing to show the table
+    </small>
+  </h4>
+</div>
+`;
+
+exports[`>>> Snapshots of Components +++ check if toggle button is showing gray 1`] = `
+<div
+  id="captureToggle"
+>
+  <div
+    className="react-toggle"
+    onClick={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
+    onTouchStart={[Function]}
+  >
+    <div
+      className="react-toggle-track"
+    >
+      <div
+        className="react-toggle-track-check"
+      >
+        <svg
+          height="11"
+          viewBox="0 0 14 11"
+          width="14"
+        >
+          <title>
+            switch-check
+          </title>
+          <path
+            d="M11.264 0L5.26 6.004 2.103 2.847 0 4.95l5.26 5.26 8.108-8.107L11.264 0"
+            fill="#fff"
+            fillRule="evenodd"
+          />
+        </svg>
+      </div>
+      <div
+        className="react-toggle-track-x"
+      >
+        <svg
+          height="10"
+          viewBox="0 0 10 10"
+          width="10"
+        >
+          <title>
+            switch-x
+          </title>
+          <path
+            d="M9.9 2.12L7.78 0 4.95 2.828 2.12 0 0 2.12l2.83 2.83L0 7.776 2.123 9.9 4.95 7.07 7.78 9.9 9.9 7.776 7.072 4.95 9.9 2.12"
+            fill="#fff"
+            fillRule="evenodd"
+          />
+        </svg>
+      </div>
+    </div>
+    <div
+      className="react-toggle-thumb"
+    />
+    <input
+      checked={false}
+      className="react-toggle-screenreader-only"
+      id="toggleCaptures"
+      name="toggleCapture"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      type="checkbox"
+      value="yes"
+    />
+  </div>
+  <h4
+    htmlFor="toggleCapture"
+    style={
+      Object {
+        "color": "#151d27",
+      }
+    }
+  >
+    Capturing disabled 
+    <small>
+      ...Toggle above switch to start capturing
+    </small>
+  </h4>
+</div>
+`;

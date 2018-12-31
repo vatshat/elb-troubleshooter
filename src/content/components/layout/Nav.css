@@ -1,0 +1,10 @@
+nav.nav_bar {
+    background: rgb(36, 48, 64);
+}
+
+a.nav_a_img {
+    padding: 0 10px;
+}
+img.nav_img {
+    height: 100%;
+}
