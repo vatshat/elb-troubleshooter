@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { Home, AccessLogs, PageTemp } from '../components/tempPage/TempPages';
+import { Home, Metrics } from '../components/tempPage/StaticPages';
+import { PageTemp } from '../components/tempPage/TempPages';
 import Headers from './HeadersReduxConnect';
 
 import Nav from '../components/layout/Nav';
@@ -19,7 +20,7 @@ class Main extends React.Component {
                     <div className="col-lg-12">
                         <Switch>
                             <Route exact path='/headers' component={Headers}/>
-                            <Route exact path='/access_logs' component={AccessLogs} />
+                            <Route exact path='/access_logs' component={Metrics} />
                             <Route exact path='/temp_page' component={PageTemp} />
                             <Route path='/' component={Home} />
                         </Switch>

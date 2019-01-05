@@ -20,20 +20,27 @@
             "type": "node",
             "request": "launch",
             "name": "node sandbox",
-            "program": "${env:vsWorkspaceRoot}/sandbox.js",
-            "outFiles": ["${env:vsWorkspaceRoot}/.compiled/**/*.js"],
+            "program": "${env:vsWorkspaceRoot}\\src\\sandbox\\sandbox.js",
+            "cwd": "${env:vsWorkspaceRoot}\\src\\sandbox",
+            "outFiles": ["${env:vsWorkspaceRoot}/src/sandbox/.babel.compiled/**/*.js"],
+            "runtimeArgs": ["--nolazy"],
+            "sourceMaps": true
         }, {
             "type": "node",
             "request": "launch",
-            "name": "nodemon sandbox",
+            "name": "nodemon",
             "runtimeExecutable": "nodemon",
-            "program": "${env:vsWorkspaceRoot}/sandbox.js",
+            "program": "${env:vsWorkspaceRoot}\\src\\sandbox\\src\\sandbox.js",
+            "runtimeArgs": ["--exec", "babel-node"],
             "restart": true,
             "console": "integratedTerminal",
-            "args": [
-                "--exec", 
-                "babel-node"
-            ]
+            "internalConsoleOptions": "neverOpen"
+        }, {
+            "name": "Attach",
+            "type": "node",
+            "request": "attach",
+            "address": "localhost",
+            "port": 9229
         }, {
             "name": "jest",
             "type": "node",
@@ -41,7 +48,8 @@
             "runtimeArgs": [
                 "--inspect-brk",
                 "${env:vsWorkspaceRoot}/node_modules/jest/bin/jest.js",
-                "--runInBand"
+                "--runInBand",
+                "sandbox"
             ],
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
