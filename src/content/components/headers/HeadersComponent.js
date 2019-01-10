@@ -118,7 +118,13 @@ export class SelectedHeadersComponent extends React.Component {
                     <p>
                         <span className="glyphicon glyphicon-minus" style={{ color: '#2fa4e7' }}></span>
                         {' '} 
-                        <a onClick={() => this.setState({ open: !this.state.open })} >
+                        <a 
+                            onClick={
+                                () => this.setState((prevState, props) => ({
+                                    open: !prevState.open
+                                }))
+                            } 
+                        >
                             Click here to collapse the selected headers
                         </a>
                     </p>
@@ -126,7 +132,13 @@ export class SelectedHeadersComponent extends React.Component {
                     <p>    
                         <span className="glyphicon glyphicon-plus" style={{ color: '#2fa4e7' }}></span>
                         {' '} 
-                        <a onClick={() => this.setState({ open: !this.state.open })} >
+                        < a 
+                            onClick = {
+                                () => this.setState((prevState, props) => ({
+                                    open: !prevState.open
+                                }))
+                            } 
+                        >
                             Click here to expand the selected headers
                         </a>
                     </p>

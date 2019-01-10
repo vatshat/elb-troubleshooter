@@ -5,18 +5,16 @@ import PropTypes from 'prop-types';
 import ReactJson from 'react-json-view'
 import { CSVLink } from 'react-csv';
 
-class TableExpandComponent extends React.Component {    
-    render() {
-        return (
-            <div className='col-sm-4'>
-                <ReactJson 
-                    src={this.props.data} 
-                    name="headers"
-                    displayDataTypes={ false }
-                />
-            </div>
-        );
-    }
+const TableExpandComponent = props => {        
+    return (
+        <div className='col-sm-4'>
+            <ReactJson 
+                src={props.data} 
+                name="headers"
+                displayDataTypes={ false }
+            />
+        </div>
+    );
 }
 
 export class ActualBootTableComponent extends React.Component {
@@ -107,69 +105,66 @@ export class ActualBootTableComponent extends React.Component {
     }
 }
 
-class ExportCSVComponent extends React.Component {        
-    render() {
-
+const ExportCSVComponent = props => {        
         
-        const headers = [
-            { label: 'ID', key: 'id' },
-            {label: 'Request ID', key: 'requestId'},
-            {label: 'Initiator', key: 'initiator'},
-            {label: 'Time stamp', key: 'timeStamp'},
-            {label: 'Type', key: 'type'},
-            {label: 'URL', key: 'url'},
-            {label: 'Status Code', key: 'statusCode'},
-            {label: 'Status Line', key: 'statusLine'},
-            {label: 'Header Type', key: 'headerType'},
-            {label: 'HTTP Headers', key: 'headers'},
-        ];
+    const headers = [
+        { label: 'ID', key: 'id' },
+        {label: 'Request ID', key: 'requestId'},
+        {label: 'Initiator', key: 'initiator'},
+        {label: 'Time stamp', key: 'timeStamp'},
+        {label: 'Type', key: 'type'},
+        {label: 'URL', key: 'url'},
+        {label: 'Status Code', key: 'statusCode'},
+        {label: 'Status Line', key: 'statusLine'},
+        {label: 'Header Type', key: 'headerType'},
+        {label: 'HTTP Headers', key: 'headers'},
+    ];
 
-        const data = this.props.data.map((header) => {
-            if ( typeof header.responseHeaders === 'object' ) {
-                let {responseHeaders, ...headerNew} = header                
+    const data = props.data.map((header) => {
+        if ( typeof header.responseHeaders === 'object' ) {
+            let {responseHeaders, ...headerNew} = header                
 
-                return {
-                    ...headerNew,
-                    headers: JSON.stringify(header.responseHeaders)
-                }
+            return {
+                ...headerNew,
+                headers: JSON.stringify(header.responseHeaders)
             }
-            else if ( typeof header.requestHeaders === 'object' ) {
-                let {requestHeaders, ...headerNew} = header;                
+        }
+        else if ( typeof header.requestHeaders === 'object' ) {
+            let {requestHeaders, ...headerNew} = header;                
 
-                return {
-                    ...headerNew,
-                    headers: JSON.stringify(header.requestHeaders)
-                }
+            return {
+                ...headerNew,
+                headers: JSON.stringify(header.requestHeaders)
             }
-        })
+        }
+    })
 
-        return (             
-            <CSVLink 
-                headers={headers}
-                data={data}
-                separator={";"}
-                filename={`headers-${ new Date().toISOString() }.csv`}
-            >
-                <Button className='export-csv'>
-                    <Glyphicon glyph="export" /> 
-                    {' '}
-                        Export to CSV
-                </Button> 
-            </CSVLink>
-        )
-    }
+    return (             
+        <CSVLink 
+            headers={headers}
+            data={data}
+            separator={";"}
+            filename={`headers-${ new Date().toISOString() }.csv`}
+        >
+            <Button className='export-csv'>
+                <Glyphicon glyph="export" /> 
+                {' '}
+                    Export to CSV
+            </Button> 
+        </CSVLink>
+    )
 }
 
-export default class TableBootstrapComponent extends React.Component {    
-    render() {
-        return (      
-            <div>  
-                <ExportCSVComponent data={ this.props.data } />  
-                <ActualBootTableComponent { ...this.props } />                       
-            </div>
-        );
-    }
+const TableBootstrapComponent = props => {
+    return (      
+        <div>  
+            <ExportCSVComponent data={ props.data } />  
+            <ActualBootTableComponent { ...props } />                       
+        </div>
+    );
 }
+
+export default TableBootstrapComponent
 
 TableBootstrapComponent.propTypes = {
     data: PropTypes.array.isRequired,

@@ -1,66 +1,37 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-class Headers extends React.Component {
+const Headers = () => {
+    if (this.props.preHeadersStoreList) {
+        const { preHeadersStoreList } = this.props;
+        
+        const preHeadersList = preHeadersStoreList.slice(0, 10);
 
-    componentDidMount() {
-        document.addEventListener('click', () => {
-            this.props.dispatch({
-                type: 'ADD_COUNT'
-            });
+        const PreHeaderComponents = preHeadersList.map((preHeader, index) => {                    
+
+            //const id = preHeader.headers.timeStamp; //Date.now()
+            
+            const id = index
+
+            return <PreHeader key={id}  {...preHeader } />;
         });
-
-        /*
-        window.history.replaceState({}, document.title, '/');
-
-        fix the unmount of this with 
-            https://stackoverflow.com/questions/39094138/reactjs-event-listener-beforeunload-added-but-not-removed
-            https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Intercept_HTTP_requests
-        */
-    }    
-
-    render() {
-
-        if (this.props.preHeadersStoreList) {
-            const { preHeadersStoreList } = this.props;
-            
-            const preHeadersList = preHeadersStoreList.slice(0, 10);
-
-            const PreHeaderComponents = preHeadersList.map((preHeader, index) => {                    
-
-                //const id = preHeader.headers.timeStamp; //Date.now()
-                
-                const id = index
-
-                return <PreHeader key={id}  {...preHeader } />;
-            });
-            
-            return (
-                <div className="row">{PreHeaderComponents}</div>
-            );
-        }
-        else { return ( <div /> ); }
-    }
-}
-
-const preStyle = {
-    wordWrap: 'normal'
-};
-
-class PreHeader extends React.Component {
-    render() {
+        
         return (
-            <pre style={preStyle} className="col-lg-4">
-                {JSON.stringify(this.props, null, 2)}
-            </pre>
+            <div className="row">{PreHeaderComponents}</div>
         );
     }
+    else { return ( <div /> ); }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        preHeadersStoreList: state.headers.actualHeaders
-    };
-};
+
+const PreHeader = (props) => {
+    return (
+        <pre style={{ wordWrap: 'normal' }} className="col-lg-4">
+            {JSON.stringify(props, null, 2)}
+        </pre>
+    );
+}
+
+const mapStateToProps = (state) => {{ preHeadersStoreList: state.headers.actualHeaders }};
 
 export default connect(mapStateToProps)(Headers);

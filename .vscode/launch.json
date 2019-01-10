@@ -19,16 +19,24 @@
         }, {
             "type": "node",
             "request": "launch",
+            "name": "babel sandbox",
+            "program": "${env:vsWorkspaceRoot}\\src\\sandbox\\src\\sandbox.js",
+            "runtimeExecutable": "${env:vsWorkspaceRoot}/node_modules/.bin/babel-node",
+            "cwd": "${workspaceRoot}"
+        }
+        ,{
+            "type": "node",
+            "request": "launch",
             "name": "node sandbox",
-            "program": "${env:vsWorkspaceRoot}\\src\\sandbox\\sandbox.js",
-            "cwd": "${env:vsWorkspaceRoot}\\src\\sandbox",
-            "outFiles": ["${env:vsWorkspaceRoot}/src/sandbox/.babel.compiled/**/*.js"],
+            "program": "${env:vsWorkspaceRoot}\\src\\sandbox\\src\\sandbox.js",
+            "cwd": "${env:vsWorkspaceRoot}/src/sandbox/src",
+            "outFiles": ["${env:vsWorkspaceRoot}\\src\\sandbox\\.babel.compiled\\**\\*.js"],
             "runtimeArgs": ["--nolazy"],
             "sourceMaps": true
         }, {
             "type": "node",
             "request": "launch",
-            "name": "nodemon",
+            "name": "nodemon sandbox",
             "runtimeExecutable": "nodemon",
             "program": "${env:vsWorkspaceRoot}\\src\\sandbox\\src\\sandbox.js",
             "runtimeArgs": ["--exec", "babel-node"],
@@ -36,15 +44,9 @@
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"
         }, {
-            "name": "Attach",
-            "type": "node",
-            "request": "attach",
-            "address": "localhost",
-            "port": 9229
-        }, {
-            "name": "jest",
             "type": "node",
             "request": "launch",
+            "name": "jest",
             "runtimeArgs": [
                 "--inspect-brk",
                 "${env:vsWorkspaceRoot}/node_modules/jest/bin/jest.js",

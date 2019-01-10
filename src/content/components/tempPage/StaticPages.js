@@ -2,12 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 export class Home extends React.Component{
-    constructor(props) {
-        super(props);
-        this.changeURLHandler = this.changeURLHandler.bind(this);
-    }
-
-    changeURLHandler() {
+    changeURLHandler = () => {
         this.props.history.push('/')
     }
 
@@ -20,9 +15,9 @@ export class Home extends React.Component{
     }
 }
 
-export const Metrics = () => (
+export const PageTemp = () => (
     <div>
-        <h1>Metrics</h1>
+        <h1>Temporary Page</h1>
     </div>
 )
 

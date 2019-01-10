@@ -21,7 +21,7 @@ export default class HeadersTableContainer extends React.Component {
         this.captureToggleDispatch(event.target.checked);
     }    
 
-    rowSelectHandler(row, isSelected, e, rowIndex) {
+    rowSelectHandler = (row, isSelected, e, rowIndex) => {
         if (isSelected) { 
             this.addPreHeadersDispatch(row.id, this.preHeaderCount); 
         }
@@ -30,7 +30,7 @@ export default class HeadersTableContainer extends React.Component {
         }
     }
 
-    rowSelectAllHandler(isSelected, rows) {
+    rowSelectAllHandler = (isSelected, rows) => {
         if (isSelected) {
             for (let i = 0; i < rows.length; i++) {
                 this.addPreHeadersDispatch(rows[i].id, this.preHeaderCount);
@@ -68,8 +68,8 @@ export default class HeadersTableContainer extends React.Component {
                 />
 
                 <TableBootstrapComponent  
-                    rowSelectHandler={ this.rowSelectHandler.bind(this) } 
-                    rowSelectAllHandler={ this.rowSelectAllHandler.bind(this) } 
+                    rowSelectHandler={ this.rowSelectHandler } 
+                    rowSelectAllHandler={ this.rowSelectAllHandler } 
                     toggleCapture={ toggleCapture }
                     headersLength={ headersRowList.length }
                     data={ toggleCapture? [] : headersRowList } 
