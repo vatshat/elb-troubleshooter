@@ -1,7 +1,7 @@
 import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Glyphicon } from 'react-bootstrap';
-import PropTypes from 'prop-types';
+import { array, func, bool, number} from 'prop-types';
 import ReactJson from 'react-json-view'
 import { CSVLink } from 'react-csv';
 
@@ -167,9 +167,9 @@ const TableBootstrapComponent = props => {
 export default TableBootstrapComponent
 
 TableBootstrapComponent.propTypes = {
-    data: PropTypes.array.isRequired,
-    rowSelectHandler: PropTypes.func.isRequired,
-    rowSelectAllHandler: PropTypes.func.isRequired,
-    toggleCapture: PropTypes.bool.isRequired, 
-    headersLength: PropTypes.number.isRequired,
+    data: array.isRequired,
+    rowSelectHandler: func.isRequired,
+    rowSelectAllHandler: func.isRequired,
+    toggleCapture: bool.isRequired, 
+    headersLength: number.isRequired,
 };

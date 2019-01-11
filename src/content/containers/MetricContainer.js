@@ -1,12 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { object } from 'prop-types'
 import { MetricComponent } from '../components/metrics/MetricsComponent'
-import { max, extent } from 'd3-array'
 import { timeParse } from 'd3-time-format'
 
 class MetricContainer extends React.Component {
     static propTypes = {
-        metricData: PropTypes.object.isRequired
+        metricData: object.isRequired
     }
     
     static defaultProps = {
@@ -34,7 +33,10 @@ class MetricContainer extends React.Component {
     componentWillUnmount() {
         window.removeEventListener("resize", this.windowResizeHandler);
     }    
-
+    /* 
+        fix bug caused - scatter plot getting misaligned
+        https://bl.ocks.org/anqi-lu/5c793fb952dd9f9204abe6ebbd657461
+    */
     windowResizeHandler = () => {
         this.setState({
             width: window.innerWidth < 900 ? window.innerWidth-100 : 800
@@ -46,7 +48,7 @@ class MetricContainer extends React.Component {
     }
 
     render() {
-        // substitute hard coded key with period option from redux store
+        // substitute hard coded object key with period option from redux store
         const metricWidgets = this.props.metricData["MetricDataResults"]
             .map((metricDataPeriod) => {            
                 // fix up slice with time interval from redux store
@@ -60,11 +62,10 @@ class MetricContainer extends React.Component {
                         })
             })
             .map((metricWidget, widgetIndex) => {
+                // fix key prop by adding unique value to redux with crc32 hasing
                 return <MetricComponent 
                     {...this.state}
                     data={ metricWidget }
-                    xDomain={ extent(metricWidget, d => d.date) }
-                    yDomain={ max(metricWidget, d => d.value) }
                     key={widgetIndex}
                 />
             })
@@ -76,6 +77,7 @@ class MetricContainer extends React.Component {
                 </h1>
                 
                 {metricWidgets}
+                
             </div>    
         )
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { array, bool, func } from 'prop-types';
 import Toggle from 'react-toggle';
 import ReactJson from 'react-json-view'
 import { Panel, Well } from 'react-bootstrap';
@@ -47,8 +47,8 @@ export class ToggleComponent extends React.Component {
 }
 
 ToggleComponent.propTypes = {
-        handleCaptureToggleChange: PropTypes.func.isRequired,
-        toggleCapture: PropTypes.bool.isRequired,
+        handleCaptureToggleChange: func.isRequired,
+        toggleCapture: bool.isRequired,
 }
 
 export class SelectedHeadersComponent extends React.Component {
@@ -156,7 +156,7 @@ export class SelectedHeadersComponent extends React.Component {
 }
 
 SelectedHeadersComponent.propTypes = {
-    selectedHeaders: PropTypes.array.isRequired,
+    selectedHeaders: array.isRequired,
 }
 
 export default class ContentComponent extends React.Component {
@@ -180,7 +180,7 @@ export default class ContentComponent extends React.Component {
 }
 
 ContentComponent.propTypes = {
-    handleCaptureToggleChange: PropTypes.func.isRequired,
-    toggleCapture: PropTypes.bool.isRequired,
-    selectedHeaders: PropTypes.array.isRequired,
+    handleCaptureToggleChange: func.isRequired,
+    toggleCapture: bool.isRequired,
+    selectedHeaders: array.isRequired,
 };

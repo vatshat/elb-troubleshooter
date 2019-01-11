@@ -1,6 +1,7 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { Home, PageTemp } from '../components/tempPage/StaticPages'
+import { Home } from '../components/tempPage/StaticPages'
+import PageTemp from '../components/metrics/MetricsComponent'
 import Metrics from '../containers/MetricContainer'
 import Headers from './HeadersReduxConnect'
 
