@@ -1,7 +1,8 @@
 import React from 'react'
 import { object } from 'prop-types'
-import { MetricComponent } from '../components/metrics/MetricsComponent'
+import { MetricComponent, MetricComponents } from '../components/metrics/MetricsComponent'
 import { timeParse } from 'd3-time-format'
+import mockData from './mockData.json'
 
 class MetricContainer extends React.Component {
     static propTypes = {
@@ -94,15 +95,48 @@ let MockStoreComponent = MetricComponent => class extends React.Component {
             });
     }
 
-    render() {        
-        // return ( 
-        //     // investigate further why data is not transitioning?
-        //     this.state.metricDataFetched 
-        //         ?  
-        //         : <div>Loading or Error</div> 
-        // )
-
+    render() {   
         return <MetricComponent {...this.state} />
+    }
+}
+
+export class MetricContainers extends React.Component {        
+    state = {
+        colour: true,
+        height: 600,
+        width: window.innerWidth < 900 ? window.innerWidth-100 : 800
+    }
+
+    componentDidMount() {
+        window.addEventListener("resize", this.windowResizeHandler);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.windowResizeHandler);
+    }    
+    
+    windowResizeHandler = () => {
+        this.setState({
+            width: window.innerWidth < 900 ? window.innerWidth-100 : 800
+        });
+    }
+
+    updateChart = () => {
+        this.setState({colour: false})
+    }
+
+    render() {
+        return (
+            <div>
+                <h1 onClick={this.updateChart}>
+                    Metrics
+                </h1>                                
+                <MetricComponents 
+                    {...this.state} 
+                    data={JSON.parse(JSON.stringify(mockData))}
+                />
+            </div>    
+        )
     }
 }
 
