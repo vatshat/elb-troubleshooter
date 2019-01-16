@@ -1,22 +1,12 @@
-let props = {
-        margin : {
-            top: 20,
-            right: 20,
-            bottom: 30,
-            left: 50
-        },
-        width: 1000,
-        height: 600
-    }
+import data from './sandbox.json'
+import { timeParse } from 'd3-time-format'
 
-function extractSize() {
-        const { margin, width: widthIncludingMargins, height: heightIncludingMargins } = props;
-        const width = widthIncludingMargins - margin.left - margin.right;
-        const height = heightIncludingMargins - margin.top - margin.bottom;
-        
-        return { width, height, margin };
-    }
-    
-    const { width } = extractSize();    
+const temp = data
+                .map(d => {
+                    d.date = timeParse("%Y-%m-%dT%H:%M:%S.%LZ")(d.date);
+                    d.price = +d.price;
+                    return d;
+                })
+                .sort((a,b) => b.date - a.date)
 
-    console.log(width)
+console.log(temp)

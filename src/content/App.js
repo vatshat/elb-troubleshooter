@@ -1,12 +1,12 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { Home } from '../components/tempPage/StaticPages'
-// import PageTemp from '../components/metrics/MetricsComponent'
-import Metrics, { MetricContainers as PageTemp  } from '../containers/MetricContainer'
-import Headers from './HeadersReduxConnect'
+import { Home, PageTemp as Else } from './components/tempPage/StaticPages'
+import PageTemp from './components/metrics/OldMetricComponent'
+import Metrics from './containers/MetricsContainer'
+import Headers from './containers/HeadersReduxConnect'
 
-import Nav from '../components/layout/Nav'
-import Footer from '../components/layout/Footer'
+import Nav from './components/layout/Nav'
+import Footer from './components/layout/Footer'
 
 const Main = () => {
     const containerStyle = {

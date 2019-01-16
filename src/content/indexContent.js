@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
 import { HashRouter } from 'react-router-dom'
 
-import Layout from './containers/App.js';
+import Layout from './App.js';
 
 const proxyStore = new Store({
     portName: 'messaging'

@@ -9,12 +9,6 @@
     display: block
 }
 
-.lines {
-    fill: none;
-    stroke: steelblue;
-    stroke-width: 2px;
-}
-
 .export-csv, .export-csv a {
     background: #2fa4e7;
     color: black;
@@ -23,4 +17,9 @@
 .export-csv:hover, .export-csv a:hover {
     background: black;
     color: #2fa4e7;
+}
+
+g.brush rect.selection {
+    fill: rgb(203, 75, 22);
+    fill-opacity: 0.2
 }
