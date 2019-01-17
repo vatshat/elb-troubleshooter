@@ -1,13 +1,17 @@
 import React from 'react'
-import { object } from 'prop-types'
-import { MetricComponents } from '../components/metrics/MetricsComponent'
-import { timeParse } from 'd3-time-format'
-import mockData from './mockData.json'
+import { object, number, array, any } from 'prop-types'
+import MetricComponent from '../components/metrics/MetricComponent'
 
-export class MetricContainers extends React.Component {        
+// d3 imports
+import { csv } from 'd3-fetch'
+import { timeParse } from 'd3-time-format'
+
+class MetricContainer extends React.Component {
+    static propTypes = { metricData: array.isRequired }
+    
     state = {
         colour: true,
-        height: 600,
+        height: 400,
         width: window.innerWidth < 900 ? window.innerWidth-100 : 800
     }
 
@@ -17,8 +21,10 @@ export class MetricContainers extends React.Component {
 
     componentWillUnmount() {
         window.removeEventListener("resize", this.windowResizeHandler);
-    }    
+    }        
     
+    // scatterplot respond to resize https://bl.ocks.org/anqi-lu/5c793fb952dd9f9204abe6ebbd657461
+
     windowResizeHandler = () => {
         this.setState({
             width: window.innerWidth < 900 ? window.innerWidth-100 : 800
@@ -30,29 +36,73 @@ export class MetricContainers extends React.Component {
     }
 
     render() {
-        // don't remove this otherwise update/re-rendering of component fails
-        const data = JSON.parse(JSON.stringify(mockData))
-                        .map(d => {
-                            d.date = timeParse("%Y-%m-%dT%H:%M:%S.%LZ")(d.date);
-                            d.price = +d.price;
-                            return d;
-                        })
-                        .sort((a, b) => a.date - b.date)
+        const metricWidgets =  this.props.metricData
+            .map((metricWidget, widgetIndex) => {
+                return <MetricComponent 
+                    {...this.state}
+                    data = { metricWidget }
+                    dataMean = {
+                        metricWidget.reduce((total, dataPoint) => total + dataPoint["Values"]) / metricWidget.length
+                    }
+                    key={widgetIndex}
+                />
+            })
 
         return (
             <div>
                 <h1 onClick={this.updateChart}>
                     Metrics
-                </h1>                                
-                <MetricComponents 
-                    {...this.state} 
-
-                    data={data}
-                />
+                </h1>
+                
+                {metricWidgets}
+                
             </div>    
         )
     }
 }
 
-// export default MetricComponent
-export default MetricContainers
+const MockStoreComponent = MetricComponent => class extends React.Component {    
+
+    state = {
+        metricData: {
+            "MetricDataResults": [{
+                "StatusCode": "Incomplete",
+                "Id": "m1",
+                "Timestamps": ["1970-01-01T00:00:00Z"],
+                "Label": "Metric",
+                "Values": [1]
+            }]
+        }
+    }
+
+    componentDidMount() {
+        fetch('http://localhost:8080/api/5min')
+            .then(promise => promise.json())
+            .then(response => {
+                this.setState({
+                    metricData: response
+                })
+            });
+    }
+
+    render() {   
+
+        const metricWidgets = this.state.metricData["MetricDataResults"]
+            .map((metricDataPeriod) => {
+                return metricDataPeriod["Timestamps"]
+                        .slice(0, 250)
+                        .map((timestamp, index) => {
+                            return {
+                                date: timeParse("%Y-%m-%dT%H:%M:%SZ")(timestamp),
+                                value: +metricDataPeriod["Values"][index] // convert string to number
+                            }
+                        })
+                        .sort((a, b) => a.date - b.date)
+            })
+
+        return <MetricComponent metricData = { metricWidgets } />
+    }
+}
+
+// export default MetricComponent (substitute with Redux connect)
+export default MockStoreComponent(MetricContainer)

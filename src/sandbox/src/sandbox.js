@@ -1,2 +1,2 @@
-let temp=1
-console.log(`test ${((50+50)/2)}`)
+let temp = typeof [] == "object" ? "test": "testing"
+console.log(Array.isArray([]))

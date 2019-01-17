@@ -2,12 +2,11 @@ import React from 'react'
 import { object, number, array, any } from 'prop-types'
 
 // d3 imports
-import { csv } from 'd3-fetch'
 import { line } from 'd3-shape'
 import { brushX } from 'd3-brush'
 import { timeFormat } from 'd3-time-format'
 import { axisBottom, axisLeft } from 'd3-axis'
-import { max, extent, bisector } from 'd3-array'
+import { max, extent, bisector, mean } from 'd3-array'
 import { scaleLinear, scaleTime } from 'd3-scale'
 import { transition, delay } from 'd3-transition'
 import { select, style, event, mouse } from 'd3-selection'
@@ -15,7 +14,7 @@ import { select, style, event, mouse } from 'd3-selection'
 const blueColour = "rgb(36, 48, 64)"
 const orangeColour = "rgb(203, 75, 22)"
 
-export class MetricComponents extends React.Component {
+export default class MetricComponent extends React.Component {
     
     static propTypes = {
         data: array.isRequired,
@@ -25,7 +24,8 @@ export class MetricComponents extends React.Component {
         margin: { top: 20, right: 20, bottom: 110, left: 50 },
         margin2: { top: 600 - 70, right: 20, bottom: 30, left: 50 },
         width: 800,
-        height: 600
+        height: 600,
+        optional: {scatterplot: false}
     }
 
     constructor(props) {
@@ -49,13 +49,14 @@ export class MetricComponents extends React.Component {
         });
     }
 
-    componentDidUpdate({ margin, width, height, xDomain, yDomain }) {
+    componentDidUpdate({ margin, width, height, xDomain, yDomain, dataMean }) {
         if (
             margin !== this.props.margin || 
             width !== this.props.width || 
             height !== this.props.height ||
             xDomain !== this.props.xDomain ||
-            yDomain !== this.props.yDomain
+            yDomain !== this.props.yDomain ||
+            dataMean !== this.props.dataMean
         ) {
             this.shouldUpdate = true;
         }
@@ -68,10 +69,11 @@ export class MetricComponents extends React.Component {
     }
 
     extractSize() {
-        const { height: actualHeight, width: actualWidth, margin, margin2 } = this.props
+        const { height: actualHeight, width: actualWidth, margin, margin2: defaultMargin2 } = this.props
 
         let width = actualWidth - margin.left - margin.right,
             height = actualHeight - margin.top - margin.bottom,
+            margin2 = { ...defaultMargin2, top: actualHeight - 70},
             height2 = actualHeight - margin2.top - margin2.bottom;
             
         return { margin, margin2, width, height, height2 }
@@ -188,6 +190,7 @@ export class MetricComponents extends React.Component {
             this.focusYAxis = this.focusGroup.append("g")
                 .attr("class", "axis axis--y")
 
+            /*
             this.focusYText = this.focusGroup.append("text")
                 .attr("transform", "rotate(-90)")
 
@@ -196,7 +199,8 @@ export class MetricComponents extends React.Component {
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
                 .style("fill", orangeColour)
-                .text("Price");
+                .text("Value");
+            
 
             let translateX = ((width + margin.right + margin.left) / 2),
                 translateY = (height + margin.top + margin.bottom)
@@ -206,6 +210,7 @@ export class MetricComponents extends React.Component {
                 .style("text-anchor", "middle")
                 .style("fill", orangeColour)
                 .text("Date");
+            */
         }
     }
 
@@ -241,14 +246,14 @@ export class MetricComponents extends React.Component {
         
         let drawFocusLine = line()
             .x(d => xScale(d.date))
-            .y(d => yScale(d.price));
+            .y(d => yScale(d.value));
 
         const brushed = () => {
             const selection = event.selection;
             xScale.domain(selection.map(xScale2.invert, xScale2));
             this.focusGroup.selectAll(".dot")
                 .attr("cx", d => xScale(d.date))
-                .attr("cy", d => yScale(d.price));
+                .attr("cy", d => yScale(d.value));
             this.focusGroup.select(".axis--x").call(xAxis);
 
             this.focusGroup.selectAll(".line")
@@ -260,7 +265,7 @@ export class MetricComponents extends React.Component {
                         .on("brush", brushed);
             
         xScale.domain(extent(data, d =>  d.date));
-        yScale.domain([0, max(data, d => d.price)+200]);
+        yScale.domain([0, max(data, d => d.value)*1.1]);
         xScale2.domain(xScale.domain());
         yScale2.domain(yScale.domain());
 
@@ -269,21 +274,23 @@ export class MetricComponents extends React.Component {
                 .attr("width", width)
                 .attr("height", height);
 
-            let translateX = ((width + margin.right + margin.left) / 2),
-                translateY = (height + margin.top + margin.bottom)
-
-            this.xText
-                .attr("transform", `translate( ${translateX} , ${translateY} )`)
-
             this.focusXAxis
                 .attr("transform", `translate(0, ${height})`)
                 .call(xAxis);
 
             this.focusYAxis.call(yAxis);
 
+            /*
+            let translateX = ((width + margin.right + margin.left) / 2),
+                translateY = (height + margin.top + margin.bottom)
+
+            this.xText
+                .attr("transform", `translate( ${translateX} , ${translateY} )`)
+
             this.focusYText
                 .attr("y", 0 - margin.left)
                 .attr("x", 0 - (height / 2))
+            */
         
         }
 
@@ -293,8 +300,6 @@ export class MetricComponents extends React.Component {
             
             { //dots
 
-                /////// ADD SCATTER PLOT AS AN OPTION via props/redux TO THE GRAPH (LIKE enable prediction)!!!! ///////
-
                     // scatterplot 
                     //     http://bl.ocks.org/WilliamQLiu/bd12f73d0b79d70bfbae
                     //     https://stackoverflow.com/questions/38065997/d3-js-attribute-setting-not-working-after-binding-data-and-entering-elements
@@ -302,7 +307,7 @@ export class MetricComponents extends React.Component {
 
                 // append scatter plot to main chart area 
                 
-                if (this.props.scatterPlot) {
+                if (this.props.optional.scatterPlot) {
                     let focusJoinDots = this.focusWidget.selectAll(".dot").data(data)
     
                     let focusEnterDots = focusJoinDots.enter()
@@ -315,7 +320,7 @@ export class MetricComponents extends React.Component {
                             .style("fill", orangeColour)
                             .style("stroke", orangeColour)
                             .attr("cx", d =>  xScale(d.date))
-                            .attr("cy", d => yScale(d.price))
+                            .attr("cy", d => yScale(d.value))
     
                     focusJoinDots.exit().remove()
                 }
@@ -351,13 +356,15 @@ export class MetricComponents extends React.Component {
 
                 let mousemove = () => {
 
-                    let x0 = xScale.invert(mouse(this.focusRect._groups[0][0])[0]),
+                    let mouseInvert = mouse(this.focusRect._groups[0][0])
+
+                    let x0 = xScale.invert(mouseInvert[0]),
                         i = bisectDate(data, x0, 1),
                         d0 = data[i - 1],
                         d1 = data[i],
                         d = x0 - d0.date > d1.date - x0 ? d1 : d0;
 
-                    let translateY = `translate( ${ xScale(d.date) } , ${ yScale(d.price) } )`
+                    let translateY = `translate( ${ xScale(d.date) } , ${ yScale(d.value) } )`
 
                     this.focusToolTipCircle
                         .attr("transform", translateY);
@@ -367,11 +374,11 @@ export class MetricComponents extends React.Component {
 
                     this.focusToolTip.select("text.y1")
                         .attr("transform", translateY)
-                        .text(d.price);
+                        .text(d.value);
 
                     this.focusToolTip.select("text.y2")
                         .attr("transform", translateY)
-                        .text(d.price);
+                        .text(d.value);
 
                     this.focusToolTip.select("text.y3")
                         .attr("transform", translateY)
@@ -383,10 +390,10 @@ export class MetricComponents extends React.Component {
 
                     this.focusToolTip.select("line.x")
                         .attr("transform", translateY)
-                        .attr("y2", height - yScale(d.price));
+                        .attr("y2", height - yScale(d.value));
 
                     this.focusToolTip.select("line.y")
-                        .attr("transform", `translate( ${width * -1} , ${ yScale(d.price) } )`)
+                        .attr("transform", `translate( ${width * -1} , ${ yScale(d.value) } )`)
                         .attr("x2", width + width);
                 }
 
@@ -413,12 +420,12 @@ export class MetricComponents extends React.Component {
                     .append("circle")
                     .attr('class', 'dot')
                 .merge(contextDots)
-                    .attr("r", data.length < 150? 3 : 1 )
+                    .attr("r", data.length < 300? 3 : 1 )
                     .style("opacity", .5)
                     .attr('fill-opacity', 0.6)
                     .style("fill", blueColour)
                     .attr("cx", d => xScale2(d.date))
-                    .attr("cy", d => yScale2(d.price))
+                    .attr("cy", d => yScale2(d.value))
 
             this.contextXAxis
                 .attr("transform", `translate(0, ${height2} )`)
@@ -444,5 +451,3 @@ export class MetricComponents extends React.Component {
     }
 
 } 
-
-export default MetricComponents
