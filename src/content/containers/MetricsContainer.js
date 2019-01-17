@@ -30,6 +30,15 @@ export class MetricContainers extends React.Component {
     }
 
     render() {
+        // don't remove this otherwise update/re-rendering of component fails
+        const data = JSON.parse(JSON.stringify(mockData))
+                        .map(d => {
+                            d.date = timeParse("%Y-%m-%dT%H:%M:%S.%LZ")(d.date);
+                            d.price = +d.price;
+                            return d;
+                        })
+                        .sort((a, b) => a.date - b.date)
+
         return (
             <div>
                 <h1 onClick={this.updateChart}>
@@ -38,8 +47,7 @@ export class MetricContainers extends React.Component {
                 <MetricComponents 
                     {...this.state} 
 
-                    // don't remove this otherwise update/re-rendering of component fails
-                    data={JSON.parse(JSON.stringify(mockData))}
+                    data={data}
                 />
             </div>    
         )

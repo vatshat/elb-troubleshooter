@@ -16,7 +16,7 @@ class App extends Component {
     clickHandler = () => {
         
         chrome.tabs.create({
-            url: chrome.runtime.getURL('/index.html')
+            url: chrome.runtime.getURL('/index.html#/metrics')
         });
     }
 
