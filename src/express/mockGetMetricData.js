@@ -2,7 +2,7 @@ const api_1min = {
     "MetricDataResults": [
         {
             "StatusCode": "Complete",
-            "Id": "m1",
+            "Id": (Date.now() + Math.random()).toFixed(0),
             "Timestamps": [
                 "2019-01-07T09:17:00Z",
                 "2019-01-07T09:15:00Z",
@@ -29359,7 +29359,7 @@ const api_1min = {
         },
         {
             "StatusCode": "Complete",
-            "Id": "m2",
+            "Id": (Date.now() + Math.random()).toFixed(0),
             "Timestamps": [
                 "2019-01-07T09:17:00Z",
                 "2019-01-07T09:15:00Z",
@@ -72907,7 +72907,7 @@ const api_5min = {
                 941.0
             ],
             "StatusCode": "Complete",
-            "Id": "m1",
+            "Id": (Date.now() + Math.random()).toFixed(0),
             "Label": "IncomingLogEvents",
             "Timestamps": [
                 "2019-01-07T09:16:00Z",
@@ -101284,7 +101284,7 @@ const api_5min = {
                 124682.0
             ],
             "StatusCode": "Complete",
-            "Id": "m2",
+            "Id": (Date.now() + Math.random()).toFixed(0),
             "Label": "IncomingLogBytes",
             "Timestamps": [
                 "2019-01-07T09:16:00Z",

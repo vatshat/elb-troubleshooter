@@ -9,6 +9,7 @@
     display: block
 }
 
+/*  export button for headers tab */
 .export-csv, .export-csv a {
     background: #2fa4e7;
     color: black;
@@ -16,10 +17,56 @@
 
 .export-csv:hover, .export-csv a:hover {
     background: black;
-    color: #2fa4e7;
+    color: rgb(203, 75, 22);
 }
 
+/*  mini scatterplot below graph widget */
 g.brush rect.selection {
     fill: rgb(203, 75, 22);
     fill-opacity: 0.2
+}
+
+div.react-draggable {
+    overflow: hidden;
+    resize: both;
+    text-align: center;
+}
+
+div.react-draggable::-webkit-scrollbar {
+    width: 10;
+}
+
+div.widget-handle-drag span.widget-drag {
+    content: '....';
+    width: 40px;
+    height: 30px;
+    display: inline-block;
+    overflow: hidden;
+    line-height: 5px;
+    padding: 3px 4px;
+    cursor: move;
+    vertical-align: middle;
+    margin-top: -.7em;
+    margin-right: .3em;
+    font-size: 12px;
+    font-family: sans-serif;
+    letter-spacing: 2px;
+    color: #cccccc;
+    text-shadow: 1px 0 1px black;
+    cursor: move;
+    /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
+div.widget-handle-drag span.widget-drag::after {
+    content: '..... ..... ..... ..... .....';
+}
+
+/* (Optional) Apply a "closed-hand" cursor during drag operation. */
+div.widget-handle-drag .widget-drag:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
 }

@@ -5,6 +5,8 @@ describe('>>> d3', () => {
     it('+++ Snapshot of d3 components', () => {});
 
     it('+++ add test to make sure data is sorted', () => {});
+
+    it(`+++ make sure tooltip on graph shows on left when on left side of graph and when it's too low`, () => {});
 });
 
 describe('>>> d3 - redux integration to-do', () => {

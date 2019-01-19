@@ -6,50 +6,33 @@ import MetricComponent from '../components/metrics/MetricComponent'
 import { csv } from 'd3-fetch'
 import { timeParse } from 'd3-time-format'
 
+import ReactResizeDetector from 'react-resize-detector';
+import Draggable from 'react-draggable'
+
 class MetricContainer extends React.Component {
     static propTypes = { metricData: array.isRequired }
     
-    state = {
-        colour: true,
-        height: 400,
-        width: window.innerWidth < 900 ? window.innerWidth-100 : 800
-    }
-
-    componentDidMount() {
-        window.addEventListener("resize", this.windowResizeHandler);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.windowResizeHandler);
-    }        
+    state = { colour: true }
     
-    // scatterplot respond to resize https://bl.ocks.org/anqi-lu/5c793fb952dd9f9204abe6ebbd657461
-
-    windowResizeHandler = () => {
-        this.setState({
-            width: window.innerWidth < 900 ? window.innerWidth-100 : 800
-        });
-    }
-
     updateChart = () => {
-        this.setState({colour: false})
+        this.setState((prevState, props) => { colour: !prevState.colour })
     }
 
     render() {
         const metricWidgets =  this.props.metricData
             .map((metricWidget, widgetIndex) => {
-                return <MetricComponent 
-                    {...this.state}
-                    data = { metricWidget }
-                    dataMean = {
-                        metricWidget.reduce((total, dataPoint) => total + dataPoint["Values"]) / metricWidget.length
-                    }
-                    key={widgetIndex}
-                />
+                return <div className="widget-scrollbar col-lg-6">
+                            <DraggableComponent 
+                                {...this.state}
+                                data = { metricWidget }
+                                dataMean = { metricWidget.reduce((total, dataPoint) => total + dataPoint["Values"]) / metricWidget.length }
+                                widgetIndex={widgetIndex}
+                            />
+                        </div>
             })
 
         return (
-            <div>
+            <div className="col-lg-12">
                 <h1 onClick={this.updateChart}>
                     Metrics
                 </h1>
@@ -57,6 +40,73 @@ class MetricContainer extends React.Component {
                 {metricWidgets}
                 
             </div>    
+        )
+    }
+}
+
+class DraggableComponent extends React.Component {
+    
+    static defaultProps = {
+        maxWidth: 2800
+    }
+
+    constructor(props) {
+        super(props)
+
+        this.state = { height: 400, width: 800 }
+
+        this.draggableRef = null
+
+        this.setDraggableRef = element => {
+            this.draggableRef = element
+        }
+    }
+    
+    componentDidMount() {
+        document.getElementById("footer-filler").style.zIndex = "-1";
+    }
+
+    onResize = () => {
+        // console.log(this.draggableRef.scrollWidth)
+        let { scrollHeight, scrollWidth } = this.draggableRef        
+
+        this.setState((prevState, props) => ({
+            height: ((scrollHeight > 300) && (Math.abs(prevState.height - scrollHeight) > 50))
+                    ? scrollHeight - 100 
+                    : prevState.height,
+            width: ((width) => {
+                                    if (width < 300) {
+                                        return 300
+                                    } else if (width > this.props.maxWidth) {
+                                        return this.props.maxWidth
+                                    } else return width - 100
+
+                                })
+                    (scrollWidth)
+        }));
+    }
+    
+    render() {        
+
+        return (
+            <Draggable handle=".widget-handle-drag">
+                <div ref={this.setDraggableRef}>
+                    <ReactResizeDetector 
+                        handleWidth 
+                        handleHeight 
+                        onResize={this.onResize}
+                    />
+                    <div className="widget-handle-drag"><span className="widget-drag"></span></div>
+
+                    <MetricComponent
+                        {...this.state} 
+                        colour={this.props.colour}
+                        data={this.props.data}
+                        dataMean = {this.props.dataMean}
+                        key = {this.props.widgetIndex}
+                    />
+                </div>
+            </Draggable>
         )
     }
 }
