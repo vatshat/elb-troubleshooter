@@ -1,8 +1,16 @@
+const randomId = () => (
+                            Math
+                                .random()
+                                .toString(36)
+                                .substring(2, 15) + 
+                            Math.random().toString(36).substring(2, 15)
+                        );
+
 const api_1min = {
     "MetricDataResults": [
         {
             "StatusCode": "Complete",
-            "Id": (Date.now() + Math.random()).toFixed(0),
+            "Id": randomId(),
             "Timestamps": [
                 "2019-01-07T09:17:00Z",
                 "2019-01-07T09:15:00Z",
@@ -29359,7 +29367,7 @@ const api_1min = {
         },
         {
             "StatusCode": "Complete",
-            "Id": (Date.now() + Math.random()).toFixed(0),
+            "Id": randomId(),
             "Timestamps": [
                 "2019-01-07T09:17:00Z",
                 "2019-01-07T09:15:00Z",
@@ -72907,7 +72915,7 @@ const api_5min = {
                 941.0
             ],
             "StatusCode": "Complete",
-            "Id": (Date.now() + Math.random()).toFixed(0),
+            "Id": randomId(),
             "Label": "IncomingLogEvents",
             "Timestamps": [
                 "2019-01-07T09:16:00Z",
@@ -101284,7 +101292,7 @@ const api_5min = {
                 124682.0
             ],
             "StatusCode": "Complete",
-            "Id": (Date.now() + Math.random()).toFixed(0),
+            "Id": randomId(),
             "Label": "IncomingLogBytes",
             "Timestamps": [
                 "2019-01-07T09:16:00Z",

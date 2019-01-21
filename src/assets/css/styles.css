@@ -10,12 +10,14 @@
 }
 
 /*  export button for headers tab */
-.export-csv, .export-csv a {
+.export-csv, 
+.export-csv a {
     background: #2fa4e7;
     color: black;
 }
 
-.export-csv:hover, .export-csv a:hover {
+.export-csv:hover, 
+.export-csv a:hover {
     background: black;
     color: rgb(203, 75, 22);
 }
@@ -26,10 +28,12 @@ g.brush rect.selection {
     fill-opacity: 0.2
 }
 
+/*  draggable */
+
 div.react-draggable {
     overflow: hidden;
     resize: both;
-    text-align: center;
+    display: block;
 }
 
 div.react-draggable::-webkit-scrollbar {
@@ -43,13 +47,8 @@ div.widget-handle-drag span.widget-drag {
     display: inline-block;
     overflow: hidden;
     line-height: 5px;
-    padding: 3px 4px;
     cursor: move;
-    vertical-align: middle;
-    margin-top: -.7em;
-    margin-right: .3em;
-    font-size: 12px;
-    font-family: sans-serif;
+    margin-bottom: 10px;
     letter-spacing: 2px;
     color: #cccccc;
     text-shadow: 1px 0 1px black;
@@ -70,3 +69,8 @@ div.widget-handle-drag .widget-drag:active {
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
 }
+/* 
+div.drag-tooltip {
+
+}
+ */

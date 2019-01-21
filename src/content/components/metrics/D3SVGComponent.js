@@ -14,7 +14,7 @@ import { select, style, event, mouse } from 'd3-selection'
 const blueColour = "rgb(36, 48, 64)"
 const orangeColour = "rgb(203, 75, 22)"
 
-export default class MetricComponent extends React.Component {
+export default class D3SVGComponent extends React.Component {
     
     static propTypes = {
         data: array.isRequired,
@@ -101,7 +101,7 @@ export default class MetricComponent extends React.Component {
 
         this.brushRect = this.rootNode.append('defs')
             .append("clipPath")
-                .attr("id", "clip")
+                .attr("id", `clip-${this.props.widgetId}`)
                 .append("rect")
                     .attr("width", width)
                     .attr("height", height);
@@ -112,6 +112,44 @@ export default class MetricComponent extends React.Component {
 
         this.focusWidget = this.focusGroup.append("g");
         
+        { // titile, x,y labels
+            this.focusXAxis = this.focusGroup.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", `translate(0,${height})`)
+
+            this.focusYAxis = this.focusGroup.append("g")
+                .attr("class", "axis axis--y")
+
+            let translateX = ((width + margin.right + margin.left) / 2),
+                translateY = (height + margin.top + margin.bottom)
+
+            this.xTitle = this.rootNode.append('text')
+                .attr("transform", `translate( 0, 10 )`)
+                .style("fill", orangeColour)
+                .text("CPUUtilization");
+
+            /*
+            this.focusYText = this.focusGroup.append("text")
+                .attr("transform", "rotate(-90)")
+
+                .attr("y", 0 - margin.left)
+                .attr("x", 0 - (height / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .style("fill", orangeColour)
+                .text("Value");
+            
+            let translateX = ((width + margin.right + margin.left) / 2),
+                translateY = (height + margin.top + margin.bottom)
+
+            this.xText = this.rootNode.append('text')
+                .attr("transform", `translate( ${translateX}, ${translateY} )`)
+                .style("text-anchor", "middle")
+                .style("fill", orangeColour)
+                .text("Date");
+            */
+        }
+
         { // tooltips
                                      
             this.focusToolTip = this.focusWidget
@@ -182,36 +220,6 @@ export default class MetricComponent extends React.Component {
                 .attr("dy", "1em");
         }
        
-        { // x,y labels
-            this.focusXAxis = this.focusGroup.append("g")
-                .attr("class", "axis axis--x")
-                .attr("transform", `translate(0,${height})`)
-
-            this.focusYAxis = this.focusGroup.append("g")
-                .attr("class", "axis axis--y")
-
-            /*
-            this.focusYText = this.focusGroup.append("text")
-                .attr("transform", "rotate(-90)")
-
-                .attr("y", 0 - margin.left)
-                .attr("x", 0 - (height / 2))
-                .attr("dy", "1em")
-                .style("text-anchor", "middle")
-                .style("fill", orangeColour)
-                .text("Value");
-            
-
-            let translateX = ((width + margin.right + margin.left) / 2),
-                translateY = (height + margin.top + margin.bottom)
-
-            this.xText = this.rootNode.append('text')
-                .attr("transform", `translate( ${translateX}, ${translateY} )`)
-                .style("text-anchor", "middle")
-                .style("fill", orangeColour)
-                .text("Date");
-            */
-        }
     }
 
     initContext() {
@@ -296,7 +304,7 @@ export default class MetricComponent extends React.Component {
 
         { //focus G
 
-            this.focusWidget.attr("clip-path", "url(#clip)");
+            this.focusWidget.attr("clip-path", `url(#clip-${this.props.widgetId})`);
             
             { //dots
 
@@ -411,7 +419,7 @@ export default class MetricComponent extends React.Component {
             
             // append scatter plot to brush chart area
 
-            this.contextDots.attr("clip-path", "url(#clip)");
+            this.contextDots.attr("clip-path", `url(#clip-${this.props.widgetId})`);
             
             let contextDots = this.contextDots.selectAll(".dot").data(data)
 

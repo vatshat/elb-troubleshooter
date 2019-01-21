@@ -1,0 +1,40 @@
+[
+  {
+    "Id": "m1",
+    "MetricStat": {
+      "Metric": {
+        "Namespace": "AWS/Logs",
+        "MetricName": "IncomingLogEvents",
+            "Dimensions": [
+                {
+                    "Name": "LogGroupName",
+                    "Value": "CloudTrail/DefaultLogGroup"
+                }
+            ]
+      },
+      "Period": 300,
+      "Stat": ["Sum", "Maximum", "Minimum", "SampleCount"]
+    },
+    "Label": "IncomingLogEvents",
+    "ReturnData": true
+  },
+  {
+    "Id": "m2",
+    "MetricStat": {
+      "Metric": {
+        "Namespace": "AWS/Logs",
+        "MetricName": "IncomingBytes",
+            "Dimensions": [
+                {
+                    "Name": "LogGroupName",
+                    "Value": "CloudTrail/DefaultLogGroup"
+                }
+            ]
+      },
+      "Period": 300,
+      "Stat": ["Sum", "Maximum", "Minimum", "SampleCount"]
+    },
+    "Label": "IncomingBytes",
+    "ReturnData": true
+  }
+]
