@@ -40,6 +40,10 @@ div.react-draggable::-webkit-scrollbar {
     width: 10;
 }
 
+.widget-handle-drag {
+    text-align: left;
+}
+
 div.widget-handle-drag span.widget-drag {
     content: '....';
     width: 40px;
@@ -60,7 +64,7 @@ div.widget-handle-drag span.widget-drag {
 }
 
 div.widget-handle-drag span.widget-drag::after {
-    content: '..... ..... ..... ..... .....';
+    content: '.... .... .... .... ....';
 }
 
 /* (Optional) Apply a "closed-hand" cursor during drag operation. */
@@ -69,8 +73,25 @@ div.widget-handle-drag .widget-drag:active {
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
 }
-/* 
-div.drag-tooltip {
 
+div.widget-handle-drag form,
+div.widget-handle-drag .glyphicon {
+    cursor: pointer;
+    float: right;
 }
- */
+
+.widget-scrollbar {
+    text-align: center;
+}
+
+div.drag-tooltip {
+    position: fixed;
+    bottom: 0;
+    width: 99%;
+    text-align: right;
+    padding-bottom: 10px;
+}
+
+div.drag-tooltip .glyphicon {
+    float: right;
+}
