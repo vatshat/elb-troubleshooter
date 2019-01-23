@@ -30,13 +30,13 @@ g.brush rect.selection {
 
 /*  draggable */
 
-div.react-draggable {
+div.draggable-widget {
     overflow: hidden;
     resize: both;
     display: block;
 }
 
-div.react-draggable::-webkit-scrollbar {
+div.draggable-widget::-webkit-scrollbar {
     width: 10;
 }
 
@@ -94,4 +94,12 @@ div.drag-tooltip {
 
 div.drag-tooltip .glyphicon {
     float: right;
+}
+
+div#bug-tool-tip p {
+    text-align: left;
+}
+
+div#bug-tool-tip span {
+    text-decoration: underline;
 }

@@ -1,7 +1,3 @@
 
 
-let temp = {
-    test: ((i) => i)(1)
-}
-
-console.log(temp)
+(true && true) && console.log("test")

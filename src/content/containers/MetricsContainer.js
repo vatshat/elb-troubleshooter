@@ -30,7 +30,7 @@ class MetricContainer extends React.Component {
             })
 
         return (
-            <div className="col-lg-12">
+            <div>
                 <h1 onClick={this.updateChart}>
                     Metrics
                 </h1>
