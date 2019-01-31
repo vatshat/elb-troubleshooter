@@ -6,6 +6,12 @@ import { HashRouter } from 'react-router-dom'
 
 import Layout from './App.js';
 
+import './static/css/index.min.css';
+import './static/css/index-content.scss';
+import './static/css/bootstrap.min.css';
+import './static/css/react-bootstrap-table-all.min.css';
+import './static/css/capture-toggle.scss';
+
 const proxyStore = new Store({
     portName: 'messaging'
 });

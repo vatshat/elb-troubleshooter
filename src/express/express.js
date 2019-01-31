@@ -15,4 +15,7 @@ app.all('/index.html', function(req, res) {
     res.sendFile(path.join(__dirname, '../assets/index.html'));
 });
 
-app.listen(5000);
+var port = 5000
+app.listen(port, () => {
+    console.log(`App listening to ${port}.... \n Press Ctrl+C to quit.`)
+});

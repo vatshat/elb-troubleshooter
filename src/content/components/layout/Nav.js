@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 //https://webpack.js.org/concepts/loaders/
-import styles from './Nav.css';
+import styles from './Nav.jsx.css';
 
 const Header = () => { 
 

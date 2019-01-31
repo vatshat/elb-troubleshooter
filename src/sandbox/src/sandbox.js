@@ -1,3 +1,9 @@
+let temp = [
+    ...(false && ["testings1", "testings2"]),
+    "testing3"
+]
 
 
-(true && true) && console.log("test")
+var path = require('path');
+
+console.log(path.resolve(__dirname, '../src/'))

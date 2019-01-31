@@ -19,6 +19,7 @@ export default class DraggableWidgetComponent extends React.Component {
             xMouse: 0,
             yMouse: 0,
             open: true,
+            drawLine: true,
         }
 
         this.draggableRef = null
@@ -70,6 +71,8 @@ export default class DraggableWidgetComponent extends React.Component {
         });
     }
 
+    onChangeHandler = eventChecked => { this.setState({ drawLine: eventChecked.target.checked }) }
+
     render() {
 
         let { open } = this.state
@@ -109,7 +112,7 @@ export default class DraggableWidgetComponent extends React.Component {
                     <div className={"widget-handle-drag"}>
 
                         <span className={"widget-drag"}></span>
-                                                
+
                         {
                             open ?
                                 <Fade in={open}>
@@ -139,7 +142,13 @@ export default class DraggableWidgetComponent extends React.Component {
                             <FormGroup>
                                 <ControlLabel>Widget Options:</ControlLabel>{' '}
                                 <Checkbox inline>Prediction</Checkbox>
-                                <Checkbox inline>Drawline</Checkbox>
+                                <Checkbox 
+                                    inline
+                                    defaultChecked={true}
+                                    onChange={this.onChangeHandler}
+                                >
+                                    Draw Line
+                                </Checkbox>
                                 <Checkbox inline>Multi-AZ</Checkbox>
                             </FormGroup>
                         </form>

@@ -8,7 +8,8 @@ import { timeFormat } from 'd3-time-format'
 import { axisBottom, axisLeft } from 'd3-axis'
 import { max, extent, bisector, mean } from 'd3-array'
 import { scaleLinear, scaleTime } from 'd3-scale'
-import { transition, delay } from 'd3-transition'
+import { transition, delay, } from 'd3-transition'
+import { easeLinear } from 'd3-ease'
 import { select, style, event, mouse } from 'd3-selection'
 
 const blueColour = "rgb(36, 48, 64)"
@@ -25,7 +26,7 @@ export default class D3SVGComponent extends React.Component {
         margin2: { top: 600 - 70, right: 20, bottom: 30, left: 50 },
         width: 800,
         height: 600,
-        optional: {scatterplot: false}
+        drawLine: true,
     }
 
     constructor(props) {
@@ -315,27 +316,27 @@ export default class D3SVGComponent extends React.Component {
 
                 // append scatter plot to main chart area 
                 
-                if (this.props.optional.scatterPlot) {
-                    let focusJoinDots = this.focusWidget.selectAll(".dot").data(data)
-    
-                    let focusEnterDots = focusJoinDots.enter()
-                    
-                    focusEnterDots
-                        .append("circle") // new/entering dots/data
-                            .attr('class', 'dot')
-                            .attr("r",2)
-                            .style("opacity", .5)
-                            .style("fill", orangeColour)
-                            .style("stroke", orangeColour)
-                            .attr("cx", d =>  xScale(d.date))
-                            .attr("cy", d => yScale(d.value))
-    
-                    focusJoinDots.exit().remove()
-                }
+                let focusJoinDots = this.focusWidget.selectAll(".dot").data(data)
+
+                let focusEnterDots = focusJoinDots.enter()
+                
+                focusEnterDots
+                    .append("circle") // new/entering dots/data
+                        .attr('class', 'dot')
+                        .attr("r",1)
+                        .style("opacity", .5)
+                        .style("fill", orangeColour)
+                        .style("stroke", orangeColour)
+                        .attr("cx", d =>  xScale(d.date))
+                        .attr("cy", d => yScale(d.value))
+
+                focusJoinDots.exit().remove()
+
             }
             // append line graph to brush chart area
 
             { // line graph
+                
                 let focusJoinLine = this.focusWidget.selectAll(".line").data([data])
                 
                 // [Update] transition from previous paths to new paths
@@ -349,13 +350,19 @@ export default class D3SVGComponent extends React.Component {
                     .insert('path', 'g')
                     .attr('class', 'line')
                     .attr('d', drawFocusLine)
-                        .style('stroke-width', '2px')
                         .style('fill', 'none')
                         .style("stroke", blueColour);
 
                 // [Exit]
                 focusJoinLine.exit()
                     .remove();
+
+                focusJoinLine
+                    .transition()
+                    .delay(1000)
+                    .ease(easeLinear)
+                    .style('stroke-width', this.props.drawLine ? '2px' : '0px')
+
             }
             
             { //tooltips

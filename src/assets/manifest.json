@@ -11,7 +11,7 @@
 
     },
     "background": {
-        "scripts": ["js/background.min.js"],
+        "scripts": ["min/background.min.js"],
         "persistent": true
     },
 
@@ -33,7 +33,7 @@
         "matches": ["<all_urls>"],
         "exclude_matches": ["*://*/*"],
         "css": [],
-        "js": ["js/content.min.js"]
+        "js": ["min/content.min.js"]
        }
     ]
 }
