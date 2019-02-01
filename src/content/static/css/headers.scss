@@ -1,0 +1,26 @@
+$orange: #cb4b16;
+$blue: #2fa4e7;
+
+#nav1:hover,
+#nav2:hover,
+#nav3:hover,
+#nav4:hover {
+    background: #151d27;
+}
+
+.react-bs-table-sizePerPage-dropdown {
+    display: block
+}
+
+/*  export button for headers tab */
+.export-csv,
+.export-csv a {
+    background: $blue;
+    color: black;
+}
+
+.export-csv:hover,
+.export-csv a:hover {
+    background: black;
+    color: $orange;
+}

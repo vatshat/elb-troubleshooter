@@ -1,5 +1,6 @@
 import React from 'react'
-import { object, number, array, any } from 'prop-types'
+import { object, number, array, any, oneOf } from 'prop-types'
+import { loadingSVG } from './LoadingSVG'
 
 // d3 imports
 import { line } from 'd3-shape'
@@ -19,6 +20,7 @@ export default class D3SVGComponent extends React.Component {
     
     static propTypes = {
         data: array.isRequired,
+        status: oneOf(['loading', 'error', 'success']).isRequired,
     }
 
     static defaultProps = {
@@ -44,9 +46,9 @@ export default class D3SVGComponent extends React.Component {
         this.init();
         // the code below is to trigger componentDidUpdate (which is not called at first render)
         setTimeout(() => {
-            this.setState({
-                initialized: true
-            });
+            if (this.rootRefNode) {
+                this.setState({ initialized: true });
+            }
         });
     }
 
@@ -81,7 +83,7 @@ export default class D3SVGComponent extends React.Component {
     }
 
     updateAxis() {
-        const { margin, margin2, width, height, height2 } = this.extractSize()
+        const { width, height, height2 } = this.extractSize()
 
         // axis update
         let xScale = scaleTime().range([0, width]),
@@ -98,14 +100,15 @@ export default class D3SVGComponent extends React.Component {
     initFocus() {
         
         const { margin, width, height } = this.extractSize()
-        const { data } = this.props
 
-        this.brushRect = this.rootNode.append('defs')
-            .append("clipPath")
-                .attr("id", `clip-${this.props.widgetId}`)
-                .append("rect")
-                    .attr("width", width)
-                    .attr("height", height);
+        if (this.props.status == "success") {
+            this.brushRect = this.rootNode.append('defs')
+                .append("clipPath")
+                    .attr("id", `clip-${this.props.widgetId}`)
+                    .append("rect")
+                        .attr("width", width)
+                        .attr("height", height);
+        }
 
         this.focusGroup = this.rootNode.append('g')
             .attr("class", "focus")
@@ -120,9 +123,6 @@ export default class D3SVGComponent extends React.Component {
 
             this.focusYAxis = this.focusGroup.append("g")
                 .attr("class", "axis axis--y")
-
-            let translateX = ((width + margin.right + margin.left) / 2),
-                translateY = (height + margin.top + margin.bottom)
 
             this.xTitle = this.rootNode.append('text')
                 .attr("transform", `translate( 0, 10 )`)
@@ -226,9 +226,10 @@ export default class D3SVGComponent extends React.Component {
     initContext() {
         
         const { margin2, height2 } = this.extractSize()
+        const { status } = this.props;
 
         this.contextGroup = this.rootNode.append('g')
-            .attr("class", "context")
+            .attr("class", `context ${(status == "success") ? "show" : "hide"}`)
             .attr("transform", `translate( ${margin2.left} , ${margin2.top})`);
 
         this.contextDots = this.contextGroup.append("g");
@@ -237,8 +238,10 @@ export default class D3SVGComponent extends React.Component {
             .attr("class", "axis axis--x")
             .attr("transform", `translate(0, ${height2} )`);
 
-        this.contextBrush = this.contextGroup.append("g")
-            .attr("class", "brush");
+        if (status == "success") {
+            this.contextBrush = this.contextGroup.append("g")
+                .attr("class", "brush");            
+        }
     }
 
     init() {                    
@@ -249,7 +252,7 @@ export default class D3SVGComponent extends React.Component {
     update() {
                     
         const { margin, width, height, height2, margin2 } = this.extractSize()
-        const { data } = this.props            
+        const { data, status } = this.props            
 
         const { xScale, xScale2, yScale, yScale2, xAxis, xAxis2, yAxis } = this.updateAxis()
         
@@ -272,16 +275,18 @@ export default class D3SVGComponent extends React.Component {
         const brush = brushX()
                         .extent([[0, 0], [width, height2]])
                         .on("brush", brushed);
-            
+
         xScale.domain(extent(data, d =>  d.date));
         yScale.domain([0, max(data, d => d.value)*1.1]);
         xScale2.domain(xScale.domain());
         yScale2.domain(yScale.domain());
 
         { //other elements
-            this.brushRect
-                .attr("width", width)
-                .attr("height", height);
+            if (status == "success") {
+                this.brushRect
+                    .attr("width", width)
+                    .attr("height", height);
+            }
 
             this.focusXAxis
                 .attr("transform", `translate(0, ${height})`)
@@ -305,7 +310,9 @@ export default class D3SVGComponent extends React.Component {
 
         { //focus G
 
-            this.focusWidget.attr("clip-path", `url(#clip-${this.props.widgetId})`);
+            if (status == "success") {
+                this.focusWidget.attr("clip-path", `url(#clip-${this.props.widgetId})`);
+            }
             
             { //dots
 
@@ -412,10 +419,12 @@ export default class D3SVGComponent extends React.Component {
                         .attr("x2", width + width);
                 }
 
-                this.focusRect 
-                    .attr("width", width)
-                    .attr("height", height)
-                    .on("mousemove", mousemove);
+                if (status == "success") {
+                    this.focusRect 
+                        .attr("width", width)
+                        .attr("height", height)
+                        .on("mousemove", mousemove);
+                }
 
             }
         }
@@ -446,9 +455,53 @@ export default class D3SVGComponent extends React.Component {
                 .attr("transform", `translate(0, ${height2} )`)
                 .call(xAxis2);
 
-            this.contextBrush
-                .call(brush)
-                .call(brush.move, xScale.range());
+            if (status == "success") {
+                this.contextBrush
+                    .call(brush)
+                    .call(brush.move, xScale.range());
+            }
+
+        }
+
+        { // loader
+            let translateX = ((width - margin.right - margin.left)),
+                translateY = ((height - margin.top - margin.bottom));
+
+            let svgLoader = this.rootRefNode.querySelectorAll("svg.svg-loading");
+
+            if (status == "loading") {
+                if (svgLoader.length == 0) {
+                    let oDOM = new DOMParser().parseFromString(
+                                                    loadingSVG(translateX, translateY), 
+                                                    "image/svg+xml"
+                                                );
+
+                    this.rootRefNode.querySelector("g.focus").appendChild(oDOM.documentElement);
+                }
+                else {
+                    this.focusGroup.select("svg.svg-loading g")
+                        .attr("transform", `translate(${translateX/2}, ${translateY/2} )`)
+                }
+            }
+            else if(status == "error") {
+                this.focusGroup.selectAll("svg.svg-loading circle")
+                    .remove()
+
+                let loadErrorMessage = this.focusGroup.select("svg.svg-loading text").empty()
+                
+                if (loadErrorMessage) {
+                    this.focusGroup.select("svg.svg-loading g")
+                                    .append('text')
+                                        .style("text-anchor", "middle")
+                                        .style("fill", orangeColour)
+                                        .text(this.props.errorMessage);
+                }
+
+            }
+            else if(status == "success") {
+                this.rootRefNode.querySelectorAll("svg.svg-loading")
+                                .forEach(e => e.parentNode.removeChild(e));
+            }
         }
     }
 
@@ -457,9 +510,15 @@ export default class D3SVGComponent extends React.Component {
         const { margin, width, height } = this.extractSize()
 
         return <svg className="root-svg" 
-                    ref={ node => this.rootNode = select(node) }
+                    ref={ node => 
+                        {
+                            this.rootRefNode = node
+                            this.rootNode = select(node)
+                        } 
+                    }
                     width = { width + margin.left + margin.right }
                     height = { height + margin.top + margin.bottom } 
+                    xmlns={"http://www.w3.org/2000/svg"}
                 >
 
                 </svg>

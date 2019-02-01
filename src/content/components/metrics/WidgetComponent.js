@@ -7,7 +7,7 @@ import { Panel, Well, Collapse, Fade, Tooltip,
             OverlayTrigger, Checkbox, FormGroup, ControlLabel } from 'react-bootstrap';
 import ReactResizeDetector from 'react-resize-detector';
 
-export default class DraggableWidgetComponent extends React.Component {
+export default class WidgetComponent extends React.Component {
     constructor(props) {
         super(props)
 
@@ -120,7 +120,7 @@ export default class DraggableWidgetComponent extends React.Component {
                                         className={`glyphicon glyphicon-chevron-up`}
                                         onClick = {
                                             () => this.setState((prevState, props) => {
-                                                open: !this.prevState.open
+                                                open: !prevState.open
                                             })
                                         }
                                     > </span>
@@ -131,7 +131,7 @@ export default class DraggableWidgetComponent extends React.Component {
                                         className={`glyphicon glyphicon-chevron-down`}
                                         onClick = {
                                             () => this.setState((prevState, props) => {
-                                                open: !this.prevState.open
+                                                open: !prevState.open
                                             })
                                         }
                                     > </span>
@@ -158,10 +158,7 @@ export default class DraggableWidgetComponent extends React.Component {
                         <div>
                             <D3SVGComponent
                                 {...this.state}
-                                colour={this.props.colour}
-                                data={this.props.data}
-                                dataMean={this.props.dataMean}
-                                widgetId={this.props.widgetId}
+                                {...this.props}
                             />
                         </div>
                     </Collapse>

@@ -1,0 +1,39 @@
+{
+    "manifest_version": 2,
+    "name": "ELB Troubleshooter",
+    "description": "Tool for troubleshooting AWS ELB",
+    "version": "1.0",
+
+    "browser_action": {
+    "default_icon": "img/icon.png",
+    "default_popup": "popup.html",
+    "default_title": "ELB Troubleshooter"
+
+    },
+    "background": {
+        "scripts": ["min/background.min.js"],
+        "persistent": true
+    },
+
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "tabs","<all_urls>",
+        "storage"
+    ],
+
+    "icons": {
+        "128": "img/icon.png"
+    },
+
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+
+    "content_scripts": [
+        {
+        "matches": ["<all_urls>"],
+        "exclude_matches": ["*://*/*"],
+        "css": [],
+        "js": ["min/content.min.js"]
+       }
+    ]
+}

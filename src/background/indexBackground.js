@@ -5,6 +5,8 @@ import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import httpCapturer from './httpCapturer'
 
+import '../manifest.json'
+
 const logger = createLogger({
     level: 'info',
     collapsed: true

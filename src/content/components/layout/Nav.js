@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 //https://webpack.js.org/concepts/loaders/
 import styles from './Nav.jsx.css';
+import awsLogo from './aws.jpg'
 
 const Header = () => { 
 
@@ -16,7 +17,7 @@ const Header = () => {
         <nav className={'navbar navbar-inverse navbar-fixed-top bg-dark navbar-dark ' + styles.nav_bar}  role='navigation' >            
             <div style={{width:'90%'}}>
                 <Link className={'navbar-brand ' + styles.nav_a_img} to='/index.html'>
-                    <img className={styles.nav_img} src='img/aws.jpg' alt='logo' />
+                    <img className={styles.nav_img} src={awsLogo} alt='logo' />
                 </Link>
 
                 <div className='navbar-header'>

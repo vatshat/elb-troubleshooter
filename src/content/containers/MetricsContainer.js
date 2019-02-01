@@ -1,6 +1,6 @@
 import React from 'react'
 import { object, number, array, any } from 'prop-types'
-import DraggableWidgetComponent from '../components/metrics/WidgetComponent'
+import WidgetComponent from '../components/metrics/WidgetComponent'
 
 // d3 imports
 import { csv } from 'd3-fetch'
@@ -9,29 +9,24 @@ import { timeParse } from 'd3-time-format'
 class MetricContainer extends React.Component {
     static propTypes = { metricData: array.isRequired }
     
-    state = { colour: true }
-    
-    updateChart = () => {
-        this.setState((prevState, props) => { colour: !prevState.colour })
-    }
-
     render() {
         const metricWidgets =  this.props.metricData
             .map((metricWidget, widgetIndex) => {
                 return <div className="widget-scrollbar col-lg-6">
-                            <DraggableWidgetComponent 
-                                {...this.state}
+                            <WidgetComponent 
+                                errorMessage = {this.props.errorMessage}
                                 data = { metricWidget["metricData"] }
                                 dataMean = { metricWidget["metricData"].reduce((total, dataPoint) => total + dataPoint["Values"]) / metricWidget.length }
                                 widgetId={ metricWidget["id"] } 
-                                key= { metricWidget["id"] }
+                                key= { `${metricWidget["id"]}${widgetIndex}`}
+                                status = {this.props.status}
                             />
                         </div>
             })
 
         return (
             <div>
-                <h1 onClick={this.updateChart}>
+                <h1>
                     Metrics
                 </h1>
                 
@@ -59,7 +54,8 @@ const HOCMockStoreComponent = MockStoreComponent => class extends React.Componen
                 "Label": "Metric",
                 "Values": [1]
             }]
-        }
+        }, 
+        status: "loading",
     }
 
     componentDidMount() {
@@ -67,7 +63,15 @@ const HOCMockStoreComponent = MockStoreComponent => class extends React.Componen
             .then(promise => promise.json())
             .then(response => {
                 this.setState({
-                    metricData: response
+                    metricData: response,
+                    status: "success",
+                })
+            })
+            .catch(error => {
+                this.setState({
+                    status: "error",
+                    errorMessage: error.message,
+                    
                 })
             });
     }
@@ -90,7 +94,15 @@ const HOCMockStoreComponent = MockStoreComponent => class extends React.Componen
                 }
             })
 
-        return <MockStoreComponent metricData = { metricWidgets } />
+        return <MockStoreComponent 
+                    errorMessage = { this.state.errorMessage ? 
+                                        this.state.errorMessage :
+                                        undefined
+                                    }
+
+                    status = { this.state.status }
+                    metricData = { metricWidgets } 
+                />
     }
 }
 

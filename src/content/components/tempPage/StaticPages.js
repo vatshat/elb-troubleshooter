@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { PushSpinner } from "react-spinners-kit";
 
 export class Home extends React.Component{
     changeURLHandler = () => {
@@ -10,6 +11,13 @@ export class Home extends React.Component{
         return (
             <div>
                 <h1>Home</h1>
+                
+                <PushSpinner
+                    size={30}
+                    color="#686769"
+                    loading={true}
+                />
+
             </div>    
         )
     }

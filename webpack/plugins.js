@@ -37,6 +37,12 @@ customPlugins = [
         template: path.resolve(__dirname, '../src/content/static/content.html'),
         title: 'ELB Troubleshooter',
         inject: false,
+    }),
+    new HtmlWebpackPlugin({
+        filename: '../popup.html', //relative to root of the application
+        template: path.resolve(__dirname, '../src/popup/popup.html'),
+        title: 'Pop-up ',
+        inject: false,
     })
 ]
 

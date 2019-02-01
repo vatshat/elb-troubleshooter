@@ -41,9 +41,30 @@ module.exports = [
             {
                 test: /\.svg$/,
                 use: glyphicon + '&mimetype=image/svg+xml'
+            },
+            {
+                test: /\.(jpg|png)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        outputPath: '../img',
+                        publicPath: '/img/',
+                    },
+                }],
             }, 
             {
-                test: /react-bootstrap-table-all.min.css$/,
+                test: /manifest\.json$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        outputPath: '../',
+                    },
+                }],
+            }, 
+            {
+                test: /react-bootstrap-table-all\.min\.css$/,
                 use: [{
                     loader: 'file-loader',
                     options: {
