@@ -1,0 +1,12 @@
+{
+    "verbose": false,
+    "ignore": ["src/sandbox/src/consoleLog.json"],
+    "events": {
+        "start": "node -e 'console.clear()'"
+    },
+    "watch": ["src"],
+    "execMap": {
+        "js": "babel-node",
+        "jsx": "babel-node"
+    }
+}

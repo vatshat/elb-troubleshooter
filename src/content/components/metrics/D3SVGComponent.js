@@ -314,6 +314,58 @@ export default class D3SVGComponent extends React.Component {
                 this.focusWidget.attr("clip-path", `url(#clip-${this.props.widgetId})`);
             }
             
+            { // grid lines
+                
+                // add the X gridlines
+                this.focusWidget.append("g")
+                    .attr("class", "grid")
+                    .attr("transform", `translate(0, ${height})`)
+                    .call(axisBottom(xScale)
+                        .ticks(5)
+                        .tickSize(-height)
+                        .tickFormat("")
+                    )
+
+                // add the Y gridlines
+                this.focusWidget.append("g")
+                    .attr("class", "grid")
+                    .call(axisLeft(yScale)
+                        .ticks(5)
+                        .tickSize(-width)
+                        .tickFormat("")
+                    )
+            }
+
+            { // line graph
+
+                let focusJoinLine = this.focusWidget.selectAll(".line").data([data])
+
+                // [Update] transition from previous paths to new paths
+
+                this.focusWidget.selectAll('.line')
+                    .style("stroke", blueColour)
+                    .attr('d', drawFocusLine)
+
+                // [Enter] any new data
+                focusJoinLine.enter()
+                    .append('path')
+                    .attr('class', 'line')
+                    .attr('d', drawFocusLine)
+                    .style('fill', 'none')
+                    .style("stroke", blueColour);
+
+                // [Exit]
+                focusJoinLine.exit()
+                    .remove();
+
+                focusJoinLine
+                    .transition()
+                    .delay(1000)
+                    .ease(easeLinear)
+                    .style('stroke-width', this.props.drawLine ? '2px' : '0px')
+
+            }
+            
             { //dots
 
                     // scatterplot 
@@ -342,36 +394,6 @@ export default class D3SVGComponent extends React.Component {
             }
             // append line graph to brush chart area
 
-            { // line graph
-                
-                let focusJoinLine = this.focusWidget.selectAll(".line").data([data])
-                
-                // [Update] transition from previous paths to new paths
-
-                this.focusWidget.selectAll('.line')
-                    .style("stroke", blueColour)
-                    .attr('d', drawFocusLine)
-
-                // [Enter] any new data
-                focusJoinLine.enter()
-                    .insert('path', 'g')
-                    .attr('class', 'line')
-                    .attr('d', drawFocusLine)
-                        .style('fill', 'none')
-                        .style("stroke", blueColour);
-
-                // [Exit]
-                focusJoinLine.exit()
-                    .remove();
-
-                focusJoinLine
-                    .transition()
-                    .delay(1000)
-                    .ease(easeLinear)
-                    .style('stroke-width', this.props.drawLine ? '2px' : '0px')
-
-            }
-            
             { //tooltips
                 const bisectDate = bisector(d => d.date).left,
                         formatDate = timeFormat("%d-%b-%y");
@@ -497,10 +519,6 @@ export default class D3SVGComponent extends React.Component {
                                         .text(this.props.errorMessage);
                 }
 
-            }
-            else if(status == "success") {
-                this.rootRefNode.querySelectorAll("svg.svg-loading")
-                                .forEach(e => e.parentNode.removeChild(e));
             }
         }
     }

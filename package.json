@@ -6,7 +6,7 @@
     "scripts": {
         "test": "jest --watch",
         "build": "webpack --config webpack/webpack.config.js",
-        "nodemon": "nodemon --exec babel-node ./src/sandbox/src/sandbox.js",
+        "sandbox": "nodemon ./src/sandbox/src/sandbox.js",
         "babel": "babel ./src/sandbox/src --out-dir ./src/sandbox/.babel.compiled --source-maps --watch",
         "mockGetMetricData": "node ./src/express/mockGetMetricData.js",
         "express": "node ./src/express/express.js",
@@ -29,6 +29,7 @@
     "license": "ISC",
     "diagnosticLogging": true,
     "dependencies": {
+        "@tensorflow/tfjs-node": "^0.2.3",
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.3",
         "babel-loader": "^7.1.5",
@@ -44,6 +45,7 @@
         "d3-array": "^2.0.3",
         "d3-axis": "^1.0.12",
         "d3-brush": "^1.0.6",
+        "d3-dsv": "^1.0.10",
         "d3-ease": "^1.0.5",
         "d3-fetch": "^1.1.2",
         "d3-scale": "^2.1.2",
