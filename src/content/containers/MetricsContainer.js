@@ -1,20 +1,143 @@
-import React from 'react'
-import { object, number, array, any } from 'prop-types'
+import React from 'react';
+import aws4 from 'aws4'
+import { parseString } from 'xml2js'
+import { object, number, array, any, func } from 'prop-types'
 import WidgetComponent from '../components/metrics/WidgetComponent'
-
-// d3 imports
 import { timeParse } from 'd3-time-format'
 
-class MetricContainer extends React.Component {
-    static propTypes = { metricData: array.isRequired }
+export default class MetricsContainer extends React.Component {
+    fetchMetricData = this.fetchMetricData.bind(this)
+
+    static propTypes = { 
+        metricData: array.isRequired,
+        errorMetricsActionDispatch: func.isRequired,
+        requestMetricsDispatch: func.isRequired,
+        responseMetricsDispatch: func.isRequired,
+    }
+
+    componentDidMount() {
+        this.fetchMetricData()
+    }
     
+    fetchMetricData() {
+        
+        this.props.requestMetricsDispatch()
+
+        let
+            currentTime = new Date(),
+            queryGenerator = metricDataQueries => {
+                let query = {
+                    "EndTime": metricDataQueries.endtime,
+                    "Version": "2010-08-01",
+                    "Action": "GetMetricData",
+                    "StartTime": metricDataQueries.startTime,
+                }
+
+                metricDataQueries.members.map((m, i) => {
+                    i++
+                    query = {
+                        ...query,
+                        [`MetricDataQueries.member.${i}.MetricStat.Stat`]: m.stat,
+                        [`MetricDataQueries.member.${i}.MetricStat.Metric.MetricName`]: m.metricName,
+                        [`MetricDataQueries.member.${i}.Id`]: `m${i}`,
+                        [`MetricDataQueries.member.${i}.ReturnData`]: "true",
+                        [`MetricDataQueries.member.${i}.MetricStat.Metric.Namespace`]: m.nameSpace,
+                        [`MetricDataQueries.member.${i}.MetricStat.Period`]: m.period,
+                        [`MetricDataQueries.member.${i}.Label`]: m.metricName,
+                    }
+
+                    m.memberDimensions.map((mD, mI) => {
+                        mI++
+                        query = {
+                            ...query,
+                            [`MetricDataQueries.member.${i}.MetricStat.Metric.Dimension.${mI}.Name`]: mD.Name,
+                            [`MetricDataQueries.member.${i}.MetricStat.Metric.Dimension.${mI}.Value`]: mD.Value,
+
+                        }
+                    })
+                });
+
+                return query
+            },
+            query =
+                queryGenerator({
+                    endtime: currentTime.toISOString(),
+                    startTime: new Date(currentTime.setDate(currentTime.getDate() - 5)).toISOString(),
+                    members: [
+                        {
+                            stat: "Sum",
+                            metricName: "IncomingBytes",
+                            nameSpace: "AWS/Logs",
+                            period: 300,
+                            memberDimensions: [{
+                                Name: "LogGroupName",
+                                Value: "CloudTrail/DefaultLogGroup"
+                            }]
+                        }, 
+                        {
+                            stat: "Maximum",
+                            metricName: "IncomingLogEvents",
+                            nameSpace: "AWS/Logs",
+                            period: 300,
+                            memberDimensions: [{
+                                Name: "LogGroupName",
+                                Value: "CloudTrail/DefaultLogGroup"
+                            }]
+                        },
+
+                    ],
+                }),
+            // sort out dynamiaclly getting region, accessKeyId, secretAccessKey
+            opts =
+                aws4.sign(
+                    {
+                        host: 'monitoring.eu-west-1.amazonaws.com',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        method: 'POST',
+                        path: '/',
+                        body: Object.keys(query)
+                                    .map( k => encodeURIComponent(k) + '=' + encodeURIComponent(query[k]) )
+                                    .join('&'),
+                    }
+                    , {
+                        accessKeyId: 'AKIAIBGW3XOTGH37TWMQ',
+                        secretAccessKey: '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',
+                    }
+                )
+
+        fetch(
+            `https://${opts.headers.Host}${opts.path}`,
+            {
+                method: "POST",
+                headers: {...opts.headers},
+                body: opts.body,
+            }
+        )
+        .then( response => response.text() )
+        .then(xml => {
+            parseString(xml, (err, json) => {
+                // add ajv validator before sending to store as success!!!!!!!!
+                this.props.responseMetricsDispatch(json);
+            })
+        })
+        .catch(error => { this.props.errorMetricsActionDispatch(error.message) });
+    }
+
     render() {
-        const metricWidgets =  this.props.metricData
+        const metricWidgets = this.props.metricsReducer.metricWidgets
             .map((metricWidget, widgetIndex) => {
+
+                let temp = metricWidget["metricData"].map(x => {
+                    return {
+                        ...x,
+                        date: timeParse("%Y-%m-%dT%H:%M:%SZ")(x.date)
+                    }
+                })
+
                 return <div className="widget-scrollbar col-lg-6">
                             <WidgetComponent 
                                 errorMessage = {this.props.errorMessage}
-                                data = { metricWidget["metricData"] }
+                                data = { temp }
                                 dataMean = { metricWidget["metricData"].reduce((total, dataPoint) => total + dataPoint["Values"]) / metricWidget.length }
                                 widgetId={ metricWidget["id"] } 
                                 key= { `${metricWidget["id"]}${widgetIndex}`}
@@ -23,93 +146,24 @@ class MetricContainer extends React.Component {
                         </div>
             })
 
-        return (
+        return ( 
             <div>
                 <h1>
                     Metrics
                 </h1>
                 
                 {metricWidgets}
-                
-            </div>    
-        )
-    }
-}
 
-const HOCMockStoreComponent = MockStoreComponent => class extends React.Component {    
-
-    state = {
-        metricData: {
-            "MetricDataResults": [{
-                "StatusCode": "Incomplete",
-                "Id": (() => (
-                    Math
-                    .random()
-                    .toString(36)
-                    .substring(2, 15) +
-                    Math.random().toString(36).substring(2, 15)
-                ))(),
-                "Timestamps": ["1970-01-01T00:00:00Z"],
-                "Label": "Metric",
-                "Values": [1]
-            }]
-        }, 
-        status: "loading",
-    }
-
-    componentDidMount() {
-        fetch('http://localhost:8080/api/5min')
-            .then(promise => promise.json())
-            .then(response => {
-                this.setState({
-                    metricData: response,
-                    status: "success",
-                })
-            })
-            .catch(error => {
-                this.setState({
-                    status: "error",
-                    errorMessage: error.message,
-                    
-                })
-            });
-    }
-
-    render() {   
-
-        const metricWidgets = this.state.metricData["MetricDataResults"]
-            .map((metricDataPeriod) => {
-                return {
-                    id: metricDataPeriod["Id"],
-                    metricData: metricDataPeriod["Timestamps"]
-                                    .slice(0, 250)
-                                    .map((timestamp, index) => {
-                                        return {
-                                            date: timeParse("%Y-%m-%dT%H:%M:%SZ")(timestamp),
-                                            value: +metricDataPeriod["Values"][index] // convert string to number
-                                        }
-                                    })
-                                    .sort((a, b) => a.date - b.date)
+                {
+                    /*                         
+                        <pre className="col-lg-4">
+                            {
+                                JSON.stringify(this.props.metricsWidget, null, 2)
+                            }
+                        </pre>              
+                    */
                 }
-            })
-
-        return <MockStoreComponent 
-                    errorMessage = { this.state.errorMessage ? 
-                                        this.state.errorMessage :
-                                        undefined
-                                    }
-
-                    status = { this.state.status }
-                    metricData = { metricWidgets } 
-                />
+            </div>
+        );
     }
 }
-
-/* 
-    export default HOCMockStoreComponent (substitute with Redux connect)
-
-        HOCMockStoreComponent --> Data into --> MockStoreComponent --> DraggableComponent --> MetricComponent
-
-
- */
-export default HOCMockStoreComponent(MetricContainer)

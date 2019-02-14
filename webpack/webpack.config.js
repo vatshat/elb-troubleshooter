@@ -10,7 +10,7 @@ module.exports = {
         popup: src + 'popup/indexPopup.js',
         background: src + 'background/indexBackground.js',
         content: src + 'content/indexContent.js',
-        sandbox: src + 'sandbox/src/sandbox.json.js',
+        // sandbox: src + 'sandbox/src/sandbox.json.js',
     },
     module: {
         rules: require('./rules'),

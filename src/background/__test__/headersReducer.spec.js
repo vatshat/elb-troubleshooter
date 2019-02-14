@@ -4,7 +4,7 @@ import fs from "fs"
 import path from "path"
 
 describe('>>>REDUCER --- Test Header Reducers', () => {
-    it('+++ should trigger correction action when CAPTURE_TOGGLE dispatched', () => {
+    it('+++ should trigger correct action when CAPTURE_TOGGLE dispatched', () => {
         let state = {
             toggleCapture: false,
             selectedHeaders: [],

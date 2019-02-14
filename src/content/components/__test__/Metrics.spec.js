@@ -18,5 +18,4 @@ describe('>>> d3 - redux integration to-do', () => {
     
     it('++ add scatter plot as an option via props/redux to the graph (like enable prediction)', () => {})
 
-    it('++ review using mean as indicator for changed data, use Redux store marker', () => {})
 });

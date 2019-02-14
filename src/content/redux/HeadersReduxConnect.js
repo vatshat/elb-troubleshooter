@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
-import HeadersTableContainer from './HeadersContainer'
-import * as pageAction from '../actions/pageAction'
+import HeadersTableContainer from '../containers/HeadersContainer'
+import * as headersAction from '../actions/headersAction'
 
-const mapStateToProps = (state) => {    
+const mapStateToProps = state => {    
     if (state.headers) {    
         const toggleCapture = typeof state.headers.preHeaders.toggleCapture === 'undefined' ? false : state.headers.preHeaders.toggleCapture;
 
@@ -26,10 +26,10 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    captureToggleDispatch: (toggleCapture) => dispatch(pageAction.captureToggleAction(toggleCapture)),
-    addPreHeadersDispatch: (id, preHeaderCount) => dispatch(pageAction.addPreHeadersAction(id, preHeaderCount)),
-    disablePreHeadersDispatch: (id) => dispatch(pageAction.disablePreHeadersAction(id)),
-    clearPreHeadersDispatch: () => dispatch(pageAction.clearPreHeadersAction())
+    captureToggleDispatch: (toggleCapture) => dispatch(headersAction.captureToggleAction(toggleCapture)),
+    addPreHeadersDispatch: (id, preHeaderCount) => dispatch(headersAction.addPreHeadersAction(id, preHeaderCount)),
+    disablePreHeadersDispatch: (id) => dispatch(headersAction.disablePreHeadersAction(id)),
+    clearPreHeadersDispatch: () => dispatch(headersAction.clearPreHeadersAction())
 })
 
 export default connect(

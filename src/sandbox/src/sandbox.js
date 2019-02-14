@@ -1,106 +1,117 @@
-import * as tf from '@tensorflow/tfjs-node';
-import sandboxJSON from './sandbox.json'
-import fs from "fs"
-import path from "path"
+import consoleLog from './consoleLog'
 
-import { csvParse } from 'd3-dsv'
+import { applyMiddleware, createStore } from "redux";
+import axios from "axios";
+import thunk from "redux-thunk";
+import promise from "redux-promise-middleware";
+import AWS from 'aws-sdk'
 
-{ // never remove this logging function 
-    var consoleLog = data => {
-        fs.writeFile(
-            path.join(__dirname) + "\\consoleLog.json",
-            JSON.stringify(data),
-            (err) => {
-                if (err) throw err;
-                console.log('Written to consoleLog.json');
-            }
-        )
+import aws4 from 'aws4'
+import { parseString } from 'xml2js'
+
+import tensorflow from './sandbox.json'
+// tensorflow()
+
+import util from 'util'
+
+function redux() {    
+    const initialState = {
+      fetching: false,
+      fetched: false,
+      users: [],
+      error: null,
     };
     
-    if (typeof fetch !== 'function') {
-        global.fetch = require('node-fetch');
-    }
-}
-
-let 
-    prediction,
-    sandBoxData = sandboxJSON.map(x => x.price),
-    tutorialData = [2.75, 25.36, 24.79, 27.88];
-
-let predictionData = originalData => {
-
-    Number.prototype.toFixedNumber = function (x, base) {
-        let pow = Math.pow(base || 10, x);
-        return Math.round(this * pow) / pow;
-    }
-
-    let exponentialSmoothing = data => {
-        let
-            arrayIndex = [...Array(data.length).keys()],
-            inputDataTensor = tf.variable(tf.tensor1d(data, "float32")),
-            predictedTensor = tf.variable(tf.zeros([data.length], 'float32')),
-            minDecay = [],
-            step = 0.01,
-            alpha = 0;
-    
-        for (alpha; alpha < 1-step; alpha += step) {    
-            
-            let 
-                mvaTensor = tf.movingAverage(predictedTensor, inputDataTensor, alpha, data.length, true),
-                sseTensor = tf.tensor1d([data[0]]).concat(mvaTensor).slice(0, data.length)
-    
-            predictedTensor.assign(sseTensor)
-    
-            let 
-                    yTrue = tf.tensor2d([arrayIndex, inputDataTensor.dataSync()]),
-                    yPred = tf.tensor2d([arrayIndex, sseTensor.dataSync()]),
-                    mse = tf.metrics.meanSquaredError(yTrue, yPred);
-    
-            minDecay = [
-                ...minDecay, 
-                { 
-                    "decay": alpha,
-                    "mse" : [...Array.from(
-                                mse.slice(1, 1).dataSync()
-                            )][0],
-                    "data" : [...[
-                                ...data,
-                                Array.from(
-                                        mvaTensor.slice(data.length-1, 1).dataSync()
-                                    )[0].toFixedNumber(2)
-                                ],
-                            ]
-                }
-            ]
+    const reducer = (state=initialState, action) => {
+      switch (action.type) {
+        case "FETCH_USERS_PENDING": {
+          return {...state, fetching: true}
+          break;
         }
-        
-        let totalMse = [];
-
-        minDecay = minDecay.reduce((prev, curr) => {            
-            totalMse.push(curr.mse)
-            return prev.mse < curr.mse ? prev : curr;
-        })
-        
-        // minDecay = {
-        //     ...minDecay,
-        //     totalMse: totalMse
-        // }
-
-        return ((minDecay.data.length - originalData.length) < 10) ? 
-                    exponentialSmoothing(minDecay.data) 
-                    : 
-                    minDecay;
+        case "FETCH_USERS_REJECTED": {
+          return {...state, fetching: false, error: action.payload}
+          break;
+        }
+        case "FETCH_USERS_FULFILLED": {
+          return {
+            ...state,
+            fetching: false,
+            fetched: true,
+            users: action.payload,
+          }
+          break;
+        }
+      }
+      return state
     }
-
-    return exponentialSmoothing(originalData)
+    
+    const middleware = applyMiddleware(promise, thunk)
+    const store = createStore(reducer, middleware)
+    
+    store.dispatch({
+      type: "FETCH_USERS",
+      payload: axios.get("http://rest.learncode.academy/api/wstern/users")
+    })
+    .then(() => {
+        var temp = store.getState()
+        
+        consoleLog(util.inspect(temp))
+    })
 }
 
-fetch('http://localhost:8000/temp.csv')
-    .then(promise => promise.text())
-    .then(response => {
-        let passengerData = csvParse(response).map(x => parseFloat(x.Passengers)),
-            effectiveData = [passengerData, tutorialData, sandBoxData],
-            i = 1
+// redux()
 
-        // consoleLog(predictionData(effectiveData[i]))
-    })
+function getMetricData() {
+
+    let
+        currentTime = new Date(),
+        query = {
+            "MetricDataQueries.member.1.MetricStat.Stat": "Average",
+            "EndTime": currentTime.toISOString(),
+            "MetricDataQueries.member.1.MetricStat.Metric.MetricName": "IncomingBytes",
+            "MetricDataQueries.member.1.Id": "m1",
+            "MetricDataQueries.member.1.ReturnData": "true",
+            "MetricDataQueries.member.1.MetricStat.Metric.Namespace": "AWS/Logs",
+            "Version": "2010-08-01",
+            "MetricDataQueries.member.1.MetricStat.Period": 300,
+            "Action": "GetMetricData",
+            "MetricDataQueries.member.1.Label": "Logs",
+            "StartTime": new Date(currentTime.setDate(currentTime.getDate() - 5)).toISOString(),
+        },
+        cwOpts =
+            aws4.sign(
+                {
+                    host: 'monitoring.eu-west-1.amazonaws.com',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    method: 'POST',
+                    path: '/',
+                    body: Object.keys(query).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(query[k])).join('&'),
+                }
+                , {
+                    accessKeyId: 'AKIAIBGW3XOTGH37TWMQ',
+                    secretAccessKey: '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',
+                }
+            ),
+        fetchAWS = async opts => {
+            const 
+                rawResponse = await fetch(
+                    `https://${opts.headers.Host}${opts.path}`,
+                    {
+                        method: "POST",
+                        headers: {...opts.headers},
+                        body: opts.body,
+                    }
+                ),
+                content = await rawResponse.text();
+
+            parseString(content, (err, result) => {
+                console.log(JSON.stringify(result, null, 2))
+            })
+        }
+
+    fetchAWS(cwOpts);        
+ }
+
+getMetricData()
