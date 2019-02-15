@@ -2,9 +2,6 @@ import React from 'react'
 import { object, number, array, any } from 'prop-types'
 import WidgetComponent from '../components/metrics/WidgetComponent'
 
-// d3 imports
-import { timeParse } from 'd3-time-format'
-
 class MetricContainer extends React.Component {
     static propTypes = { metricData: array.isRequired }
     

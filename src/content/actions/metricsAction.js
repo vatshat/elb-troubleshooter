@@ -32,3 +32,32 @@ export const errorMetricsAction = errorMessage => ({
     type: 'FETCH_METRICS_REJECTED',
     errorMessage: errorMessage
 });
+
+export const responseCredsAction = ({Credentials}) => ({
+        type: 'STS_CREDS_FULFILLED',
+        responseCreds: (
+            ({
+                AccessKeyId,
+                SecretAccessKey,
+                SessionToken,
+                Expiration
+            }) => ({
+                'expiration': Expiration,
+                'creds': {
+                    'accessKeyId': AccessKeyId,
+                    'secretAccessKey': SecretAccessKey,
+                    'sessionToken': SessionToken,
+                }
+            })
+        )(Credentials)
+});
+
+export const requestCredsAction = () => ({
+    type: 'STS_CREDS_PENDING'
+})
+
+
+export const errorCredsAction = errorMessage => ({
+    type: 'STS_CREDS_REJECTED',
+    errorMessage: errorMessage
+});

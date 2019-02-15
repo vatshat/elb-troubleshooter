@@ -1,25 +1,84 @@
 import React from 'react';
 import aws4 from 'aws4'
 import { parseString } from 'xml2js'
-import { object, number, array, any, func } from 'prop-types'
+import { func, object } from 'prop-types'
 import WidgetComponent from '../components/metrics/WidgetComponent'
+import AWS from 'aws-sdk/global';
+import STS from 'aws-sdk/clients/sts';
 import { timeParse } from 'd3-time-format'
+
+if (typeof fetch !== 'function') {
+    if (typeof window !=='object') global.fetch = require('node-fetch');
+    else window.fetch = require('node-fetch');
+}
+
+// https://robwise.github.io/blog/cancel-whatwg-fetch-requests-in-react
+if (typeof AbortController !== 'function') {
+    if (typeof window !== 'object') global.AbortController = require('abortcontroller-polyfill/dist/cjs-ponyfill');
+    else window.AbortController = require('abortcontroller-polyfill/dist/cjs-ponyfill');
+}
 
 export default class MetricsContainer extends React.Component {
     fetchMetricData = this.fetchMetricData.bind(this)
 
     static propTypes = { 
-        metricData: array.isRequired,
+        metricsReducer: object.isRequired,
+        credsReducer: object.isRequired,
         errorMetricsActionDispatch: func.isRequired,
         requestMetricsDispatch: func.isRequired,
         responseMetricsDispatch: func.isRequired,
     }
 
     componentDidMount() {
-        this.fetchMetricData()
+        /* this.fetchMetricData({
+            accessKeyId: "AKIAJSPIKEHCJDICSXXQ",
+            secretAccessKey: "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",
+        }) */
+        this.getSTSBeforeFetch(this.props.credsReducer)
     }
     
-    fetchMetricData() {
+    componentDidUpdate({credsReducer: {stsStatus: prevStsStatus} }) {        
+        let {stsStatus, creds} = this.props.credsReducer
+
+        if (stsStatus !== prevStsStatus && stsStatus === "success") {
+            this.fetchMetricData(creds)
+        }
+    }
+
+    componentWillUnmount = () => this.abortController.abort();
+    abortController = new window.AbortController();
+
+    getSTSBeforeFetch({expiration, stsStatus, roleArn}) {
+
+        if (new Date(expiration) < new Date()) {
+
+            if (stsStatus !== "loading") {
+                this.props.requestCredsDispatch()
+                
+                let
+                    creds = new AWS.Credentials({
+                        accessKeyId: "AKIAJCBHMGLCFXZ2NDQA",
+                        secretAccessKey: "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",
+                    }),
+                    sts = new STS({ credentials: creds }),
+                    params = {
+                        Policy: `{"Version":"2012-10-17","Statement":[{"Sid":"747368911612","Effect":"Allow","Action":["cloudwatch:GetMetricData","cloudwatch:ListMetrics"],"Resource":"*"}]}`,
+                        RoleArn: roleArn,
+                        RoleSessionName: "anomaly-detector"
+                    };
+    
+                sts.assumeRole(params, (err, response) => {
+                    if (err) this.props.errorCredsActionDispatch(err.code) // check docs for code meaning
+                    else this.props.responseCredsDispatch(response); // add ajv validator for this response
+                });
+    
+            }
+            else { this.fetchMetricData(creds) }
+
+        }
+    }
+
+    fetchMetricData(creds) {
         
         this.props.requestMetricsDispatch()
 
@@ -87,7 +146,7 @@ export default class MetricsContainer extends React.Component {
 
                     ],
                 }),
-            // sort out dynamiaclly getting region, accessKeyId, secretAccessKey
+                
             opts =
                 aws4.sign(
                     {
@@ -98,11 +157,8 @@ export default class MetricsContainer extends React.Component {
                         body: Object.keys(query)
                                     .map( k => encodeURIComponent(k) + '=' + encodeURIComponent(query[k]) )
                                     .join('&'),
-                    }
-                    , {
-                        accessKeyId: 'AKIAIBGW3XOTGH37TWMQ',
-                        secretAccessKey: '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',
-                    }
+                    }, 
+                    creds
                 )
 
         fetch(
@@ -111,6 +167,7 @@ export default class MetricsContainer extends React.Component {
                 method: "POST",
                 headers: {...opts.headers},
                 body: opts.body,
+                signal: this.abortController.signal
             }
         )
         .then( response => response.text() )
@@ -125,23 +182,27 @@ export default class MetricsContainer extends React.Component {
 
     render() {
         const metricWidgets = this.props.metricsReducer.metricWidgets
-            .map((metricWidget, widgetIndex) => {
+            .map(metricWidget => {                                
+                return <div 
+                            key = { metricWidget.id }
+                            className="widget-scrollbar col-lg-6">
 
-                let temp = metricWidget["metricData"].map(x => {
-                    return {
-                        ...x,
-                        date: timeParse("%Y-%m-%dT%H:%M:%SZ")(x.date)
-                    }
-                })
-
-                return <div className="widget-scrollbar col-lg-6">
                             <WidgetComponent 
-                                errorMessage = {this.props.errorMessage}
-                                data = { temp }
-                                dataMean = { metricWidget["metricData"].reduce((total, dataPoint) => total + dataPoint["Values"]) / metricWidget.length }
-                                widgetId={ metricWidget["id"] } 
-                                key= { `${metricWidget["id"]}${widgetIndex}`}
-                                status = {this.props.status}
+                                errorMessage = {this.props.metricsReducer.errorMessage}
+                                data = { 
+                                    metricWidget
+                                        .metricData
+                                        .map(x => {
+                                            return {
+                                                ...x,
+                                                date: timeParse("%Y-%m-%dT%H:%M:%SZ")(JSON.parse(JSON.stringify(x.date)))
+                                            }
+                                        })
+                                        .sort((a, b) => a.date - b.date)
+                                }
+                                dataMean = { metricWidget.metricData.reduce((total, dataPoint) => total + dataPoint.value, 0) / metricWidget.metricData.length }
+                                key = { metricWidget.id }
+                                status = {this.props.metricsReducer.metricsStatus}
                             />
                         </div>
             })
@@ -153,16 +214,7 @@ export default class MetricsContainer extends React.Component {
                 </h1>
                 
                 {metricWidgets}
-
-                {
-                    /*                         
-                        <pre className="col-lg-4">
-                            {
-                                JSON.stringify(this.props.metricsWidget, null, 2)
-                            }
-                        </pre>              
-                    */
-                }
+                
             </div>
         );
     }

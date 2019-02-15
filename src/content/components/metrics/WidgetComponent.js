@@ -1,11 +1,13 @@
 import React from 'react'
 import Draggable from 'react-draggable'
+import { object, array, string, number } from 'prop-types'
+
 // Pure JS implementation instead of using Draggable libary - https://www.kirupa.com/html5/drag.htm
 
 import D3SVGComponent from './D3SVGComponent'
 import { Panel, Well, Collapse, Fade, Tooltip,
             OverlayTrigger, Checkbox, FormGroup, ControlLabel } from 'react-bootstrap';
-import ReactResizeDetector from 'react-resize-detector';
+// import ReactResizeDetector from 'react-resize-detector';
 
 export default class WidgetComponent extends React.Component {
     constructor(props) {
@@ -27,6 +29,13 @@ export default class WidgetComponent extends React.Component {
         this.setDraggableRef = element => {
             this.draggableRef = element
         }
+    }
+
+    static propTypes = {
+        errorMessage: string,
+        data: array.isRequired,
+        dataMean: number.isRequired,
+        status: string.isRequired,
     }
 
     componentDidMount() {
@@ -103,11 +112,13 @@ export default class WidgetComponent extends React.Component {
                     onMouseMove = {this.onMouseMoveHandler}
                     ref = {this.setDraggableRef}
                 >
-                    <ReactResizeDetector
-                        handleWidth
-                        handleHeight
-                        onResize={this.onResizeHandler}
-                    />
+                    {
+                        /* <ReactResizeDetector
+                            handleWidth
+                            handleHeight
+                            onResize={this.onResizeHandler}
+                        /> */
+                    }
 
                     <div className={"widget-handle-drag"}>
 

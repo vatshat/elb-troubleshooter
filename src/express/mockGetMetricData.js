@@ -115496,7 +115496,7 @@ app.get('/api/1min', (req, res) => {
 app.get('/api/5min', (req, res) => {
     setTimeout(() => {
         res.send(api_5min);
-    }, 5000);
+    }, 1000);
 });
 
 var port = 8080

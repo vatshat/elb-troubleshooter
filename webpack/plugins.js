@@ -31,7 +31,7 @@ customPlugins = [
         jQuery: 'jquery',
         Util: 'exports-loader?Util!bootstrap/js/dist/util'
     }),
-    new ExtractTextWebpackPlugin("[name].css"),
+    new ExtractTextWebpackPlugin("[name].css"),/* 
     new HtmlWebpackPlugin({
         filename: '../index.html', //relative to root of the application
         template: path.resolve(__dirname, '../src/content/static/content.html'),
@@ -43,7 +43,7 @@ customPlugins = [
         template: path.resolve(__dirname, '../src/popup/popup.html'),
         title: 'Pop-up ',
         inject: false,
-    })
+    }) */
 ]
 
  module.exports = customPlugins;

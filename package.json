@@ -6,7 +6,7 @@
     "scripts": {
         "test": "jest --watch",
         "build": "webpack --config webpack/webpack.config.js",
-        "sandbox": "nodemon ./src/sandbox/src/sandbox.js",
+        "sandbox": "nodemon ./src/sandbox/src/sandbox2.js",
         "babel": "babel ./src/sandbox/src --out-dir ./src/sandbox/.babel.compiled --source-maps --watch",
         "mockGetMetricData": "node ./src/express/mockGetMetricData.js",
         "express": "node ./src/express/express.js",
@@ -30,6 +30,7 @@
     "diagnosticLogging": true,
     "dependencies": {
         "@tensorflow/tfjs-node": "^0.2.3",
+        "abortcontroller-polyfill": "^1.2.3",
         "aws-sdk": "^2.401.0",
         "aws4": "^1.8.0",
         "axios": "^0.18.0",
