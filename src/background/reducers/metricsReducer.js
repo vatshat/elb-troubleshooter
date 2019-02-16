@@ -2,7 +2,7 @@ const initialCredsState = {
     stsStatus: "initial",
     creds: {},
     roleArn: "arn:aws:iam::037559324442:role/anomaly-detector",
-    expiration: "1970-01-01T00:00:00Z"
+    expiration: "1970-01-01T00:00:00Z",
 }
 
 const credsReducer = (state = initialCredsState, action) => {
@@ -39,23 +39,51 @@ const credsReducer = (state = initialCredsState, action) => {
     }
 }
 
-const initialMetricsState = {
-    metricsStatus: "loading", 
-    metricWidgets: [{
-        "id": (() => (
-            Math
-            .random()
-            .toString(36)
-            .substring(2, 15) +
-            Math.random().toString(36).substring(2, 15)
-        ))(),
-        "Label": "Metric",
-        "metricData": [{
-            "date": "1970-01-01T00:00:00Z",
-            "value": 1
-        }]
-    }],
-};
+const 
+    currentTime = new Date(),
+    initialMetricsState = {
+        metricsStatus: "loading", 
+        metricWidgets: [{
+            "id": (() => (
+                Math
+                .random()
+                .toString(36)
+                .substring(2, 15) +
+                Math.random().toString(36).substring(2, 15)
+            ))(),
+            "Label": "Metric",
+            "metricData": [{
+                "date": "1970-01-01T00:00:00Z",
+                "value": 1
+            }]
+        }],
+        selectedMetrics: {
+            endtime: currentTime.toISOString(),
+            startTime: new Date(currentTime.setDate(currentTime.getDate() - 5)).toISOString(),
+            members: [{
+                    stat: "Sum",
+                    metricName: "IncomingBytes",
+                    nameSpace: "AWS/Logs",
+                    period: 300,
+                    memberDimensions: [{
+                        Name: "LogGroupName",
+                        Value: "CloudTrail/DefaultLogGroup"
+                    }]
+                },
+                {
+                    stat: "Maximum",
+                    metricName: "IncomingLogEvents",
+                    nameSpace: "AWS/Logs",
+                    period: 300,
+                    memberDimensions: [{
+                        Name: "LogGroupName",
+                        Value: "CloudTrail/DefaultLogGroup"
+                    }]
+                },
+
+            ],
+        }
+    };
 
 const metricsReducer = (state = initialMetricsState, action) => {
     switch (action.type) {

@@ -33,23 +33,9 @@ export const errorMetricsAction = errorMessage => ({
     errorMessage: errorMessage
 });
 
-export const responseCredsAction = ({Credentials}) => ({
+export const responseCredsAction = (creds) => ({
         type: 'STS_CREDS_FULFILLED',
-        responseCreds: (
-            ({
-                AccessKeyId,
-                SecretAccessKey,
-                SessionToken,
-                Expiration
-            }) => ({
-                'expiration': Expiration,
-                'creds': {
-                    'accessKeyId': AccessKeyId,
-                    'secretAccessKey': SecretAccessKey,
-                    'sessionToken': SessionToken,
-                }
-            })
-        )(Credentials)
+        responseCreds: creds
 });
 
 export const requestCredsAction = () => ({

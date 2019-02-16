@@ -3,7 +3,6 @@ import aws4 from 'aws4'
 import { parseString } from 'xml2js'
 import { func, object } from 'prop-types'
 import WidgetComponent from '../components/metrics/WidgetComponent'
-import AWS from 'aws-sdk/global';
 import STS from 'aws-sdk/clients/sts';
 import { timeParse } from 'd3-time-format'
 
@@ -30,7 +29,7 @@ export default class MetricsContainer extends React.Component {
     }
 
     componentDidMount() {
-        this.getSTSBeforeFetch(this.props.credsReducer)
+        this.checkSTSLocalStorage(this.props.credsReducer)
     }
     
     componentDidUpdate({credsReducer: {stsStatus: prevStsStatus} }) {        
@@ -44,9 +43,26 @@ export default class MetricsContainer extends React.Component {
     componentWillUnmount = () => this.abortController.abort();
     abortController = new window.AbortController();
 
-    getSTSBeforeFetch({expiration, stsStatus, roleArn}) {
+    checkSTSLocalStorage(credsReducer) {
+        try {
+            chrome.storage.local.get(['stsCreds'], result => {
+                if (typeof result.stsCreds === "string") {
+                    let cachedCreds = JSON.parse(result.stsCreds);
+    
+                    if (new Date(cachedCreds.expiration).getTime() > new Date().getTime()) {                        
+                        credsReducer.creds = cachedCreds.creds
+                        credsReducer.expiration = cachedCreds.expiration;                        
+                    }
+                }
+                this.getSTSBeforeFetch(credsReducer)
+            });
+        } catch (ex) { this.getSTSBeforeFetch(credsReducer) }
 
-        if (new Date(expiration) < new Date()) {
+    }
+
+    getSTSBeforeFetch({expiration, stsStatus, roleArn, creds}) {
+
+        if (new Date(expiration).getTime() < new Date().getTime()) {
 
             if (stsStatus !== "loading") {
                 this.props.requestCredsDispatch()
@@ -70,14 +86,39 @@ export default class MetricsContainer extends React.Component {
                         RoleSessionName: "anomaly-detector"
                     };
     
-                sts.assumeRole(params, (err, response) => {
+                sts.assumeRole(params, (err, {Credentials}) => {
                     if (err) this.props.errorCredsActionDispatch(err.code) // check docs for code meaning
-                    else this.props.responseCredsDispatch(response); // add ajv validator for this response
-                });
-    
-            }
-            else { this.fetchMetricData(creds) }
+                    else {
 
+                        let creds = (
+                            ({
+                                AccessKeyId,
+                                SecretAccessKey,
+                                SessionToken,
+                                Expiration
+                            }) => ({
+                                'expiration': Expiration,
+                                'creds': {
+                                    'accessKeyId': AccessKeyId,
+                                    'secretAccessKey': SecretAccessKey,
+                                    'sessionToken': SessionToken,
+                                }
+                            })
+                        )(Credentials)
+
+                        try {
+                            chrome.storage.local.set({stsCreds: JSON.stringify(creds)}, () => {});
+                        }
+                        catch (ex) {}
+
+                        this.props.responseCredsDispatch(creds); // add ajv validator for this response
+                    }
+                });    
+            }
+        } 
+        else {
+            var test = "testing";
+            this.fetchMetricData(creds)
         }
     }
 
@@ -85,71 +126,7 @@ export default class MetricsContainer extends React.Component {
         
         this.props.requestMetricsDispatch()
 
-        let
-            currentTime = new Date(),
-            queryGenerator = metricDataQueries => {
-                let query = {
-                    "EndTime": metricDataQueries.endtime,
-                    "Version": "2010-08-01",
-                    "Action": "GetMetricData",
-                    "StartTime": metricDataQueries.startTime,
-                }
-
-                metricDataQueries.members.map((m, i) => {
-                    i++
-                    query = {
-                        ...query,
-                        [`MetricDataQueries.member.${i}.MetricStat.Stat`]: m.stat,
-                        [`MetricDataQueries.member.${i}.MetricStat.Metric.MetricName`]: m.metricName,
-                        [`MetricDataQueries.member.${i}.Id`]: `m${i}`,
-                        [`MetricDataQueries.member.${i}.ReturnData`]: "true",
-                        [`MetricDataQueries.member.${i}.MetricStat.Metric.Namespace`]: m.nameSpace,
-                        [`MetricDataQueries.member.${i}.MetricStat.Period`]: m.period,
-                        [`MetricDataQueries.member.${i}.Label`]: m.metricName,
-                    }
-
-                    m.memberDimensions.map((mD, mI) => {
-                        mI++
-                        query = {
-                            ...query,
-                            [`MetricDataQueries.member.${i}.MetricStat.Metric.Dimension.${mI}.Name`]: mD.Name,
-                            [`MetricDataQueries.member.${i}.MetricStat.Metric.Dimension.${mI}.Value`]: mD.Value,
-
-                        }
-                    })
-                });
-
-                return query
-            },
-            query =
-                queryGenerator({
-                    endtime: currentTime.toISOString(),
-                    startTime: new Date(currentTime.setDate(currentTime.getDate() - 5)).toISOString(),
-                    members: [
-                        {
-                            stat: "Sum",
-                            metricName: "IncomingBytes",
-                            nameSpace: "AWS/Logs",
-                            period: 300,
-                            memberDimensions: [{
-                                Name: "LogGroupName",
-                                Value: "CloudTrail/DefaultLogGroup"
-                            }]
-                        }, 
-                        {
-                            stat: "Maximum",
-                            metricName: "IncomingLogEvents",
-                            nameSpace: "AWS/Logs",
-                            period: 300,
-                            memberDimensions: [{
-                                Name: "LogGroupName",
-                                Value: "CloudTrail/DefaultLogGroup"
-                            }]
-                        },
-
-                    ],
-                }),
-                
+        let                
             opts =
                 aws4.sign(
                     {
@@ -157,8 +134,8 @@ export default class MetricsContainer extends React.Component {
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         method: 'POST',
                         path: '/',
-                        body: Object.keys(query)
-                                    .map( k => encodeURIComponent(k) + '=' + encodeURIComponent(query[k]) )
+                        body: Object.keys(this.props.metricsReducer.query)
+                                    .map( k => encodeURIComponent(k) + '=' + encodeURIComponent(this.props.metricsReducer.query[k]) )
                                     .join('&'),
                     }, 
                     creds
