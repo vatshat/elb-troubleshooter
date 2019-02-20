@@ -27,6 +27,9 @@ export const requestMetricsAction = () => ({
     type: 'FETCH_METRICS_PENDING'
 })
 
+export const testAction = () => ({
+    type: 'TEST_ACTION'
+})
 
 export const errorMetricsAction = errorMessage => ({
     type: 'FETCH_METRICS_REJECTED',

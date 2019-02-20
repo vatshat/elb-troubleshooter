@@ -87,6 +87,11 @@ const
 
 const metricsReducer = (state = initialMetricsState, action) => {
     switch (action.type) {
+        case 'TEST_ACTION':
+            return {
+                ...state
+            }
+
         case 'FETCH_METRICS_PENDING':
             return {
                 ...state,

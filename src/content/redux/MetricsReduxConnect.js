@@ -66,6 +66,7 @@ const mapDispatchToProps = dispatch => ({
     requestCredsDispatch: () => dispatch(metricsAction.requestCredsAction()),
     responseCredsDispatch: response => dispatch(metricsAction.responseCredsAction(response)),
     errorCredsActionDispatch: errorMessage => dispatch(metricsAction.errorCredsAction(errorMessage)),
+    testDispatch: () => dispatch(metricsAction.testAction()),
 })
 
 export default connect(
