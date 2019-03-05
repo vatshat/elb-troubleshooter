@@ -6,15 +6,25 @@ if (typeof fetch !== 'function') {
 }
 
 // never remove this logging function 
-const consoleLog = data => {
-    fs.writeFile(
-        path.join(__dirname) + "\\consoleLog.json",
-        JSON.stringify(data),
-        (err) => {
+const consoleLog = (
+                    data = {}, 
+                    {
+                        json = true, fileName = "consoleLog.json", 
+                        append = false
+                    } = {}
+                ) => {
+    
+    let
+        filePath = `${path.join(__dirname)}\\${fileName}`,
+        datum = json ? JSON.stringify(data) : data,
+        fsCallBack = err => {
             if (err) throw err;
-            console.log('Written to consoleLog.json');
-        }
-    )
+            console.log(`\n ${!append ? "Overwritten" : "Appended"} to ${fileName} \n`);
+        };
+
+    if(append) fs.appendFile(filePath, datum, fsCallBack)
+    else fs.writeFile(filePath, datum, fsCallBack)
+
 };
 
 export default consoleLog

@@ -1,6 +1,9 @@
 {
     "verbose": false,
-    "ignore": ["src/sandbox/src/consoleLog.json"],
+    "ignore": [
+        "src/sandbox/src/*.json",
+        "src/sandbox/tfjs-model/*"
+    ],
     "events": {
         "start": "node -e 'console.clear()'"
     },

@@ -13,11 +13,19 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-#webpack builds
+# webpack builds
 src/assets/min/*
 
-#babel builds
+# babel builds
 **/.babel.compiled/
+
+# tensorflow models
+**/tfjs-model/
+src/sandbox/src/*
+
+# don't ignore these
+!src/sandbox/src/sandbox*.js
+!src/sandbox/src/sandbox*.scss
 
 tempCodeRunnerFile.js
 

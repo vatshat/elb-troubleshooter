@@ -1,6 +1,7 @@
 import aws4 from 'aws4'
 import { parseString } from 'xml2js'
 import STS from 'aws-sdk/clients/sts';
+import { inspect } from 'util'
 
 export const sts = props => {
     const getSTSBeforeFetch = ({expiration, stsStatus, roleArn}) => {
@@ -113,17 +114,26 @@ export const fetchMetricData = (props, abortController) => {
                                 .join('&'),
                 }, 
                 creds
-            )
-
-    fetch(
-        `https://${opts.headers.Host}${opts.path}`,
-        {
+            ),
+        signalOpt = (
+            typeof abortController == 'undefined' ||
+            typeof abortController.signal == 'undefined'
+          )  ? abortController.signal : null,
+        fetchOpts = {
             method: "POST",
-            headers: {...opts.headers},
+            headers: {
+                ...opts.headers
+            },
             body: opts.body,
-            signal: abortController.signal
+            signal: signalOpt,
         }
-    )
+
+    if (fetchOpts.signal == null) {
+        delete fetchOpts.signal
+        console.log(inspect(window))
+    }
+
+    fetch( `https://${opts.headers.Host}${opts.path}`, fetchOpts)
     .then( response => response.text() )
     .then(xml => {
         parseString(xml, (err, json) => {

@@ -6,7 +6,7 @@
     "scripts": {
         "test": "jest --watch",
         "build": "webpack --config webpack/webpack.config.js",
-        "sandbox": "nodemon ./src/sandbox/src/sandbox2.js",
+        "sandbox": "nodemon ./src/sandbox/src/sandbox.json.js",
         "babel": "babel ./src/sandbox/src --out-dir ./src/sandbox/.babel.compiled --source-maps --watch",
         "mockGetMetricData": "node ./src/express/mockGetMetricData.js",
         "express": "node ./src/express/express.js",
