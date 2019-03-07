@@ -25,13 +25,13 @@ var customPlugins = process.env.NODE_ENV !== 'production' ?
     ]
 
 customPlugins = [
-    ...customPlugins,
+    ...customPlugins,/*
     new webpack.ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery',
         Util: 'exports-loader?Util!bootstrap/js/dist/util'
     }),
-    new ExtractTextWebpackPlugin("[name].css"),/* 
+    new ExtractTextWebpackPlugin("[name].css"),
     new HtmlWebpackPlugin({
         filename: '../index.html', //relative to root of the application
         template: path.resolve(__dirname, '../src/content/static/content.html'),
@@ -41,7 +41,7 @@ customPlugins = [
     new HtmlWebpackPlugin({
         filename: '../popup.html', //relative to root of the application
         template: path.resolve(__dirname, '../src/popup/popup.html'),
-        title: 'Pop-up ',
+        title: 'Pop-up',
         inject: false,
     }) */
 ]
