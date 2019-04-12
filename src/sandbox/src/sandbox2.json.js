@@ -1,5 +1,3 @@
-console.log("testing")
-
 class EarlyStoppingCallback extends tf.Callback {
     constructor() {
         super()
@@ -8,26 +6,23 @@ class EarlyStoppingCallback extends tf.Callback {
                 epoches: 0,
                 loss: 1
             },
-            temp: 0,
+            iteration: 0,
         };
-
+        
         let pre = document.createElement("pre");
         pre.setAttribute("id", "messageTrain");
         pre.setAttribute("style", "overflow:scroll;height:500px;")
         document.body.insertBefore(pre, document.body.firstChild);
+        
     }
 
     // https://codepen.io/caisq/pen/xzMYZx?editors=0011
 
     async onEpochEnd(epoch, logs) {
-        let {
-            minLoss,
-            epochLoss,
-            temp
-        } = this.historicalLoss, {
-                loss: currLoss
-            } = logs,
-            consoleMessage = JSON.stringify(this.historicalLoss) + '\r\n';
+        let 
+        { minLoss, epochLoss, iteration } = this.historicalLoss, 
+        { loss: currLoss } = logs,
+        consoleMessage = JSON.stringify(this.historicalLoss) + '\r\n';
 
         this.historicalLoss.minLoss = (minLoss.loss - currLoss) > 0 ? {
             loss: currLoss,
@@ -37,14 +32,16 @@ class EarlyStoppingCallback extends tf.Callback {
             epoches: minLoss.epoches + 1,
         };
 
-        this.historicalLoss.temp = temp + 1;
-        /* 
-        if(minLoss.epoches > 18) {
+        this.historicalLoss.iteration = iteration + 1;
+        
+        if (
+            // this.historicalLoss.iteration > 1 ||
+            minLoss.epoches > 0 /* ideal value should be 18 or configurable from UI */
+        ) {
             this.model.stopTraining = true;
         }
-        */
-        document.getElementById("messageTrain").textContent += consoleMessage;
-
+       
+        // document.getElementById("messageTrain").insertAdjacentHTML('afterbegin', consoleMessage);
         console.log(consoleMessage);
     }
 }
@@ -117,7 +114,7 @@ export const trainModel = async ({trainInputs, trainOutputs, window_size}, model
         optimizer: opt_adam,
         loss: 'meanSquaredError'
     });
-
+    
     const 
         hist = await model.fit(xs, ys, {
             batchSize: rnn_batch_size,
@@ -125,6 +122,9 @@ export const trainModel = async ({trainInputs, trainOutputs, window_size}, model
             callbacks: new EarlyStoppingCallback(),
         });
 
+    xs.dispose()
+    ys.dispose()
+    
     return {
         model: model,
         stats: hist
@@ -182,20 +182,21 @@ export const modelParamters = rawVec => {
         ),
         outputsValue = [],
         totalInputValues = [],
-        bactchedInputsValues = batchedDatapoints.map(inputValues => {
+        batchedInputsValues = batchedDatapoints.map(inputValues => {
             outputsValue.push(inputValues.future);
             totalInputValues.push(inputValues.set[window_size - 1].value);
 
             return inputValues.set.map(val => val.value);
         }),
-        dayIndex = day => bactchedInputsValues.length - (dayDatapoints * (daysData - day + 1)) - 1,
+        dayIndex = day => batchedInputsValues.length - (dayDatapoints * (daysData - day + 1)) - 1,
 
-        trainInputs = bactchedInputsValues.slice(0, dayIndex(7) - dayDatapoints),
+        trainInputs = batchedInputsValues.slice(0, dayIndex(7) - dayDatapoints),
         trainOutputs = outputsValue.slice(dayDatapoints, dayIndex(7)),
 
-        predictedInputs = bactchedInputsValues.slice(dayIndex(8), dayIndex(8) + dayDatapoints),
+        predictedTrainInputs = batchedInputsValues.slice(dayIndex(8), dayIndex(8) + dayDatapoints),
+        predictedTestInputs = batchedInputsValues.slice(-dayDatapoints),
 
-        actualValueOutputs = outputsValue.slice(dayIndex(8) + dayDatapoints, outputsValue.length - 1);
+        actualTestValueOutputs = outputsValue.slice(dayIndex(8) + dayDatapoints, outputsValue.length - 1);
 
     return {
         // switch this to a closure?
@@ -209,10 +210,12 @@ export const modelParamters = rawVec => {
         trainOutputs,
 
         // predicting 
-        predictedInputs,
-        actualValueOutputs,
+        predictedTrainInputs,
+        predictedTestInputs,
+
+        actualTestValueOutputs,
         totalInputValues,
         totalDates,
-
+        dayDatapoints,
     }
 }

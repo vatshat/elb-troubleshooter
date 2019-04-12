@@ -6,60 +6,73 @@ import {
     modelParamters
 } from './sandbox2.json.js';
 
-const tensorflow = async () => {    
+tf.tidy(() => {
+    const tensorflow = async () => {    
+        
+        let 
+            predict = async (
+                {
+                    actualTestValueOutputs, 
+                    predictedTrainInputs, predictedTestInputs,
+                    totalInputValues, totalDates,
+                    
+                    stdDev, moments, 
+                }, 
+                model
+            ) => {
+                
+                let 
+                    predictedTestOutputs = await model.predict(
+                        tf.tensor2d(
+                            predictedTrainInputs,
+                            [predictedTrainInputs.length, predictedTrainInputs[0].length]
+                        ).div(tf.scalar(10))
+                    ).mul(10),
+                    actualPredictionOutputs = await model.predict(
+                        tf.tensor2d(
+                            predictedTestInputs,
+                            [predictedTestInputs.length, predictedTestInputs[0].length]
+                        ).div(tf.scalar(10))
+                    ).mul(10),
+                    unnormalize = tensor => Array.from(tensor.mul(stdDev).add(moments.mean).dataSync()),
+                    returnValue = {
+                        "actualTestValueOutputs": unnormalize(tf.tensor1d(actualTestValueOutputs)),
+                        "predictedTestOutputs": unnormalize(predictedTestOutputs),
+                        "totalInputValues": unnormalize(tf.tensor1d(totalInputValues)),
+                        "actualPredictionOutputs": unnormalize(actualPredictionOutputs),
+                        // "predictedInputs": predictedInputs.map(x => unnormalize(tf.tensor1d(x))),
+                        totalDates,
+                    };
+                    
+                actualPredictionOutputs.dispose();
+                predictedTestOutputs.dispose();
+
+                return {...returnValue}
+            },
+            initializedModel = tf.sequential(),
+            parameterModel = await fetch('sandbox.json')
+                                .then(response => response.json())
+                                .then(json => modelParamters(json)),
+            modelCreate = async () => {        
+
+                let 
+                    result = await trainModel(parameterModel, initializedModel),
+                    message = 'Your model has been successfully trained...';
+                    
+                document.getElementById("messageTrain").insertAdjacentHTML('afterbegin', message);
+                
+                await result.model.save('indexeddb://tfjs-model');
+                // await result.model.save(`file://${path.join(__dirname)}/../tfjs-model`);
     
-    let 
-        predict = async (
-            {
-                actualValueOutputs, predictedInputs, 
-                totalInputValues, totalDates,
-
-                stdDev, moments, 
-            }, 
-            model
-        ) => {
-            
-            let 
-                predictedOutputs = await model.predict(
-                    tf.tensor2d(
-                        predictedInputs,
-                        [predictedInputs.length, predictedInputs[0].length]
-                    ).div(tf.scalar(10))
-                ).mul(10),
-                unnormalize = tensor => Array.from(tensor.mul(stdDev).add(moments.mean).dataSync());
-
-            return {
-                "actualValueOutputs": unnormalize(tf.tensor1d(actualValueOutputs)),
-                "predictedOutputs": unnormalize(predictedOutputs),
-                "totalInputValues": unnormalize(tf.tensor1d(totalInputValues)),
-                // "predictedInputs": predictedInputs.map(x => unnormalize(tf.tensor1d(x))),
-                totalDates,
-            };
-        },
-        initializedModel = tf.sequential(),
-        parameterModel = await fetch('sandbox.json')
-                            .then(response => response.json())
-                            .then(json => modelParamters(json)),
-        modelCreate = async () => {        
-
-            let 
-                result = await trainModel(parameterModel, initializedModel),
-                message = 'Your model has been successfully trained...';
-
-            document.getElementById("messageTrain").textContent += message;
-            console.log(message);
-            
-            await result.model.save('indexeddb://tfjs-model');
-            // await result.model.save(`file://${path.join(__dirname)}/../tfjs-model`);
-
-            return result;
-        },
-        modelLoad = async () => {
-            return await tf.loadModel('indexeddb://tfjs-model');
-        },
-        newModel = true ? await modelCreate() : await modelLoad();
-
-    return await predict(parameterModel, newModel.model).then(prediction => prediction);
-}
-
-window.tensorflow = tensorflow;
+                return result;
+            },
+            modelLoad = async () => {
+                return await tf.loadModel('indexeddb://tfjs-model');
+            },
+            newModel = true ? await modelCreate() : await modelLoad();
+        
+        return await predict(parameterModel, newModel.model).then(prediction => prediction);
+    }
+    
+    window.tensorflow = tensorflow;
+})
