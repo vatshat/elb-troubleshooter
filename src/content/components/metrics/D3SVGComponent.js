@@ -1,5 +1,5 @@
 import React from 'react'
-import { object, number, array, any, oneOf } from 'prop-types'
+import { object, number, array, any, oneOf, bool } from 'prop-types'
 import { loadingSVG } from './LoadingSVG'
 
 // d3 imports
@@ -21,6 +21,7 @@ export default class D3SVGComponent extends React.Component {
     static propTypes = {
         data: array.isRequired,
         status: oneOf(['loading', 'error', 'success']).isRequired,
+        predictionStatus: oneOf(['loading', 'show', 'hide', 'error', "success"]).isRequired,
     }
 
     static defaultProps = {
@@ -29,6 +30,7 @@ export default class D3SVGComponent extends React.Component {
         width: 800,
         height: 600,
         drawLine: true,
+        predictionStatus: "hide",
     }
 
     constructor(props) {
@@ -38,7 +40,13 @@ export default class D3SVGComponent extends React.Component {
         // minimal state to manage React lifecycle
 
         this.state = {
-            initialized: false
+            initialized: false,
+            oDOM: (translateX, translateY) => {
+                return new DOMParser().parseFromString(
+                            loadingSVG(translateX, translateY),
+                            "image/svg+xml"
+                        );
+            } 
         };
     }
 
@@ -52,14 +60,15 @@ export default class D3SVGComponent extends React.Component {
         });
     }
 
-    componentDidUpdate({ margin, width, height, xDomain, yDomain, dataMean }) {
+    componentDidUpdate({ margin, width, height, xDomain, yDomain, dataMean, drawLine, predictionStatus }) {
         if (
             margin !== this.props.margin || 
             width !== this.props.width || 
             height !== this.props.height ||
             xDomain !== this.props.xDomain ||
             yDomain !== this.props.yDomain ||
-            dataMean !== this.props.dataMean
+            dataMean !== this.props.dataMean ||
+            drawLine !== this.props.drawLine
         ) {
             this.shouldUpdate = true;
         }
@@ -67,6 +76,10 @@ export default class D3SVGComponent extends React.Component {
         if (this.shouldUpdate) {
             this.update();
             this.shouldUpdate = false
+        }
+
+        if (predictionStatus !== this.props.predictionStatus) {
+            this.prediction()
         }
             
     }
@@ -486,19 +499,14 @@ export default class D3SVGComponent extends React.Component {
         }
 
         { // loader
-            let translateX = ((width - margin.right - margin.left)),
-                translateY = ((height - margin.top - margin.bottom));
-
-            let svgLoader = this.rootRefNode.querySelectorAll("svg.svg-loading");
+            let 
+                translateX = ((width - margin.right - margin.left)),
+                translateY = ((height - margin.top - margin.bottom)),
+                svgLoader = this.rootRefNode.querySelectorAll("svg.svg-loading");
 
             if (status == "loading") {
                 if (svgLoader.length == 0) {
-                    let oDOM = new DOMParser().parseFromString(
-                                                    loadingSVG(translateX, translateY), 
-                                                    "image/svg+xml"
-                                                );
-
-                    this.rootRefNode.querySelector("g.focus").appendChild(oDOM.documentElement);
+                    this.rootRefNode.querySelector("g.focus").appendChild(this.state.oDOM(translateX, translateY).documentElement);
                 }
                 else {
                     this.focusGroup.select("svg.svg-loading g")
@@ -521,6 +529,56 @@ export default class D3SVGComponent extends React.Component {
 
             }
         }
+    }
+
+    prediction() {
+        const 
+            { margin, width, height } = this.extractSize(),
+            svgLoader = this.rootRefNode.querySelectorAll("svg.svg-loading"),
+            translateX = ((width - margin.right - margin.left)),
+            translateY = ((height - margin.top - margin.bottom));
+
+        if (svgLoader.length == 0) {
+            let loadingSVG = this.rootRefNode
+                            .querySelector("g.focus")
+                            .appendChild(this.state.oDOM(translateX, translateY).documentElement);
+
+            loadingSVG.classList.add("prediction", "hide");
+
+            this.rootRefNode.childNodes.forEach(node => {
+                node.classList.add("prediction");
+            });
+        }
+
+        let 
+            togglePredictionLoading = loading => {
+                this.rootRefNode.childNodes.forEach(node => {
+                    if (
+                        node.localName == "svg" && 
+                        node.classList.contains("prediction") 
+                    ) {
+                        node.classList.add(loading  ? "show" : "hide");
+                        node.classList.remove(loading ? "hide" : "show");
+                    }
+                    else {
+                        node.classList.remove(loading ? "show" : "hide");
+                        node.classList.add(loading ? "hide" : "show");
+                    }
+                });
+            };
+
+        switch (this.props.predictionStatus) {
+            case "show":
+            case "success":
+            case "loading":
+                togglePredictionLoading(true);
+                break;
+            case "error":
+                // notify user that error occurred and prediction can't be performed (instead hiding)            
+            default:
+                // catches 'hide', 'loading' and 'error'
+                togglePredictionLoading(false);            
+        }        
     }
 
     render() {        

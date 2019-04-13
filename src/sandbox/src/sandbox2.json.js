@@ -8,12 +8,12 @@ class EarlyStoppingCallback extends tf.Callback {
             },
             iteration: 0,
         };
-        
+        /* 
         let pre = document.createElement("pre");
         pre.setAttribute("id", "messageTrain");
         pre.setAttribute("style", "overflow:scroll;height:500px;")
         document.body.insertBefore(pre, document.body.firstChild);
-        
+         */
     }
 
     // https://codepen.io/caisq/pen/xzMYZx?editors=0011

@@ -43,10 +43,29 @@ export const responseCredsAction = (creds) => ({
 
 export const requestCredsAction = () => ({
     type: 'STS_CREDS_PENDING'
-})
-
+});
 
 export const errorCredsAction = errorMessage => ({
     type: 'STS_CREDS_REJECTED',
     errorMessage: errorMessage
 });
+
+export const predictionCompleteAction = predictedDatapoints => ({
+    type: 'PREDICTION_COMPLETED',
+    predictedDatapoints: predictedDatapoints
+});
+
+/* 
+export const predictionErrorAction = errorMessage => ({
+    type: 'PREDICTION_ERROR',
+    errorMessage: errorMessage
+});
+
+export const predictionStartAction = () => ({
+    type: 'PREDICTION_START',
+});
+
+export const predictionStartAction = () => ({
+    type: 'PREDICTION_STOP',
+});
+ */

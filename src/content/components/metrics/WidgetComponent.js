@@ -9,7 +9,7 @@ import { Panel, Well, Collapse, Fade, Tooltip,
             OverlayTrigger, Checkbox, FormGroup, ControlLabel } from 'react-bootstrap';
 // import ReactResizeDetector from 'react-resize-detector';
 
-export default class WidgetComponent extends React.Component {
+class WidgetComponent extends React.Component {
     constructor(props) {
         super(props)
 
@@ -21,7 +21,6 @@ export default class WidgetComponent extends React.Component {
             xMouse: 0,
             yMouse: 0,
             open: true,
-            drawLine: true,
         }
 
         this.draggableRef = null
@@ -78,9 +77,7 @@ export default class WidgetComponent extends React.Component {
             xMouse: xpos,
             yMouse: ypos,
         });
-    }
-
-    onChangeHandler = eventChecked => { this.setState({ drawLine: eventChecked.target.checked }) }
+    }    
 
     render() {
 
@@ -152,11 +149,21 @@ export default class WidgetComponent extends React.Component {
                         <form className={"col-sm-6"}>
                             <FormGroup>
                                 <ControlLabel>Widget Options:</ControlLabel>{' '}
-                                <Checkbox inline>Prediction</Checkbox>
+                                <Checkbox 
+                                    inline
+                                    disabled = {
+                                        this.props.predictionStatus == "loading" ||
+                                        this.props.predictionStatus == "error" ?
+                                        true : false
+                                    }
+                                    onChange={this.props.onChangePredictionHandler}
+                                >
+                                    Prediction
+                                </Checkbox>
                                 <Checkbox 
                                     inline
                                     defaultChecked={true}
-                                    onChange={this.onChangeHandler}
+                                    onChange={this.props.onChangeDrawLineHandler}
                                 >
                                     Draw Line
                                 </Checkbox>
@@ -168,8 +175,8 @@ export default class WidgetComponent extends React.Component {
                     <Collapse in={open}>
                         <div>
                             <D3SVGComponent
-                                {...this.state}
-                                {...this.props}
+                                { ...this.state }
+                                { ...this.props }
                             />
                         </div>
                     </Collapse>
@@ -184,3 +191,5 @@ export default class WidgetComponent extends React.Component {
         )
     }
 }
+
+export default WidgetComponent;

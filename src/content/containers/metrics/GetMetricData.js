@@ -101,6 +101,14 @@ export const fetchMetricData = (props, abortController) => {
 
     props.requestMetricsDispatch()
 
+    let 
+        signalOpt = (
+            typeof abortController == 'undefined' ||
+            typeof abortController.signal == 'undefined'
+        ) ? null : abortController.signal
+
+    // console.log(` AbortController debug ${JSON.stringify(abortController}`));
+    
     let                
         opts =
             aws4.sign(
@@ -115,10 +123,6 @@ export const fetchMetricData = (props, abortController) => {
                 }, 
                 creds
             ),
-        signalOpt = (
-            typeof abortController == 'undefined' ||
-            typeof abortController.signal == 'undefined'
-          )  ? abortController.signal : null,
         fetchOpts = {
             method: "POST",
             headers: {

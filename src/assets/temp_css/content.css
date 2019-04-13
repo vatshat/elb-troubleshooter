@@ -1,0 +1,10 @@
+/* keep me....in the event scss fails you */
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJjb250ZW50LmNzcyIsInNvdXJjZVJvb3QiOiIifQ==*/
+
+svg.root-svg .prediction.hide {
+    display: none
+}
+
+svg.root-svg .prediction.hide {
+    display: block
+}

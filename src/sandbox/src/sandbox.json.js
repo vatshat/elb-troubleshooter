@@ -40,10 +40,9 @@ tf.tidy(() => {
                         "predictedTestOutputs": unnormalize(predictedTestOutputs),
                         "totalInputValues": unnormalize(tf.tensor1d(totalInputValues)),
                         "actualPredictionOutputs": unnormalize(actualPredictionOutputs),
-                        // "predictedInputs": predictedInputs.map(x => unnormalize(tf.tensor1d(x))),
                         totalDates,
                     };
-                    
+
                 actualPredictionOutputs.dispose();
                 predictedTestOutputs.dispose();
 
@@ -59,8 +58,9 @@ tf.tidy(() => {
                     result = await trainModel(parameterModel, initializedModel),
                     message = 'Your model has been successfully trained...';
                     
-                document.getElementById("messageTrain").insertAdjacentHTML('afterbegin', message);
-                
+                // document.getElementById("messageTrain").insertAdjacentHTML('afterbegin', message);
+                console.log(message);
+
                 await result.model.save('indexeddb://tfjs-model');
                 // await result.model.save(`file://${path.join(__dirname)}/../tfjs-model`);
     

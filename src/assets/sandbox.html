@@ -1,41 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Test Bootstrap modal</title>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Test scss.js</title>
+        <script type="text/javascript" src="http://livejs.com/live.js"></script>
+    </head>
+    <body>
+        <div class="some-selector">Test</div>
+    </body>
+    <script src="temp_css/scss/dist/sass.js"></script>
+    <script>
+        let 
+            sass = new Sass(),
+            scss = '$someVar: 123px; .some-selector { font-size: $someVar; }';
 
-    <!-- Latest compiled and minified CSS 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script -->
-
-</head>
-<body>
-    <span id="testing">testing</span>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Launch demo modal
-    </button>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <script src="js/sandbox.min.js"></script>
-</body>
+        sass.compile(scss, result => {
+            var customStyles = document.createElement('style');
+            customStyles.appendChild(
+                document.createTextNode(result.text)
+            );
+            document.documentElement.firstChild.appendChild(customStyles);
+            // console.log(result);
+        });
+    </script>
 </html>

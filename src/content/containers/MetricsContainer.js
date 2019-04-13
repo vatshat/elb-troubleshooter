@@ -1,8 +1,9 @@
 import React from 'react';
 import { func, object } from 'prop-types'
-import WidgetComponent from '../components/metrics/WidgetComponent'
 import { timeParse } from 'd3-time-format'
-import * as GetMetricData from './GetMetricData';
+import WidgetContainer from './metrics/WidgetContainer'
+import * as GetMetricData from './metrics/GetMetricData';
+// import WidgetComponent from '../components/metrics/WidgetComponent'
 
 if (typeof fetch !== 'function') {
     if (typeof window !=='object') global.fetch = require('node-fetch');
@@ -23,7 +24,7 @@ const MetricsContainer = props => {
                         key = { metricWidget.id }
                         className="widget-scrollbar col-lg-6">
 
-                        <WidgetComponent 
+                        <WidgetContainer
                             errorMessage = {props.metricsReducer.errorMessage}
                             data = { 
                                 metricWidget
@@ -39,6 +40,7 @@ const MetricsContainer = props => {
                             dataMean = { metricWidget.metricData.reduce((total, dataPoint) => total + dataPoint.value, 0) / metricWidget.metricData.length }
                             key = { metricWidget.id }
                             status = {props.metricsReducer.metricsStatus}
+                            testDispatch = { props.testDispatch }
                         />
                     </div>
         })

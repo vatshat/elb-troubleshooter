@@ -62,10 +62,20 @@ const mapDispatchToProps = dispatch => ({
     requestMetricsDispatch: () => dispatch(metricsAction.requestMetricsAction()),
     responseMetricsDispatch: xmlJSON => dispatch(metricsAction.responseMetricsAction(xmlJSON)),
     errorMetricsActionDispatch: errorMessage => dispatch(metricsAction.errorMetricsAction(errorMessage)),
+
     // creds
     requestCredsDispatch: () => dispatch(metricsAction.requestCredsAction()),
     responseCredsDispatch: response => dispatch(metricsAction.responseCredsAction(response)),
     errorCredsActionDispatch: errorMessage => dispatch(metricsAction.errorCredsAction(errorMessage)),
+
+    // prediction 
+
+    // predictionStartDispatch: () => dispatch(metricsAction.predictionStartAction()),
+    // predictionStopDispatch: () => dispatch(metricsAction.predictionStopAction()),
+    
+    predictionCompleteDispatch: predictedDatapoints => dispatch(metricsAction.predictionCompleteAction(predictedDatapoints)),
+    predictionErrorDispatch: errorMessage => dispatch(metricsAction.predictionErrorAction(errorMessage)),
+
     testDispatch: () => dispatch(metricsAction.testAction()),
 })
 
