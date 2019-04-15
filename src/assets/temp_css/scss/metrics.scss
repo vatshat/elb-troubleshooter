@@ -59,6 +59,8 @@ div.widget-handle-drag {
     .glyphicon {
         cursor: pointer;
         float: right;
+        padding: 10px;
+        margin: 10px;
     }
 
 }
@@ -107,4 +109,52 @@ div#bug-tool-tip {
 
 .grid path {
     stroke-width: 0;
+}
+
+/* prediction loading */
+svg.root-svg .prediction.hide {
+    display: none
+}
+
+svg.root-svg .prediction.hide {
+    display: block
+}
+
+/* widget options */
+
+div.widget-options .panel-title {
+    font-size: 14px;
+}
+
+div.widget-options {
+    div.panel-heading,
+    div.panel-heading * {
+        cursor: move;
+        /* fallback if grab cursor is unsupported */
+        cursor: grab;
+        cursor: -moz-grab;
+        cursor: -webkit-grab;
+
+        &:active {
+            cursor: grabbing;
+            cursor: -moz-grabbing;
+            cursor: -webkit-grabbing;
+        }
+    }
+
+    div.col-sm-2.panel.panel-default,
+    div.panel-body,
+    button.btn.btn-default {
+        padding: 0px;
+        border: none;
+        margin: 0px;
+    }
+
+    div.list-group,
+    div.alert.alert-info {
+        margin: 0;
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }

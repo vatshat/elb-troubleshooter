@@ -10,6 +10,7 @@ import Layout from './App.js';
 
 // import './static/css/index-content.scss';
 
+// import './static/css/content.min.css';
 // import './static/css/index.min.css';
 // import './static/css/bootstrap.min.css';
 // import './static/css/react-bootstrap-table-all.min.css';

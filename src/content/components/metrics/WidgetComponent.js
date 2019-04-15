@@ -2,11 +2,14 @@ import React from 'react'
 import Draggable from 'react-draggable'
 import { object, array, string, number } from 'prop-types'
 
+import { Collapse, Fade, Tooltip, OverlayTrigger } from 'react-bootstrap';
+
+import WidgetOptions from './WidgetOptions'
+
 // Pure JS implementation instead of using Draggable libary - https://www.kirupa.com/html5/drag.htm
 
 import D3SVGComponent from './D3SVGComponent'
-import { Panel, Well, Collapse, Fade, Tooltip,
-            OverlayTrigger, Checkbox, FormGroup, ControlLabel } from 'react-bootstrap';
+
 // import ReactResizeDetector from 'react-resize-detector';
 
 class WidgetComponent extends React.Component {
@@ -82,7 +85,7 @@ class WidgetComponent extends React.Component {
     render() {
 
         let { open } = this.state
-
+        
         const tooltip = (
             <Tooltip id="bug-tool-tip">
                 <div>
@@ -118,58 +121,20 @@ class WidgetComponent extends React.Component {
                     }
 
                     <div className={"widget-handle-drag"}>
+                        
+                        <WidgetOptions { ...this.props } />
 
-                        <span className={"widget-drag"}></span>
+                        <Fade in={open ? open : (!open)}>
+                            <span
+                                className={`glyphicon glyphicon-chevron-${ open ? "up" : "down"} col-sm-1`}
+                                onClick = {
+                                    () => this.setState((prevState, props) => ({
+                                        open: !prevState.open
+                                    }))
+                                }
+                            > </span>
+                        </Fade>                        
 
-                        {
-                            open ?
-                                <Fade in={open}>
-                                    <span
-                                        className={`glyphicon glyphicon-chevron-up`}
-                                        onClick = {
-                                            () => this.setState((prevState, props) => {
-                                                open: !prevState.open
-                                            })
-                                        }
-                                    > </span>
-                                </Fade>
-                                :
-                                <Fade in={!open}>
-                                    <span
-                                        className={`glyphicon glyphicon-chevron-down`}
-                                        onClick = {
-                                            () => this.setState((prevState, props) => {
-                                                open: !prevState.open
-                                            })
-                                        }
-                                    > </span>
-                                </Fade>
-                        }
-
-                        <form className={"col-sm-6"}>
-                            <FormGroup>
-                                <ControlLabel>Widget Options:</ControlLabel>{' '}
-                                <Checkbox 
-                                    inline
-                                    disabled = {
-                                        this.props.predictionStatus == "loading" ||
-                                        this.props.predictionStatus == "error" ?
-                                        true : false
-                                    }
-                                    onChange={this.props.onChangePredictionHandler}
-                                >
-                                    Prediction
-                                </Checkbox>
-                                <Checkbox 
-                                    inline
-                                    defaultChecked={true}
-                                    onChange={this.props.onChangeDrawLineHandler}
-                                >
-                                    Draw Line
-                                </Checkbox>
-                                <Checkbox inline>Multi-AZ</Checkbox>
-                            </FormGroup>
-                        </form>
                     </div>
 
                     <Collapse in={open}>

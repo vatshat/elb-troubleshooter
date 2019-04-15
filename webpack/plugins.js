@@ -25,13 +25,14 @@ var customPlugins = process.env.NODE_ENV !== 'production' ?
     ]
 
 customPlugins = [
-    ...customPlugins,/*
+    ...customPlugins,
+    /*
+    new ExtractTextWebpackPlugin("[name].css"),
     new webpack.ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery',
         Util: 'exports-loader?Util!bootstrap/js/dist/util'
     }),
-    new ExtractTextWebpackPlugin("[name].css"),
     new HtmlWebpackPlugin({
         filename: '../index.html', //relative to root of the application
         template: path.resolve(__dirname, '../src/content/static/content.html'),

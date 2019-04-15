@@ -1,6 +1,5 @@
 import React from 'react';
-// import { func, object } from 'prop-types'
-import WidgetComponent from '../../components/metrics/WidgetComponent'
+import WidgetComponent from '../../components/metrics/WidgetComponent';
 
 class WidgetContainer extends React.Component {
     static propTypes = {
@@ -9,7 +8,7 @@ class WidgetContainer extends React.Component {
 
     state = {
         drawLine: true,
-        predictionStatus: "hide",
+        predictionStatus: "initial",
         predictedDatapoints: []
     }
 
@@ -19,7 +18,7 @@ class WidgetContainer extends React.Component {
         })
     }
 
-    onChangePredictionHandler = async (eventChecked) => {
+    onEnablePredictionHandler = async (eventChecked) => {
         // await this.props.testDispatch()
 
         if (this.state.predictionStatus !== "error" ) {
@@ -31,14 +30,14 @@ class WidgetContainer extends React.Component {
             }
             else {
                 try {
-                    this.setState({ predictionStatus: "loading" });
+                    this.setState({ predictionStatus: "training" });
 
                     setTimeout(() => {
                         this.setState({ 
                             predictedDatapoints: [1],
                             predictionStatus: "success" 
                         });
-                    }, 3000);
+                    }, 5000);
 
                 } catch (e) {
                     this.setState({ predictionStatus: "error" });
@@ -50,11 +49,11 @@ class WidgetContainer extends React.Component {
     render() {
         return ( 
             <WidgetComponent 
-                { ...this.props } 
+                { ...this.props }
                 { ...this.state }
 
                 onChangeDrawLineHandler = { this.onChangeDrawLineHandler }
-                onChangePredictionHandler = { this.onChangePredictionHandler }
+                onEnablePredictionHandler = { this.onEnablePredictionHandler }
             />
         )
     }

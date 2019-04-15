@@ -21,7 +21,7 @@ export default class D3SVGComponent extends React.Component {
     static propTypes = {
         data: array.isRequired,
         status: oneOf(['loading', 'error', 'success']).isRequired,
-        predictionStatus: oneOf(['loading', 'show', 'hide', 'error', "success"]).isRequired,
+        predictionStatus: oneOf(['training', 'show', 'hide', 'error', "success", "initial"]).isRequired,
     }
 
     static defaultProps = {
@@ -30,7 +30,7 @@ export default class D3SVGComponent extends React.Component {
         width: 800,
         height: 600,
         drawLine: true,
-        predictionStatus: "hide",
+        predictionStatus: "initial",
     }
 
     constructor(props) {
@@ -540,7 +540,6 @@ export default class D3SVGComponent extends React.Component {
 
         if (svgLoader.length == 0) {
             let loadingSVG = this.rootRefNode
-                            .querySelector("g.focus")
                             .appendChild(this.state.oDOM(translateX, translateY).documentElement);
 
             loadingSVG.classList.add("prediction", "hide");
@@ -551,33 +550,32 @@ export default class D3SVGComponent extends React.Component {
         }
 
         let 
-            togglePredictionLoading = loading => {
+            togglePredictionLoading = training => {
                 this.rootRefNode.childNodes.forEach(node => {
+
                     if (
                         node.localName == "svg" && 
                         node.classList.contains("prediction") 
                     ) {
-                        node.classList.add(loading  ? "show" : "hide");
-                        node.classList.remove(loading ? "hide" : "show");
+                        node.classList.add(training  ? "show" : "hide");
+                        node.classList.remove(training ? "hide" : "show");
                     }
                     else {
-                        node.classList.remove(loading ? "show" : "hide");
-                        node.classList.add(loading ? "hide" : "show");
+                        node.classList.remove(training ? "show" : "hide");
+                        node.classList.add(training ? "hide" : "show");
                     }
+                    
                 });
             };
 
         switch (this.props.predictionStatus) {
-            case "show":
-            case "success":
-            case "loading":
-                togglePredictionLoading(true);
-                break;
             case "error":
-                // notify user that error occurred and prediction can't be performed (instead hiding)            
+            case "success":
+                togglePredictionLoading(false);
+                break;
+            case "training":
             default:
-                // catches 'hide', 'loading' and 'error'
-                togglePredictionLoading(false);            
+                togglePredictionLoading(true);
         }        
     }
 
