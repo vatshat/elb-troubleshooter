@@ -90,8 +90,8 @@ function getMetricData() {
                     body: Object.keys(query).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(query[k])).join('&'),
                 }
                 , {
-                    accessKeyId: 'AKIAIBGW3XOTGH37TWMQ',
-                    secretAccessKey: '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',
+                    accessKeyId: 'AKIAJSPIKEHCJDICSXXQ',
+                    secretAccessKey: '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',
                 }
             ),
         fetchAWS = async opts => {
@@ -111,7 +111,7 @@ function getMetricData() {
             })
         }
 
-    fetchAWS(cwOpts);        
+    fetchAWS(cwOpts);
  }
 
 getMetricData()

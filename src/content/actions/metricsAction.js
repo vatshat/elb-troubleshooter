@@ -55,6 +55,11 @@ export const predictionCompleteAction = predictedDatapoints => ({
     predictedDatapoints: predictedDatapoints
 });
 
+export const predictionStatusAction = predictionStatus => ({
+    type: 'PREDICTION_STATUS',
+    predictionStatus: predictionStatus
+});
+
 /* 
 export const predictionErrorAction = errorMessage => ({
     type: 'PREDICTION_ERROR',

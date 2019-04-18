@@ -1,33 +1,15 @@
+var qs = require('qs')
 
-const makeRequest = async () => {
-    // y = 2 ^ 2 + 1
-    tf.tidy(() => {
-        // a, b, and one will be cleaned up when the tidy ends.
-        const one = tf.scalar(1);
-        const a = tf.scalar(2);
-        const b = a.square();
-    
-        console.log('numTensors (in tidy): ' + tf.memory().numTensors);
-    
-        // The value returned inside the tidy function will return
-        // through the tidy, in this case to the variable y.
-        return b.add(one);
-    });
+var 
+    string = false ? "CorrelationId=1&PickedNumbers%5B%5D=1&PickedNumbers%5B%5D=2&PickedNumbers%5B%5D=3&PickedNumbers%5B%5D=4"
+                : "MetricDataQueries.member.1.MetricStat.Stat=Average&EndTime=2019-04-17T09%3A00%3A00Z&MetricDataQueries.member.1.MetricStat.Metric.MetricName=IncomingBytes&MetricDataQueries.member.1.Id=m1&MetricDataQueries.member.1.ReturnData=true&MetricDataQueries.member.1.MetricStat.Metric.Namespace=AWS%2FLogs&Version=2010-08-01&MetricDataQueries.member.1.MetricStat.Period=300&Action=GetMetricData&MetricDataQueries.member.1.Label=Logs&StartTime=2019-04-17T00%3A00%3A00Z"
+    encodedString = qs.parse(string),
+    decodedString = qs.stringify(encodedString)
 
-    console.log('numTensors (outside tidy): ' + tf.memory().numTensors);
+console.log(`decodedString
 
-    let 
-        getJSON = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve({
-                    "test": "testing"
-                });
-            }, 100);
-        }),
-        temp = await getJSON;
+${decodedString}`)
 
-    console.log(temp)
-    return temp
-}
+console.log(`encodedString
 
-console.log(makeRequest())
+${JSON.stringify(encodedString)}`)

@@ -51,7 +51,7 @@ const
                 .substring(2, 15) +
                 Math.random().toString(36).substring(2, 15)
             ))(),
-            "Label": "Metric",
+            "label": "MetricName",
             "metricData": [{
                 "date": "1970-01-01T00:00:00Z",
                 "value": 1
@@ -59,7 +59,7 @@ const
         }],
         selectedMetrics: {
             endtime: currentTime.toISOString(),
-            startTime: new Date(currentTime.setDate(currentTime.getDate() - 5)).toISOString(),
+            startTime: new Date(currentTime.setDate(currentTime.getDate() - 12)).toISOString(),
             members: [{
                     stat: "Sum",
                     metricName: "IncomingBytes",
@@ -121,10 +121,29 @@ const metricsReducer = (state = initialMetricsState, action) => {
     }
 }
 
+const initialPredictionsState = {
+    predictionStatus: "initial"
+}
+
+const predictionsReducer = (state = initialPredictionsState, action) => {
+    switch (action.type) {
+        
+        case 'PREDICTION_STATUS':
+            return {
+                ...state,
+                predictionStatus: action.predictionStatus
+            }
+            
+    default:
+        return state;
+    }
+}
+
 const metricManager = (state = {}, action) => {
     return {
         metricsReducer: metricsReducer(state.metricsReducer, action),
-        credsReducer: credsReducer(state.credsReducer, action)
+        credsReducer: credsReducer(state.credsReducer, action),
+        predictionsReducer: predictionsReducer(state.predictionsReducer, action)
     }
 }
 

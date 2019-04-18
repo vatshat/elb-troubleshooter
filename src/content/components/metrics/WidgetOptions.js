@@ -1,10 +1,16 @@
 import React from 'react';
-import { Collapse, Button, Alert, Panel, Well,
-            Checkbox, FormGroup, ControlLabel, ListGroupItem } from 'react-bootstrap';
+import { func } from 'prop-types'
 import ListGroup from 'react-bootstrap/lib/ListGroup'
+import { Alert, Panel, Checkbox, ListGroupItem } from 'react-bootstrap';
 
 class WidgetOptions extends React.Component {
 
+    static propTypes = {
+        onEnablePredictionHandler: func.isRequired,
+        onChangePredictionHandler: func.isRequired,
+        onChangeDrawLineHandler: func.isRequired,
+    }
+    
     state = { open: true }
 
     render() {
@@ -25,12 +31,18 @@ class WidgetOptions extends React.Component {
                 break;
             
             case "error":
-                trainingElement = <Alert variant="danger">Error occured during training</Alert>
+                trainingElement = <div 
+                                        variant="danger" 
+                                        role="alert" 
+                                        className="alert alert-danger"
+                                    > 
+                                        Error occured during training
+                                    </div>
                 break;
 
             case "training":
                 trainingElement = <Alert 
-                    id = {"training_update"}
+                    className = {"training_update"}
                     variant="secondary">
                     Training data
                 </Alert>
@@ -47,7 +59,13 @@ class WidgetOptions extends React.Component {
                 break;
                 
             default:
-                trainingElement = <Alert variant="danger"> `Some error occured` </Alert>
+                trainingElement = <div 
+                                        variant="danger" 
+                                        role="alert" 
+                                        className="alert alert-danger"
+                                    > 
+                                        {`Some error occured can't continue with training`}
+                                    </div>
         }
         
         return (

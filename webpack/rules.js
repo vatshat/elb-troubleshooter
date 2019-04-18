@@ -54,6 +54,17 @@ module.exports = [
                 }],
             }, 
             {
+                test: /\.mjs$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        outputPath: '../mjs',
+                        publicPath: '/mjs/',
+                    },
+                }],
+            },
+            {
                 test: /manifest\.json$/,
                 use: [{
                     loader: 'file-loader',

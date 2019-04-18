@@ -10,8 +10,8 @@ const mapStateToProps = ({metrics}) => {
             return {
                 ...x,
                 metricData: x.metricData
-                                // add time feature here
-                                .slice(0, 250)
+                    // add time feature here
+                    // .slice(0, 500)
             }
         });
 
@@ -73,6 +73,7 @@ const mapDispatchToProps = dispatch => ({
     // predictionStartDispatch: () => dispatch(metricsAction.predictionStartAction()),
     // predictionStopDispatch: () => dispatch(metricsAction.predictionStopAction()),
     
+    predictionStatusDispatch: predictionStatus => dispatch(metricsAction.predictionStatusAction(predictionStatus)),
     predictionCompleteDispatch: predictedDatapoints => dispatch(metricsAction.predictionCompleteAction(predictedDatapoints)),
     predictionErrorDispatch: errorMessage => dispatch(metricsAction.predictionErrorAction(errorMessage)),
 
