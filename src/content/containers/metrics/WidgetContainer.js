@@ -8,8 +8,8 @@ class WidgetContainer extends React.Component {
 
     state = {
         drawLine: true,
-        predictionStatus: "initial",
-        predictedDatapoints: []
+        predictionStateStatus: "initial",
+        predictedDatapoints: [],
     }
 
     onChangeDrawLineHandler = eventChecked => {
@@ -21,40 +21,59 @@ class WidgetContainer extends React.Component {
     onEnablePredictionHandler = async (eventChecked) => {
         // await this.props.testDispatch()
 
-        if (this.state.predictionStatus !== "error" ) {
+        if (this.state.predictionStateStatus !== "error" ) {
 
             if (this.state.predictedDatapoints.length > 0) {
+
+                this.props.predictionStatusDispatch(
+                    eventChecked.target.checked == "show" ? "hide" : "show"
+                );
+
                 this.setState({
-                    predictionStatus: eventChecked.target.checked == "show" ? "hide" : "true"
+                    predictionStateStatus: eventChecked.target.checked == "show" ? "hide" : "show"
                 });
             }
             else {
                 try {
-                    this.setState({ predictionStatus: "training" });
+                    this.setState({ predictionStateStatus: "training" });
+
+                    this.props.predictionStatusDispatch("training");
 
                     setTimeout(() => {
                         this.setState({ 
                             predictedDatapoints: [1],
-                            predictionStatus: "success" 
+                            predictionStateStatus: "success"
                         });
+
+                        this.props.predictionStatusDispatch("success");
+
                     }, 5000);
 
                 } catch (e) {
-                    this.setState({ predictionStatus: "error" });
+                    this.props.predictionStatusDispatch("error");
+
+                    this.setState({ predictionStateStatus: "error" });
                 }                
             }
-        }                
+        }
     }
 
     render() {
-        return ( 
-            <WidgetComponent 
-                { ...this.props }
-                { ...this.state }
 
-                onChangeDrawLineHandler = { this.onChangeDrawLineHandler }
-                onEnablePredictionHandler = { this.onEnablePredictionHandler }
-            />
+        let predictionStatus = this.props.predictionStatus == "training" ?
+                                                    "training" : this.state.predictionStateStatus;
+
+        return ( 
+            <div>
+                <WidgetComponent 
+                    { ...this.props }
+                    { ...this.state }
+
+                    predictionStatus = { predictionStatus }
+                    onChangeDrawLineHandler = { this.onChangeDrawLineHandler }
+                    onEnablePredictionHandler = { this.onEnablePredictionHandler }
+                />
+            </div>
         )
     }
 }

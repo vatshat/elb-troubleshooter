@@ -39,8 +39,11 @@ const MetricsContainer = props => {
                             }
                             dataMean = { metricWidget.metricData.reduce((total, dataPoint) => total + dataPoint.value, 0) / metricWidget.metricData.length }
                             key = { metricWidget.id }
-                            status = {props.metricsReducer.metricsStatus}
+                            id = { metricWidget.id }
+                            fetchMetricStatus = { props.metricsReducer.metricsStatus }
+                            predictionStatus = { props.predictionsReducer.predictionStatus }
                             testDispatch = { props.testDispatch }
+                            predictionStatusDispatch = { props.predictionStatusDispatch }
                         />
                     </div>
         })
@@ -67,6 +70,7 @@ const HOCMetricsContainer = MetricsContainer => class extends React.Component {
         errorMetricsActionDispatch: func.isRequired,
         requestMetricsDispatch: func.isRequired,
         responseMetricsDispatch: func.isRequired,
+        predictionStatusDispatch: func.isRequired,
     }
 
     componentDidMount() {

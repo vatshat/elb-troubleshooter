@@ -127,8 +127,7 @@ div.widget-options .panel-title {
 }
 
 div.widget-options {
-    div.panel-heading,
-    div.panel-heading * {
+    div.panel-heading {
         cursor: move;
         /* fallback if grab cursor is unsupported */
         cursor: grab;

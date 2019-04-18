@@ -121,10 +121,29 @@ const metricsReducer = (state = initialMetricsState, action) => {
     }
 }
 
+const initialPredictionsState = {
+    predictionStatus: "initial"
+}
+
+const predictionsReducer = (state = initialPredictionsState, action) => {
+    switch (action.type) {
+        
+        case 'PREDICTION_STATUS':
+            return {
+                ...state,
+                predictionStatus: action.predictionStatus
+            }
+            
+    default:
+        return state;
+    }
+}
+
 const metricManager = (state = {}, action) => {
     return {
         metricsReducer: metricsReducer(state.metricsReducer, action),
-        credsReducer: credsReducer(state.credsReducer, action)
+        credsReducer: credsReducer(state.credsReducer, action),
+        predictionsReducer: predictionsReducer(state.predictionsReducer, action)
     }
 }
 
