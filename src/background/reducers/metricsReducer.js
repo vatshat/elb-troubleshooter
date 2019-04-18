@@ -45,13 +45,10 @@ const
         metricsStatus: "loading", 
         metricWidgets: [{
             "id": (() => (
-                Math
-                .random()
-                .toString(36)
-                .substring(2, 15) +
+                Math.random().toString(36).substring(2, 15) +
                 Math.random().toString(36).substring(2, 15)
             ))(),
-            "Label": "Metric",
+            "label": "MetricName",
             "metricData": [{
                 "date": "1970-01-01T00:00:00Z",
                 "value": 1
@@ -59,7 +56,7 @@ const
         }],
         selectedMetrics: {
             endtime: currentTime.toISOString(),
-            startTime: new Date(currentTime.setDate(currentTime.getDate() - 5)).toISOString(),
+            startTime: new Date(currentTime.setDate(currentTime.getDate() - 12)).toISOString(),
             members: [{
                     stat: "Sum",
                     metricName: "IncomingBytes",
@@ -87,10 +84,6 @@ const
 
 const metricsReducer = (state = initialMetricsState, action) => {
     switch (action.type) {
-        case 'TEST_ACTION':
-            return {
-                ...state
-            }
 
         case 'FETCH_METRICS_PENDING':
             return {
@@ -121,10 +114,68 @@ const metricsReducer = (state = initialMetricsState, action) => {
     }
 }
 
+const initialPredictionsState = {
+<<<<<<< HEAD
+    predictionStatus: "initial", 
+    predictionProgress: {},
+=======
+    predictionStatus: "initial"
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
+}
+
+const predictionsReducer = (state = initialPredictionsState, action) => {
+    switch (action.type) {
+        
+        case 'PREDICTION_STATUS':
+            return {
+                ...state,
+                predictionStatus: action.predictionStatus
+            }
+<<<<<<< HEAD
+
+        case 'PREDICTION_START':
+            return {
+                ...state,
+                predictionProgress: {
+                    ...state.predictionProgress,
+                    [action.id]: [],
+                }
+            }
+            
+        case 'PREDICTION_PROGRESS':
+            return {
+                ...state,
+                predictionProgress: {
+                    ...state.predictionProgress,
+                    [action.predictionProgress.id]: 
+                    [
+                        ...state.predictionProgress[action.predictionProgress.id],
+                        action.predictionProgress.message,
+                    ],
+                }
+            }
+=======
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
+            
+        case 'PREDICTION_COMPLETED':
+            return {
+                ...state,
+                predictedDatapoints: {
+                    ...state.predictedDatapoints,
+                    [action.predictedDatapoints.id]:action.predictedDatapoints.datapoints,
+                }
+            }
+            
+    default:
+        return state;
+    }
+}
+
 const metricManager = (state = {}, action) => {
     return {
         metricsReducer: metricsReducer(state.metricsReducer, action),
-        credsReducer: credsReducer(state.credsReducer, action)
+        credsReducer: credsReducer(state.credsReducer, action),
+        predictionsReducer: predictionsReducer(state.predictionsReducer, action)
     }
 }
 

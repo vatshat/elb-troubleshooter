@@ -8,9 +8,9 @@ class App extends React.Component {
         test: "React testing",
     }
 
-    tensorflowHandler = this.tensorflowHandler.bind(this);
+    onClickHandler = this.onClickHandler.bind(this);
 
-    tensorflowHandler() {
+    onClickHandler() {
         this.setState({test:"test direct es6 injection in script"});
         /* 
             window.tensorflow().then(prediction => {
@@ -23,7 +23,7 @@ class App extends React.Component {
     render() {        
         return (
             <div>
-                <pre onClick={this.tensorflowHandler} id="test2">
+                <pre onClick={this.onClickHandler} id="test2">
                     {this.state.test}
                 </pre>
             </div>

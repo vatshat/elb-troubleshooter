@@ -1,5 +1,5 @@
 import React from 'react'
-import { object, number, array, any, oneOf, bool } from 'prop-types'
+import { array, oneOf, string } from 'prop-types'
 import { loadingSVG } from './LoadingSVG'
 
 // d3 imports
@@ -20,7 +20,7 @@ export default class D3SVGComponent extends React.Component {
     
     static propTypes = {
         data: array.isRequired,
-        status: oneOf(['loading', 'error', 'success']).isRequired,
+        fetchMetricStatus: oneOf(['loading', 'error', 'success']).isRequired,
         predictionStatus: oneOf(['training', 'show', 'hide', 'error', "success", "initial"]).isRequired,
     }
 
@@ -114,7 +114,7 @@ export default class D3SVGComponent extends React.Component {
         
         const { margin, width, height } = this.extractSize()
 
-        if (this.props.status == "success") {
+        if (this.props.fetchMetricStatus == "success") {
             this.brushRect = this.rootNode.append('defs')
                 .append("clipPath")
                     .attr("id", `clip-${this.props.widgetId}`)
@@ -140,7 +140,7 @@ export default class D3SVGComponent extends React.Component {
             this.xTitle = this.rootNode.append('text')
                 .attr("transform", `translate( 0, 10 )`)
                 .style("fill", orangeColour)
-                .text("CPUUtilization");
+                .text(this.props.metricName);
 
             /*
             this.focusYText = this.focusGroup.append("text")
@@ -239,10 +239,10 @@ export default class D3SVGComponent extends React.Component {
     initContext() {
         
         const { margin2, height2 } = this.extractSize()
-        const { status } = this.props;
+        const { fetchMetricStatus } = this.props;
 
         this.contextGroup = this.rootNode.append('g')
-            .attr("class", `context ${(status == "success") ? "show" : "hide"}`)
+            .attr("class", `context ${(fetchMetricStatus == "success") ? "show" : "hide"}`)
             .attr("transform", `translate( ${margin2.left} , ${margin2.top})`);
 
         this.contextDots = this.contextGroup.append("g");
@@ -251,7 +251,7 @@ export default class D3SVGComponent extends React.Component {
             .attr("class", "axis axis--x")
             .attr("transform", `translate(0, ${height2} )`);
 
-        if (status == "success") {
+        if (fetchMetricStatus == "success") {
             this.contextBrush = this.contextGroup.append("g")
                 .attr("class", "brush");            
         }
@@ -265,7 +265,7 @@ export default class D3SVGComponent extends React.Component {
     update() {
                     
         const { margin, width, height, height2, margin2 } = this.extractSize()
-        const { data, status } = this.props            
+        const { data, fetchMetricStatus } = this.props            
 
         const { xScale, xScale2, yScale, yScale2, xAxis, xAxis2, yAxis } = this.updateAxis()
         
@@ -295,7 +295,7 @@ export default class D3SVGComponent extends React.Component {
         yScale2.domain(yScale.domain());
 
         { //other elements
-            if (status == "success") {
+            if (fetchMetricStatus == "success") {
                 this.brushRect
                     .attr("width", width)
                     .attr("height", height);
@@ -323,7 +323,7 @@ export default class D3SVGComponent extends React.Component {
 
         { //focus G
 
-            if (status == "success") {
+            if (fetchMetricStatus == "success") {
                 this.focusWidget.attr("clip-path", `url(#clip-${this.props.widgetId})`);
             }
             
@@ -454,7 +454,7 @@ export default class D3SVGComponent extends React.Component {
                         .attr("x2", width + width);
                 }
 
-                if (status == "success") {
+                if (fetchMetricStatus == "success") {
                     this.focusRect 
                         .attr("width", width)
                         .attr("height", height)
@@ -490,7 +490,7 @@ export default class D3SVGComponent extends React.Component {
                 .attr("transform", `translate(0, ${height2} )`)
                 .call(xAxis2);
 
-            if (status == "success") {
+            if (fetchMetricStatus == "success") {
                 this.contextBrush
                     .call(brush)
                     .call(brush.move, xScale.range());
@@ -504,7 +504,7 @@ export default class D3SVGComponent extends React.Component {
                 translateY = ((height - margin.top - margin.bottom)),
                 svgLoader = this.rootRefNode.querySelectorAll("svg.svg-loading");
 
-            if (status == "loading") {
+            if (fetchMetricStatus == "loading") {
                 if (svgLoader.length == 0) {
                     this.rootRefNode.querySelector("g.focus").appendChild(this.state.oDOM(translateX, translateY).documentElement);
                 }
@@ -513,7 +513,7 @@ export default class D3SVGComponent extends React.Component {
                         .attr("transform", `translate(${translateX/2}, ${translateY/2} )`)
                 }
             }
-            else if(status == "error") {
+            else if(fetchMetricStatus == "error") {
                 this.focusGroup.selectAll("svg.svg-loading circle")
                     .remove()
 
@@ -570,6 +570,7 @@ export default class D3SVGComponent extends React.Component {
 
         switch (this.props.predictionStatus) {
             case "error":
+            case "initial":
             case "success":
                 togglePredictionLoading(false);
                 break;

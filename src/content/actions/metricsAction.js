@@ -27,10 +27,6 @@ export const requestMetricsAction = () => ({
     type: 'FETCH_METRICS_PENDING'
 })
 
-export const testAction = () => ({
-    type: 'TEST_ACTION'
-})
-
 export const errorMetricsAction = errorMessage => ({
     type: 'FETCH_METRICS_REJECTED',
     errorMessage: errorMessage
@@ -50,11 +46,30 @@ export const errorCredsAction = errorMessage => ({
     errorMessage: errorMessage
 });
 
-export const predictionCompleteAction = predictedDatapoints => ({
+export const predictionCompleteAction = datapoints => ({
     type: 'PREDICTION_COMPLETED',
-    predictedDatapoints: predictedDatapoints
+    datapoints: datapoints,
+    id: id,
 });
 
+export const predictionStatusAction = predictionStatus => ({
+    type: 'PREDICTION_STATUS',
+    predictionStatus: predictionStatus
+});
+
+<<<<<<< HEAD
+export const predictionStartAction = id => ({
+    type: 'PREDICTION_START',
+    id: id
+});
+
+export const predictionProgressAction = predictionProgress => ({
+    type: 'PREDICTION_PROGRESS',
+    predictionProgress: predictionProgress
+});
+
+=======
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
 /* 
 export const predictionErrorAction = errorMessage => ({
     type: 'PREDICTION_ERROR',

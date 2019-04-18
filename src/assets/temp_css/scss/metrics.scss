@@ -127,8 +127,7 @@ div.widget-options .panel-title {
 }
 
 div.widget-options {
-    div.panel-heading,
-    div.panel-heading * {
+    div.panel-heading {
         cursor: move;
         /* fallback if grab cursor is unsupported */
         cursor: grab;
@@ -156,5 +155,20 @@ div.widget-options {
         &:hover {
             cursor: pointer;
         }
+    }
+}
+
+div.training-results {
+    
+    div.panel-body {
+        overflow: scroll;
+        max-height: 300px;
+        &:hover {
+            cursor: default;
+        }
+    }
+
+    div.panel.panel-default {
+        margin-top: 10px;
     }
 }

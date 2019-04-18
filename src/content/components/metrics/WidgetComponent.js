@@ -1,6 +1,6 @@
 import React from 'react'
 import Draggable from 'react-draggable'
-import { object, array, string, number } from 'prop-types'
+import { array, string, number, oneOf } from 'prop-types'
 
 import { Collapse, Fade, Tooltip, OverlayTrigger } from 'react-bootstrap';
 
@@ -37,7 +37,7 @@ class WidgetComponent extends React.Component {
         errorMessage: string,
         data: array.isRequired,
         dataMean: number.isRequired,
-        status: string.isRequired,
+        fetchMetricStatus: oneOf(['loading', 'error', 'success']).isRequired,
     }
 
     componentDidMount() {
@@ -122,7 +122,10 @@ class WidgetComponent extends React.Component {
 
                     <div className={"widget-handle-drag"}>
                         
-                        <WidgetOptions { ...this.props } />
+                        {
+                            this.props.fetchMetricStatus == "success" ?
+                            <WidgetOptions { ...this.props } /> : null
+                        }
 
                         <Fade in={open ? open : (!open)}>
                             <span
@@ -142,6 +145,10 @@ class WidgetComponent extends React.Component {
                             <D3SVGComponent
                                 { ...this.state }
                                 { ...this.props }
+                                data = {
+                                    // add time feature here
+                                    this.props.data.slice(0, 250)
+                                }
                             />
                         </div>
                     </Collapse>

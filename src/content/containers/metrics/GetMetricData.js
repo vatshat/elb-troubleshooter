@@ -134,7 +134,7 @@ export const fetchMetricData = (props, abortController) => {
 
     if (fetchOpts.signal == null) {
         delete fetchOpts.signal
-        console.log(inspect(window))
+        // console.log(inspect(window))
     }
 
     fetch( `https://${opts.headers.Host}${opts.path}`, fetchOpts)
