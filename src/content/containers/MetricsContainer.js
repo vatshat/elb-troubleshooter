@@ -39,11 +39,22 @@ const MetricsContainer = props => {
                             }
                             dataMean = { metricWidget.metricData.reduce((total, dataPoint) => total + dataPoint.value, 0) / metricWidget.metricData.length }
                             key = { metricWidget.id }
+                            id = { metricWidget.id }
                             metricName = { metricWidget.label }
                             fetchMetricStatus = { props.metricsReducer.metricsStatus }
+
+
                             predictionStatus = { props.predictionsReducer.predictionStatus }
-                            testDispatch = { props.testDispatch }
+                            predictionProgress = { 
+                                props.predictionsReducer.predictionProgress[metricWidget.id] == "undefined" ?
+                                null : props.predictionsReducer.predictionProgress[metricWidget.id]
+                            }
+                            
                             predictionStatusDispatch = { props.predictionStatusDispatch }
+                            predictionCompleteDispatch = { props.predictionCompleteDispatch }
+                            predictionErrorDispatch = { props.predictionErrorDispatch }
+                            predictionStartDispatch = { props.predictionStartDispatch }
+                            predictionProgressDispatch = { props.predictionProgressDispatch }
                         />
                     </div>
         })

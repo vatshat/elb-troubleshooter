@@ -1,5 +1,8 @@
 class EarlyStoppingCallback extends tf.Callback {
-    constructor() {
+    constructor({
+            predictionProgressDispatch,
+            id
+        }) {
         super()
         this.historicalLoss = {
             minLoss: {
@@ -8,6 +11,9 @@ class EarlyStoppingCallback extends tf.Callback {
             },
             iteration: 0,
         };
+
+        console.log(JSON.stringify(predictionProgressDispatch), id);
+        
         /* 
         let pre = document.createElement("pre");
         pre.setAttribute("id", "messageTrain");
@@ -120,7 +126,7 @@ export const trainModel = async ({trainInputs, trainOutputs, window_size}, model
         hist = await model.fit(xs, ys, {
             batchSize: rnn_batch_size,
             epochs: n_epochs,
-            callbacks: new EarlyStoppingCallback(),
+            callbacks: new EarlyStoppingCallback(predictionProgress),
         });
 
     xs.dispose()

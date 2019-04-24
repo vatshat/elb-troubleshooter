@@ -25,7 +25,6 @@ class WidgetContainer extends React.Component {
     }
 
     onEnablePredictionHandler = async (eventChecked) => {
-        // await this.props.testDispatch()
 
         if (this.state.predictionStateStatus !== "error" ) {
 
@@ -45,7 +44,16 @@ class WidgetContainer extends React.Component {
 
                     this.props.predictionStatusDispatch("training");
 
-                    setTimeout(() => {
+                    setTimeout(async () => {
+
+                        this.props.predictionStartDispatch(this.props.id)
+                        console.log(
+                            await window.prediction2(
+                                this.props.predictionProgressDispatch,
+                                this.props.id
+                            )
+                        );
+
                         this.setState({ 
                             predictedDatapoints: [1],
                             predictionStateStatus: "success"
@@ -53,7 +61,7 @@ class WidgetContainer extends React.Component {
 
                         this.props.predictionStatusDispatch("success");
 
-                    }, 5000);
+                    }, 1000);
 
                 } catch (e) {
                     this.props.predictionStatusDispatch("error");
@@ -64,14 +72,6 @@ class WidgetContainer extends React.Component {
         }
     }
 
-    predictHandler = async () => {
-        let temp = await window.prediction(this.props.data);
-        console.log(`predicion: ${ JSON.stringify(temp)}`);
-        this.setState({
-            prediction: temp
-        });
-    }
-
     render() {
 
         let predictionStatus = this.props.predictionStatus == "training" ?
@@ -79,8 +79,6 @@ class WidgetContainer extends React.Component {
 
         return ( 
             <div>
-
-                <button onClick={this.predictHandler}>Predict</button>
 
                 <WidgetComponent 
                     { ...this.props }

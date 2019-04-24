@@ -17,7 +17,31 @@ class WidgetOptions extends React.Component {
 
         let 
             trainingElement,
-            { predictionStatus } = this.props;
+            { predictionStatus, predictionProgress } = this.props,
+            trainingResults = (
+                <Panel>
+                    <Panel.Heading>
+                        <Panel.Title toggle>Training results:</Panel.Title>
+                    </Panel.Heading>
+                    <Panel.Collapse>
+                        <Panel.Body>
+                            {
+                                predictionProgress != undefined ? 
+                                    predictionProgress.map((item, index) => (
+                                        <div 
+                                            className="col-sm-12" 
+                                            key={index}
+                                        >
+                                            {item}                                            
+                                        </div>)
+                                    )
+                                    // .join("<br />") 
+                                    : null
+                            }
+                        </Panel.Body>
+                    </Panel.Collapse>                    
+                </Panel>
+            );
 
         switch (predictionStatus) {
             case "initial":
@@ -41,21 +65,28 @@ class WidgetOptions extends React.Component {
                 break;
 
             case "training":
-                trainingElement = <Alert 
-                    className = {"training_update"}
-                    variant="secondary">
-                    Training data
-                </Alert>
+                trainingElement = 
+                                <div className="training-results">
+                                    <Alert 
+                                        className = {"training_update"}
+                                        variant="secondary">
+                                        Training data
+                                    </Alert>
+                                    {trainingResults}    
+                                </div>
                 break;
             
             case "success":
-                trainingElement = <Checkbox 
-                    inline
-                    onChange={this.props.onChangePredictionHandler}
-                >
-                    Prediction
-                </Checkbox>
-
+                trainingElement = 
+                                <div className="training-results">
+                                    <Checkbox 
+                                        inline
+                                        onChange={this.props.onChangePredictionHandler}
+                                    >
+                                        Prediction
+                                    </Checkbox>
+                                    {trainingResults}
+                                </div>
                 break;
                 
             default:
@@ -72,8 +103,13 @@ class WidgetOptions extends React.Component {
             <div className={"widget-options"}>
                 <span className={"widget-drag col-sm-1"}></span>
 
-                <div className={"col-sm-9"}></div>
-                <Panel className={"col-sm-2"}>
+                <div className={`col-sm-${
+                    (predictionStatus == "training" || predictionStatus == "success") ? 7: 9
+                }`}
+                ></div>
+                <Panel className={`col-sm-${
+                    (predictionStatus == "training" || predictionStatus == "success") ? 4: 2
+                }`}>
                     <Panel.Heading>
                         <Panel.Title toggle>Widget Options:</Panel.Title>
                     </Panel.Heading>

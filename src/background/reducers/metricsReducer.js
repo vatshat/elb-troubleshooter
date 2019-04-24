@@ -45,10 +45,7 @@ const
         metricsStatus: "loading", 
         metricWidgets: [{
             "id": (() => (
-                Math
-                .random()
-                .toString(36)
-                .substring(2, 15) +
+                Math.random().toString(36).substring(2, 15) +
                 Math.random().toString(36).substring(2, 15)
             ))(),
             "label": "MetricName",
@@ -87,10 +84,6 @@ const
 
 const metricsReducer = (state = initialMetricsState, action) => {
     switch (action.type) {
-        case 'TEST_ACTION':
-            return {
-                ...state
-            }
 
         case 'FETCH_METRICS_PENDING':
             return {
@@ -122,7 +115,8 @@ const metricsReducer = (state = initialMetricsState, action) => {
 }
 
 const initialPredictionsState = {
-    predictionStatus: "initial"
+    predictionStatus: "initial", 
+    predictionProgress: {},
 }
 
 const predictionsReducer = (state = initialPredictionsState, action) => {
@@ -132,6 +126,28 @@ const predictionsReducer = (state = initialPredictionsState, action) => {
             return {
                 ...state,
                 predictionStatus: action.predictionStatus
+            }
+
+        case 'PREDICTION_START':
+            return {
+                ...state,
+                predictionProgress: {
+                    ...state.predictionProgress,
+                    [action.id]: ["starting training"]
+                }
+            }
+            
+        case 'PREDICTION_PROGRESS':
+            return {
+                ...state,
+                predictionProgress: {
+                    ...state.predictionProgress,
+                    [action.predictionProgress.id]: 
+                    [
+                        action.predictionProgress.message,
+                        ...state.predictionProgress[action.predictionProgress.id],
+                    ],
+                }
             }
             
     default:

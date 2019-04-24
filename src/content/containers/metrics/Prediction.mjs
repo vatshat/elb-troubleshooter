@@ -7,11 +7,11 @@ import {
 } from './TensorFlowRNN.mjs';
 
 tf.tidy(() => {
-    const prediction = async (metrics) => {            
+    const prediction = async (metrics, predictionProgress) => {            
 
         let parameterModel;
 
-        try { parameterModel = getModelParamters(metrics) }
+        try { parameterModel = getModelParamters(metrics, predictionProgress) }
         catch(err) { throw err };
 
         let

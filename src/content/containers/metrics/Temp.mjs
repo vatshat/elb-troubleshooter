@@ -1,14 +1,18 @@
 
-const prediction2 = async () => {
+const prediction2 = async (predictionProgressDispatch, id) => {
     console.log("testing 0");
-    let test = await new Promise(resolve => {
+    return await new Promise(resolve => {
+        predictionProgressDispatch({
+            id: id,
+            message: "testing on going",
+        });
+        
         setTimeout(() => {
             resolve({
                 test: "testing 1"
             })
         }, 3000);
     });
-    console.log(test);
 }
 
 window.prediction2 = prediction2;
