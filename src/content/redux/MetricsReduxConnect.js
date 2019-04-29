@@ -70,6 +70,12 @@ const mapDispatchToProps = dispatch => ({
 
     // prediction 
 
+<<<<<<< HEAD
+=======
+    // predictionStartDispatch: () => dispatch(metricsAction.predictionStartAction()),
+    // predictionStopDispatch: () => dispatch(metricsAction.predictionStopAction()),
+    
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
     predictionStatusDispatch: predictionStatus => dispatch(metricsAction.predictionStatusAction(predictionStatus)),
     predictionCompleteDispatch: predictedDatapoints => dispatch(metricsAction.predictionCompleteAction(predictedDatapoints)),
 

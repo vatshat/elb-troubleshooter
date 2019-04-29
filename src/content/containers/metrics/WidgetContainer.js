@@ -2,7 +2,6 @@ import React from 'react';
 import { func, oneOf } from 'prop-types';
 import WidgetComponent from '../../components/metrics/WidgetComponent';
 
-import Prediction2 from './Temp.mjs'
 import Prediction from './Prediction.mjs'
 import TensorFlowRNN from './TensorFlowRNN.mjs'
 
@@ -14,8 +13,6 @@ class WidgetContainer extends React.Component {
     
     state = {
         drawLine: true,
-        predictionStateStatus: "initial",
-        predictedDatapoints: [],
     }
 
     onChangeDrawLineHandler = eventChecked => {
@@ -26,7 +23,7 @@ class WidgetContainer extends React.Component {
 
     onEnablePredictionHandler = async (eventChecked) => {
 
-        if (this.state.predictionStateStatus !== "error" ) {
+        if (this.props.predictionStatus !== "error" ) {
 
             if (this.state.predictedDatapoints.length > 0) {
 
@@ -34,15 +31,14 @@ class WidgetContainer extends React.Component {
                     eventChecked.target.checked == "show" ? "hide" : "show"
                 );
 
-                this.setState({
-                    predictionStateStatus: eventChecked.target.checked == "show" ? "hide" : "show"
-                });
             }
             else {
                 try {
                     this.setState({ predictionStateStatus: "training" });
 
                     this.props.predictionStatusDispatch("training");
+<<<<<<< Updated upstream
+<<<<<<< HEAD
 
                     setTimeout(async () => {
 
@@ -53,6 +49,8 @@ class WidgetContainer extends React.Component {
                                 this.props.id
                             )
                         );
+=======
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
 
                         this.setState({ 
                             predictedDatapoints: [1],
@@ -61,12 +59,23 @@ class WidgetContainer extends React.Component {
 
                         this.props.predictionStatusDispatch("success");
 
+<<<<<<< HEAD
                     }, 1000);
+=======
+                    }, 5000);
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
+=======
+                    
+                    this.props.predictionStartDispatch(this.props.id)
+
+                    this.setState({ 
+                        predictedDatapoints: [1],
+                        predictionStateStatus: "success"
+                    });            
+>>>>>>> Stashed changes
 
                 } catch (e) {
                     this.props.predictionStatusDispatch("error");
-
-                    this.setState({ predictionStateStatus: "error" });
                 }                
             }
         }
@@ -74,12 +83,14 @@ class WidgetContainer extends React.Component {
 
     render() {
 
-        let predictionStatus = this.props.predictionStatus == "training" ?
-                                                    "training" : this.state.predictionStateStatus;
+        let { predictionStatus } = this.props.predictionStatus;
 
         return ( 
             <div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
                 <WidgetComponent 
                     { ...this.props }
                     { ...this.state }
@@ -87,11 +98,14 @@ class WidgetContainer extends React.Component {
                     predictionStatus = { predictionStatus }
                     onChangeDrawLineHandler = { this.onChangeDrawLineHandler }
                     onEnablePredictionHandler = { this.onEnablePredictionHandler }
+<<<<<<< HEAD
                     onChangePredictionHandler = { () => {}}
                     data = {
                         // add time feature here
                         this.props.data.slice(0, 250)
                     }
+=======
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
                 />
             </div>
         )

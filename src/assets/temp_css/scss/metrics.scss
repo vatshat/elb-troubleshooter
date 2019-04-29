@@ -158,6 +158,17 @@ div.widget-options {
     }
 }
 
-div.training-results div.panel.panel-default {
-    margin-top: 10px;
+div.training-results {
+    
+    div.panel-body {
+        overflow: scroll;
+        max-height: 300px;
+        &:hover {
+            cursor: default;
+        }
+    }
+
+    div.panel.panel-default {
+        margin-top: 10px;
+    }
 }

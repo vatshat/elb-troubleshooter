@@ -115,8 +115,12 @@ const metricsReducer = (state = initialMetricsState, action) => {
 }
 
 const initialPredictionsState = {
+<<<<<<< HEAD
     predictionStatus: "initial", 
     predictionProgress: {},
+=======
+    predictionStatus: "initial"
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
 }
 
 const predictionsReducer = (state = initialPredictionsState, action) => {
@@ -127,13 +131,14 @@ const predictionsReducer = (state = initialPredictionsState, action) => {
                 ...state,
                 predictionStatus: action.predictionStatus
             }
+<<<<<<< HEAD
 
         case 'PREDICTION_START':
             return {
                 ...state,
                 predictionProgress: {
                     ...state.predictionProgress,
-                    [action.id]: ["starting training"]
+                    [action.id]: [],
                 }
             }
             
@@ -144,9 +149,20 @@ const predictionsReducer = (state = initialPredictionsState, action) => {
                     ...state.predictionProgress,
                     [action.predictionProgress.id]: 
                     [
-                        action.predictionProgress.message,
                         ...state.predictionProgress[action.predictionProgress.id],
+                        action.predictionProgress.message,
                     ],
+                }
+            }
+=======
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
+            
+        case 'PREDICTION_COMPLETED':
+            return {
+                ...state,
+                predictedDatapoints: {
+                    ...state.predictedDatapoints,
+                    [action.predictedDatapoints.id]:action.predictedDatapoints.datapoints,
                 }
             }
             

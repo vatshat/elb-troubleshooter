@@ -46,9 +46,10 @@ export const errorCredsAction = errorMessage => ({
     errorMessage: errorMessage
 });
 
-export const predictionCompleteAction = predictedDatapoints => ({
+export const predictionCompleteAction = datapoints => ({
     type: 'PREDICTION_COMPLETED',
-    predictedDatapoints: predictedDatapoints
+    datapoints: datapoints,
+    id: id,
 });
 
 export const predictionStatusAction = predictionStatus => ({
@@ -56,6 +57,7 @@ export const predictionStatusAction = predictionStatus => ({
     predictionStatus: predictionStatus
 });
 
+<<<<<<< HEAD
 export const predictionStartAction = id => ({
     type: 'PREDICTION_START',
     id: id
@@ -66,6 +68,8 @@ export const predictionProgressAction = predictionProgress => ({
     predictionProgress: predictionProgress
 });
 
+=======
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
 /* 
 export const predictionErrorAction = errorMessage => ({
     type: 'PREDICTION_ERROR',

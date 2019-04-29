@@ -1,25 +1,15 @@
 class EarlyStoppingCallback extends tf.Callback {
-    constructor({
-            predictionProgressDispatch,
-            id
-        }) {
+    constructor(predictionProgress) {
         super()
         this.historicalLoss = {
+            iteration: 0,
             minLoss: {
                 epoches: 0,
-                loss: 1
+                loss: 1,
             },
-            iteration: 0,
         };
-
-        console.log(JSON.stringify(predictionProgressDispatch), id);
         
-        /* 
-        let pre = document.createElement("pre");
-        pre.setAttribute("id", "messageTrain");
-        pre.setAttribute("style", "overflow:scroll;height:500px;")
-        document.body.insertBefore(pre, document.body.firstChild);
-         */
+        this.predictionProgress = predictionProgress;
     }
 
     // https://codepen.io/caisq/pen/xzMYZx?editors=0011
@@ -27,32 +17,34 @@ class EarlyStoppingCallback extends tf.Callback {
     async onEpochEnd(epoch, logs) {
         let 
         { minLoss, epochLoss, iteration } = this.historicalLoss, 
-        { loss: currLoss } = logs,
-        consoleMessage = JSON.stringify(this.historicalLoss) + '\r\n';
+        { loss: currLoss } = logs
 
         this.historicalLoss.minLoss = (minLoss.loss - currLoss) > 0 ? {
-            loss: currLoss,
             epoches: 0,
+            loss: currLoss,
         } : {
-            loss: minLoss.loss,
             epoches: minLoss.epoches + 1,
+            loss: minLoss.loss,
         };
 
         this.historicalLoss.iteration = iteration + 1;
         
         if (
-            // this.historicalLoss.iteration > 1 ||
-            minLoss.epoches > 0 /* ideal value should be 18 or configurable from UI */
+            document.getElementById(`stop-${this.predictionProgress.id}`).checked == true ||
+            this.historicalLoss.iteration > 200 ||
+            minLoss.epoches > 18
         ) {
             this.model.stopTraining = true;
         }
        
-        // document.getElementById("messageTrain").insertAdjacentHTML('afterbegin', consoleMessage);
-        console.log(consoleMessage);
+        this.predictionProgress.predictionProgressDispatch({
+            id: this.predictionProgress.id,
+            message: this.historicalLoss,
+        });
     }
 }
 
-export const trainModel = async ({trainInputs, trainOutputs, window_size}, model) => {
+export const trainModel = async ({trainInputs, trainOutputs, window_size}, model, predictionProgress) => {
     /* 
     
         Step 2 - Initialize you model and add layers:

@@ -11,7 +11,7 @@ tf.tidy(() => {
 
         let parameterModel;
 
-        try { parameterModel = getModelParamters(metrics, predictionProgress) }
+        try { parameterModel = getModelParamters(metrics) }
         catch(err) { throw err };
 
         let
@@ -54,10 +54,7 @@ tf.tidy(() => {
                 return {...returnValue}
             },
             initializedModel = tf.sequential(),
-            resultModel = await trainModel(parameterModel, initializedModel),
-            message = 'Your model has been successfully trained...';
-
-        console.log(message);
+            resultModel = await trainModel(parameterModel, initializedModel, predictionProgress)
 
         return await predictDatapoints(parameterModel, resultModel.model).then(prediction => prediction);                    
     }

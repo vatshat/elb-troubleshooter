@@ -40,14 +40,18 @@ const MetricsContainer = props => {
                             dataMean = { metricWidget.metricData.reduce((total, dataPoint) => total + dataPoint.value, 0) / metricWidget.metricData.length }
                             key = { metricWidget.id }
                             id = { metricWidget.id }
+<<<<<<< HEAD
                             metricName = { metricWidget.label }
                             fetchMetricStatus = { props.metricsReducer.metricsStatus }
-
 
                             predictionStatus = { props.predictionsReducer.predictionStatus }
                             predictionProgress = { 
                                 props.predictionsReducer.predictionProgress[metricWidget.id] == "undefined" ?
                                 null : props.predictionsReducer.predictionProgress[metricWidget.id]
+                            }
+
+                            predictedDatapoints = {
+                                this.props.predictionsReducer.predictedDatapoints[metricWidget.id]
                             }
                             
                             predictionStatusDispatch = { props.predictionStatusDispatch }
@@ -55,6 +59,12 @@ const MetricsContainer = props => {
                             predictionErrorDispatch = { props.predictionErrorDispatch }
                             predictionStartDispatch = { props.predictionStartDispatch }
                             predictionProgressDispatch = { props.predictionProgressDispatch }
+=======
+                            fetchMetricStatus = { props.metricsReducer.metricsStatus }
+                            predictionStatus = { props.predictionsReducer.predictionStatus }
+                            testDispatch = { props.testDispatch }
+                            predictionStatusDispatch = { props.predictionStatusDispatch }
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
                         />
                     </div>
         })

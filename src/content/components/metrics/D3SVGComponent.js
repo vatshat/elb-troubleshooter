@@ -1,5 +1,9 @@
 import React from 'react'
+<<<<<<< HEAD
 import { array, oneOf, string } from 'prop-types'
+=======
+import { array, oneOf } from 'prop-types'
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
 import { loadingSVG } from './LoadingSVG'
 
 // d3 imports
@@ -20,9 +24,14 @@ export default class D3SVGComponent extends React.Component {
     
     static propTypes = {
         data: array.isRequired,
+<<<<<<< HEAD
         metricName: string.isRequired,
         fetchMetricStatus: oneOf(['loading', 'error', 'success']).isRequired,
         predictionStatus: oneOf(['training', 'error', "success", "initial"]).isRequired,
+=======
+        fetchMetricStatus: oneOf(['loading', 'error', 'success']).isRequired,
+        predictionStatus: oneOf(['training', 'show', 'hide', 'error', "success", "initial"]).isRequired,
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
     }
 
     static defaultProps = {

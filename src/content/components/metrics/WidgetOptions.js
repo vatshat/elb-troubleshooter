@@ -1,7 +1,48 @@
 import React from 'react';
 import { func } from 'prop-types'
 import ListGroup from 'react-bootstrap/lib/ListGroup'
-import { Alert, Panel, Checkbox, ListGroupItem } from 'react-bootstrap';
+import { Alert, Panel, Checkbox, ListGroupItem, Table } from 'react-bootstrap';
+
+class WindowPredictionEmptyDiv extends React.Component {
+    
+    componentDidUpdate({predictionStatus}) {
+        if (
+            predictionStatus == "initial" &&
+            this.props.predictionStatus == "training"
+        ) {
+            try {
+                window.prediction(
+                    this.props.data, {
+                        predictionProgressDispatch: this.props.predictionProgressDispatch,
+                        id: this.props.id
+                    }
+                ).then(temp => {
+                    this.props.predictionStatusDispatch("success");
+
+                }).catch(() => {
+                    this.props.predictionStatusDispatch("error");
+                })
+            }
+            catch {
+                this.props.predictionStatusDispatch("error");
+            }
+        }
+    }
+
+    
+    render() {
+        let { predictionStatus } = this.props
+
+        return <div 
+                    className={
+                        `col-sm-${
+                            (predictionStatus == "training" || predictionStatus == "success") ? 5: 9
+                        }`
+                    }
+                >
+                </div>
+    }
+}
 
 class WidgetOptions extends React.Component {
 
@@ -11,31 +52,90 @@ class WidgetOptions extends React.Component {
         onChangeDrawLineHandler: func.isRequired,
     }
     
-    state = { open: true }
+    state = { 
+        open: true,
+        disableTraining: false,
+    }
+
+    stopTrainingHandler = checked => {
+        if (checked) {
+            this.setState({
+                disableTraining: true
+            })
+        }
+    }
 
     render() {
 
         let 
             trainingElement,
             { predictionStatus, predictionProgress } = this.props,
+            resultsElement = predictionProgress => {
+                return (
+                    predictionProgress.length < 1 ?
+                            null
+                            :
+                            <div>
+                                <div className="col-sm-12">
+                                    <p>
+                                        {
+                                            `Currently on epoch/iteration ${predictionProgress.slice(-1)[0].iteration} of training.`
+                                        }
+                                    </p>
+                                    <p>
+                                        {
+                                            `The model currently has ${predictionProgress.slice(-1)[0].minLoss.loss} loss.`
+                                        }
+                                    </p>                                    
+                                    <p>
+                                        {
+                                            `Currently on epoch/iteration ${predictionProgress.slice(-1)[0].iteration} of training.`
+                                        }
+                                    </p>                                    
+                                    <p>
+                                        {
+                                            `This loss value hasn't improved in the past ${predictionProgress.slice(-1)[0].epoches} epoches/iteration.`
+                                        }
+                                    </p>                                    
+                                    <p>
+                                        {
+                                            `The model will stop being trained if the loss doesn't improve for 18 iterations or after 200 epoches.`
+                                        }
+                                    </p>
+                                </div>
+                                <Table striped bordered hover size="sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Iteration</th>
+                                            <th>Epoches</th>
+                                            <th>Loss</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            predictionProgress.map((item, index) => 
+                                                    <tr key={index}>
+                                                        <td>{item.iteration}</td>
+                                                        <td>{item.minLoss.epoches}</td>
+                                                        <td>{item.minLoss.loss}</td>
+                                                    </tr>
+                                            )
+                                        }
+                                    </tbody>
+                                </Table>
+                            </div>                    
+                )
+            },
             trainingResults = (
                 <Panel>
                     <Panel.Heading>
-                        <Panel.Title toggle>Training results:</Panel.Title>
+                        <Panel.Title toggle>Click here to view training results:</Panel.Title>
                     </Panel.Heading>
                     <Panel.Collapse>
                         <Panel.Body>
                             {
                                 predictionProgress != undefined ? 
-                                    predictionProgress.map((item, index) => (
-                                        <div 
-                                            className="col-sm-12" 
-                                            key={index}
-                                        >
-                                            {item}                                            
-                                        </div>)
-                                    )
-                                    // .join("<br />") 
+                                    resultsElement(predictionProgress)
                                     : null
                             }
                         </Panel.Body>
@@ -45,12 +145,11 @@ class WidgetOptions extends React.Component {
 
         switch (predictionStatus) {
             case "initial":
-                trainingElement = <Alert
-                    variant="secondary"
+                trainingElement = <button
                     onClick = { this.props.onEnablePredictionHandler }
                 >
                     Click here to train
-                </Alert>
+                </button>
 
                 break;
             
@@ -65,15 +164,32 @@ class WidgetOptions extends React.Component {
                 break;
 
             case "training":
+<<<<<<< HEAD
                 trainingElement = 
                                 <div className="training-results">
                                     <Alert 
-                                        className = {"training_update"}
                                         variant="secondary">
-                                        Training data
+                                        Training data...
+                                        <hr />
+                                        <Checkbox 
+                                            inline
+                                            id={`stop-${this.props.id}`}
+                                            disabled={this.state.disableTraining}
+                                            // checked={false}
+                                            onChange= {this.stopTrainingHandler}
+                                        >
+                                            Check box to stop training
+                                        </Checkbox>
                                     </Alert>
-                                    {trainingResults}    
+                                    {trainingResults}
                                 </div>
+=======
+                trainingElement = <Alert 
+                    className = {"training_update"}
+                    variant="secondary">
+                    Training data
+                </Alert>
+>>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
                 break;
             
             case "success":
@@ -103,12 +219,12 @@ class WidgetOptions extends React.Component {
             <div className={"widget-options"}>
                 <span className={"widget-drag col-sm-1"}></span>
 
-                <div className={`col-sm-${
-                    (predictionStatus == "training" || predictionStatus == "success") ? 7: 9
-                }`}
-                ></div>
+                <WindowPredictionEmptyDiv 
+                    {...this.props}
+                />
+                
                 <Panel className={`col-sm-${
-                    (predictionStatus == "training" || predictionStatus == "success") ? 4: 2
+                    (predictionStatus == "training" || predictionStatus == "success") ? 6: 2
                 }`}>
                     <Panel.Heading>
                         <Panel.Title toggle>Widget Options:</Panel.Title>
