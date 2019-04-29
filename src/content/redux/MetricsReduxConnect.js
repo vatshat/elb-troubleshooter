@@ -70,24 +70,11 @@ const mapDispatchToProps = dispatch => ({
 
     // prediction 
 
-<<<<<<< HEAD
-=======
-    // predictionStartDispatch: () => dispatch(metricsAction.predictionStartAction()),
-    // predictionStopDispatch: () => dispatch(metricsAction.predictionStopAction()),
-    
->>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
     predictionStatusDispatch: predictionStatus => dispatch(metricsAction.predictionStatusAction(predictionStatus)),
     predictionCompleteDispatch: predictedDatapoints => dispatch(metricsAction.predictionCompleteAction(predictedDatapoints)),
-
-    predictionErrorDispatch: errorMessage => dispatch(metricsAction.predictionErrorAction(errorMessage)),
     
-    predictionStartDispatch: id => dispatch(metricsAction.predictionStartAction(id)),
-    predictionProgressDispatch: predictionProgress => dispatch(metricsAction.predictionProgressAction(predictionProgress)),
-    
-    /* 
-    predictionStartDispatch: () => dispatch(metricsAction.predictionStartAction()),
-    predictionStopDispatch: () => dispatch(metricsAction.predictionStopAction()), 
-    */
+    predictionInitializeDispatch: id => dispatch(metricsAction.predictionInitializeAction(id)),
+    predictionProgressDispatch: predictionProgress => dispatch(metricsAction.predictionProgressAction(predictionProgress)),    
 
 });
 

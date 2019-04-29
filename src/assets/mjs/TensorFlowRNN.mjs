@@ -29,12 +29,14 @@ class EarlyStoppingCallback extends tf.Callback {
 
         this.historicalLoss.iteration = iteration + 1;
         
-        if (
-            document.getElementById(`stop-${this.predictionProgress.id}`).checked == true ||
-            this.historicalLoss.iteration > 200 ||
-            minLoss.epoches > 18
-        ) {
-            this.model.stopTraining = true;
+        if (document.getElementById(`stop-${this.predictionProgress.id}`) != null) {
+            if (
+                document.getElementById(`stop-${this.predictionProgress.id}`).checked == true ||
+                this.historicalLoss.iteration > 200 ||
+                minLoss.epoches > 18
+            ) {
+                this.model.stopTraining = true;
+            }
         }
        
         this.predictionProgress.predictionProgressDispatch({
@@ -163,7 +165,7 @@ export const getModelParamters = rawVec => {
         totalDatapoints = dayDatapoints * daysData
 
     if (totalDatapoints > rawVec.length) {
-        throw `not enough datapoints total: ${totalDatapoints}, actual: ${rawVec.length}`
+        throw `not enough datapoints required: ${totalDatapoints}, actual: ${rawVec.length}`
     }
 
     let

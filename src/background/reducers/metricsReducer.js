@@ -41,13 +41,11 @@ const credsReducer = (state = initialCredsState, action) => {
 
 const 
     currentTime = new Date(),
+    initialMetricsId = "m0", //Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
     initialMetricsState = {
         metricsStatus: "loading", 
         metricWidgets: [{
-            "id": (() => (
-                Math.random().toString(36).substring(2, 15) +
-                Math.random().toString(36).substring(2, 15)
-            ))(),
+            "id": initialMetricsId,
             "label": "MetricName",
             "metricData": [{
                 "date": "1970-01-01T00:00:00Z",
@@ -115,12 +113,9 @@ const metricsReducer = (state = initialMetricsState, action) => {
 }
 
 const initialPredictionsState = {
-<<<<<<< HEAD
     predictionStatus: "initial", 
-    predictionProgress: {},
-=======
-    predictionStatus: "initial"
->>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
+    predictionProgress: { [initialMetricsId]: [] },
+    predictedDatapoints: { [initialMetricsId]: [] },
 }
 
 const predictionsReducer = (state = initialPredictionsState, action) => {
@@ -131,13 +126,16 @@ const predictionsReducer = (state = initialPredictionsState, action) => {
                 ...state,
                 predictionStatus: action.predictionStatus
             }
-<<<<<<< HEAD
 
-        case 'PREDICTION_START':
+        case 'PREDICTION_INITIALIZE':
             return {
                 ...state,
                 predictionProgress: {
                     ...state.predictionProgress,
+                    [action.id]: [],
+                },
+                predictedDatapoints: {
+                    ...state.predictedDatapoints,
                     [action.id]: [],
                 }
             }
@@ -147,22 +145,20 @@ const predictionsReducer = (state = initialPredictionsState, action) => {
                 ...state,
                 predictionProgress: {
                     ...state.predictionProgress,
-                    [action.predictionProgress.id]: 
+                    [action.predictionProgress.id]:
                     [
                         ...state.predictionProgress[action.predictionProgress.id],
                         action.predictionProgress.message,
                     ],
                 }
             }
-=======
->>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
             
         case 'PREDICTION_COMPLETED':
             return {
                 ...state,
                 predictedDatapoints: {
                     ...state.predictedDatapoints,
-                    [action.predictedDatapoints.id]:action.predictedDatapoints.datapoints,
+                    [action.datapointsUpdate.id]: action.datapointsUpdate.datapoints,
                 }
             }
             
