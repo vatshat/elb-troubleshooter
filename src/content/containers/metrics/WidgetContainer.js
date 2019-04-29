@@ -13,99 +13,102 @@ class WidgetContainer extends React.Component {
     
     state = {
         drawLine: true,
+        showTrainingCheckbox: false, 
+        disableTraining: false,
+        predictionStatus: "initial",
+    }
+    
+    stopTrainingHandler = checked => {
+        if (checked) {
+            this.setState({
+                disableTraining: true
+            })
+        }
     }
 
     onChangeDrawLineHandler = eventChecked => {
         this.setState({
-            drawLine: eventChecked.target.checked
-        })
+            drawLine: eventChecked.target.checked, 
+        });
     }
 
     onEnablePredictionHandler = async (eventChecked) => {
 
-        if (this.props.predictionStatus !== "error" ) {
+        if (this.props.predictionStatus != "error" ) {
 
-            if (this.state.predictedDatapoints.length > 0) {
+            if (this.props.predictedDatapoints.length > 0) {
 
                 this.props.predictionStatusDispatch(
                     eventChecked.target.checked == "show" ? "hide" : "show"
-                );
-
+                );                
             }
             else {
-                try {
-                    this.setState({ predictionStateStatus: "training" });
+                try { 
+                    this.props.predictionStatusDispatch("training"); 
+                    const { id } = this.props;
 
-                    this.props.predictionStatusDispatch("training");
-<<<<<<< Updated upstream
-<<<<<<< HEAD
+                    this.setState({
+                        showTrainingCheckbox: true
+                    });
 
-                    setTimeout(async () => {
+                    setTimeout(() => {
+                        window.prediction(
+                            this.props.data, {
+                                predictionProgressDispatch: this.props.predictionProgressDispatch,
+                                id: id,
+                            }
+                        ).then(datapoints => {
+                            this.props.predictionStatusDispatch("success");
+                            
+                            this.setState({ predictionStatus: "success" });
+        
+                            this.props.predictionCompleteDispatch({
+                                id: id,
+                                datapoints: datapoints,
+                            });
+                            
+                            this.setState({
+                                showTrainingCheckbox: false
+                            });
 
-                        this.props.predictionStartDispatch(this.props.id)
-                        console.log(
-                            await window.prediction2(
-                                this.props.predictionProgressDispatch,
-                                this.props.id
-                            )
-                        );
-=======
->>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
-
-                        this.setState({ 
-                            predictedDatapoints: [1],
-                            predictionStateStatus: "success"
+                        }).catch( e => {
+                            this.props.predictionStatusDispatch("error");
+                            this.setState({ predictionStatus: "error" });
+                            throw(e);
                         });
+                    }, 2000);
 
-                        this.props.predictionStatusDispatch("success");
-
-<<<<<<< HEAD
-                    }, 1000);
-=======
-                    }, 5000);
->>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
-=======
+                } 
+                catch (e) { 
+                    this.props.predictionStatusDispatch("error"); 
                     
-                    this.props.predictionStartDispatch(this.props.id)
-
-                    this.setState({ 
-                        predictedDatapoints: [1],
-                        predictionStateStatus: "success"
-                    });            
->>>>>>> Stashed changes
-
-                } catch (e) {
-                    this.props.predictionStatusDispatch("error");
-                }                
+                    this.setState({
+                        showTrainingCheckbox: false
+                    });
+                }
             }
         }
     }
 
     render() {
 
-        let { predictionStatus } = this.props.predictionStatus;
-
         return ( 
             <div>
-<<<<<<< HEAD
 
-=======
->>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
                 <WidgetComponent 
                     { ...this.props }
                     { ...this.state }
 
-                    predictionStatus = { predictionStatus }
+                    predictionStatus = {
+                        this.props.predictionStatus == "training" ? 
+                                                        this.props.predictionStatus : this.state.predictionStatus
+                    }
+
+                    stopTrainingHandler = { this.stopTrainingHandler }
+
                     onChangeDrawLineHandler = { this.onChangeDrawLineHandler }
                     onEnablePredictionHandler = { this.onEnablePredictionHandler }
-<<<<<<< HEAD
-                    onChangePredictionHandler = { () => {}}
-                    data = {
-                        // add time feature here
-                        this.props.data.slice(0, 250)
-                    }
-=======
->>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
+                    onChangePredictionHandler = { () => {} }
                 />
             </div>
         )

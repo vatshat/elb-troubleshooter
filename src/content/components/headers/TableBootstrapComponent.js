@@ -44,13 +44,12 @@ export class ActualBootTableComponent extends React.Component {
     }
 
     _overlay() { 
-        const { toggleCapture, headersLength } = this.props;
+        const { acc_id, loading } = this.props;
 
-        if (toggleCapture) {
+        if (loading) {
             return (
                 <div>                 
-                    <h4>For performance reasons, cannot view headers while capturing. Stop capturing to view headers...</h4>
-                    <h5 style={{ color: 'rgb(203, 75, 22)' }}>Captured a total of <strong> { headersLength > 0? headersLength : 0 } </strong> HTTP headers so far</h5>
+                    <h4>Still getting details of EC2 instance in account  {acc_id} </h4>
                     <div id="loader" />
                 </div>
             );

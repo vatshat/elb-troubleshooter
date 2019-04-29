@@ -1,26 +1,6 @@
-
-let parseXMLJSON = xmlJSON => xmlJSON
-                                .GetMetricDataResponse
-                                .GetMetricDataResult[0]
-                                .MetricDataResults[0].member
-    .map(m => {
-        return {
-            id: m["Id"][0],
-            label: m["Label"][0],
-            metricData: m["Timestamps"][0]["member"]
-                        .map((timestamp, index) => {
-                            return {
-                                date: timestamp,
-                                value: +m["Values"][0]["member"][index] // convert string to number
-                            }
-                        })
-                        .sort((a, b) => a.date - b.date)
-        }
-    })
-
-export const responseMetricsAction = xmlJSON => ({
+export const responseMetricsAction = response => ({
     type: 'FETCH_METRICS_FULFILLED',
-    response: parseXMLJSON(xmlJSON)
+    response: response, 
 });
 
 export const requestMetricsAction = () => ({
@@ -46,10 +26,9 @@ export const errorCredsAction = errorMessage => ({
     errorMessage: errorMessage
 });
 
-export const predictionCompleteAction = datapoints => ({
+export const predictionCompleteAction = datapointsUpdate => ({
     type: 'PREDICTION_COMPLETED',
-    datapoints: datapoints,
-    id: id,
+    datapointsUpdate: datapointsUpdate,
 });
 
 export const predictionStatusAction = predictionStatus => ({
@@ -57,9 +36,8 @@ export const predictionStatusAction = predictionStatus => ({
     predictionStatus: predictionStatus
 });
 
-<<<<<<< HEAD
-export const predictionStartAction = id => ({
-    type: 'PREDICTION_START',
+export const predictionInitializeAction = id => ({
+    type: 'PREDICTION_INITIALIZE',
     id: id
 });
 
@@ -67,20 +45,3 @@ export const predictionProgressAction = predictionProgress => ({
     type: 'PREDICTION_PROGRESS',
     predictionProgress: predictionProgress
 });
-
-=======
->>>>>>> 16ea7a26e932f16e7c75a319b1326015f62e1faa
-/* 
-export const predictionErrorAction = errorMessage => ({
-    type: 'PREDICTION_ERROR',
-    errorMessage: errorMessage
-});
-
-export const predictionStartAction = () => ({
-    type: 'PREDICTION_START',
-});
-
-export const predictionStartAction = () => ({
-    type: 'PREDICTION_STOP',
-});
- */

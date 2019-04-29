@@ -39,19 +39,43 @@ tf.tidy(() => {
                             [predictedTestInputs.length, predictedTestInputs[0].length]
                         ).div(tf.scalar(10))
                     ).mul(10),
-                    unnormalize = tensor => Array.from(tensor.mul(stdDev).add(moments.mean).dataSync()),
+                    unnormalize = tensor => Array.from(tensor.mul(stdDev).add(moments.mean).dataSync()),                    
                     returnValue = {
                         "actualTestValueOutputs": unnormalize(tf.tensor1d(actualTestValueOutputs)),
                         "predictedTestOutputs": unnormalize(predictedTestOutputs),
                         "totalInputValues": unnormalize(tf.tensor1d(totalInputValues)),
                         "actualPredictionOutputs": unnormalize(actualPredictionOutputs),
                         totalDates,
-                    };
+                    },
+
+                    // add stDev to prediction 
+                    average = data => data.reduce((sum, value) => sum + value) / data.length,
+                    standardDeviation = values => Math.sqrt(average(values.map(value => (value - average(values)) ** 2))),                    
+                    bollinger = JSON.parse(JSON.stringify(returnValue["actualPredictionOutputs"]));
+
+                    for (let index = 0; index < bollinger.length; index++) {
+                        let
+                            arrCurrPos = bollinger.length - index + 1,
+                            valCurrPos = bollinger.length - index - 1;
+
+                        bollinger[valCurrPos] = {
+                            stdDev: standardDeviation([
+                                                        ...returnValue["totalInputValues"],
+                                                        ...returnValue["actualPredictionOutputs"],
+                                                    ].slice(0, arrCurrPos)
+                                    ),
+                            returnValue: bollinger[valCurrPos],
+                        }
+
+                    }
 
                 actualPredictionOutputs.dispose();
                 predictedTestOutputs.dispose();
 
-                return {...returnValue}
+                return {
+                    ...returnValue,
+                    bollinger
+                }
             },
             initializedModel = tf.sequential(),
             resultModel = await trainModel(parameterModel, initializedModel, predictionProgress)

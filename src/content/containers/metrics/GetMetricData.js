@@ -141,8 +141,33 @@ export const fetchMetricData = (props, abortController) => {
     .then( response => response.text() )
     .then(xml => {
         parseString(xml, (err, json) => {
+
             // add ajv validator before sending to store as success!!!!!!!!
-            props.responseMetricsDispatch(json);
+            props.responseMetricsDispatch(
+                json
+                    .GetMetricDataResponse
+                    .GetMetricDataResult[0]
+                    .MetricDataResults[0].member
+                    .map(m => {
+
+                        let widgetId = m["Id"][0];
+                        
+                        props.predictionInitializeDispatch(widgetId);
+
+                        return {
+                            id: widgetId,
+                            label: m["Label"][0],
+                            metricData: m["Timestamps"][0]["member"]
+                                .map((timestamp, index) => {
+                                    return {
+                                        date: timestamp,
+                                        value: +m["Values"][0]["member"][index] // convert string to number
+                                    }
+                                })
+                                .sort((a, b) => a.date - b.date)
+                        }
+                    })
+            );
         })
     })
     .catch(error => { props.errorMetricsActionDispatch(error.message) });
