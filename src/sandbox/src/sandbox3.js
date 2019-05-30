@@ -1,27 +1,37 @@
-import * as tf from '@tensorflow/tfjs-node'
 
-const    
-    randomValues = Array.from({length: 5}, () => Math.floor(Math.random() * 40));
-    
-console.time("test1")
+/* 
+import consoleLog from './consoleLog'
+import path from 'path'
+*/
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-const 
-    a = tf.tensor1d(randomValues),
-    moments = tf.moments(a),
-    stdDev = tf.sqrt(moments.variance)
-console.timeEnd("test1")
+class App extends React.Component {
+    state = {
+        test: "React testing",
+    }
 
-stdDev.print()
- 
-console.time("test2")
-const 
-    average = data => data.reduce((sum, value) => sum + value) / data.length,
-    standardDeviation = values => Math.sqrt(average(values.map(value => (value - average(values)) ** 2)));
-console.timeEnd("test2")
+    onClickHandler = this.onClickHandler.bind(this);
 
-console.log(`stDev ${standardDeviation(randomValues)} random:${randomValues}`)
+    onClickHandler() {
+        this.setState({test:"test direct es6 injection in script"});
+        /* 
+            window.tensorflow().then(prediction => {
+                this.setState({test: JSON.stringify(prediction)});
+            });
 
-console.log(
-    ...[1,2,3,4,5],
-    ...[6,7,8,9],
-)
+         */
+    }
+
+    render() {        
+        return (
+            <div>
+                <pre onClick={this.onClickHandler} id="test2">
+                    {this.state.test}
+                </pre>
+            </div>
+        );
+    }
+}
+
+ReactDOM.render(<App/>, document.getElementById('app'));

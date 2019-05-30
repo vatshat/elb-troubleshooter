@@ -52,6 +52,11 @@ const
                 "value": 1
             }]
         }],
+        metricTimeRanges: [{
+            "id": initialMetricsId,
+            "startTime": "1970-01-01T00:00:00Z",
+            "endTime": "1970-01-02T00:00:00Z"
+        }],
         selectedMetrics: {
             endtime: currentTime.toISOString(),
             startTime: new Date(currentTime.setDate(currentTime.getDate() - 12)).toISOString(),

@@ -6,7 +6,8 @@
     "scripts": {
         "test": "jest --watch",
         "build": "webpack --config webpack/webpack.config.js",
-        "sandbox-build": "webpack --config src/sandbox/src/webpack.config.js",
+        "sandbox-build": "webpack --config src/sandbox/src/webpack.config.js ",
+        "sandbox-devServer": "webpack-dev-server --config src/sandbox/src/webpack.config.js --hot --inline",
         "sandbox": "nodemon ./src/sandbox/src/sandbox3.js",
         "babel": "babel ./src/sandbox/src --out-dir ./src/sandbox/.babel.compiled --source-maps --watch",
         "mockGetMetricData": "node ./src/express/mockGetMetricData.js",
@@ -63,9 +64,11 @@
         "imports-loader": "^0.6.5",
         "less-loader": "^2.2.3",
         "loaders.css": "^0.1.2",
+        "moment": "^2.24.0",
         "path": "^0.12.7",
         "popper.js": "^1.14.6",
         "prop-types": "^15.6.2",
+        "rc-datetime-picker": "^1.6.1",
         "react": "^16.0.1",
         "react-bootstrap": "^0.32.3",
         "react-bootstrap-table": "^4.3.1",
@@ -127,6 +130,7 @@
         "sinon": "^7.2.2",
         "sinon-chrome": "^2.3.2",
         "style-loader": "^0.21.0",
-        "url-loader": "^1.1.2"
+        "url-loader": "^1.1.2",
+        "webpack-dev-server": "^2.11.5"
     }
 }

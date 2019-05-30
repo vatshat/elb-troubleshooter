@@ -1,34 +1,41 @@
-/* 
-import consoleLog from './consoleLog'
-import path from 'path'
-*/
+import React, {Component} from 'react';
+import moment from 'moment';
+import {DatetimePickerTrigger} from 'rc-datetime-picker';
+import ReactDOM from 'react-dom';
 
-class App extends React.Component {
-    state = {
-        test: "React testing",
-    }
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      moment: moment()
+    };
+  }
 
-    onClickHandler = this.onClickHandler.bind(this);
+  handleChange = (moment) => {
+    this.setState({
+      moment
+    });
+  }
 
-    onClickHandler() {
-        this.setState({test:"test direct es6 injection in script"});
-        /* 
-            window.tensorflow().then(prediction => {
-                this.setState({test: JSON.stringify(prediction)});
-            });
+  render() {
+    const shortcuts = {
+      'Today': moment(),
+      'Yesterday': moment().subtract(1, 'days'),
+      'Clear': ''
+    };
 
-         */
-    }
-
-    render() {        
-        return (
-            <div>
-                <pre onClick={this.onClickHandler} id="test2">
-                    {this.state.test}
-                </pre>
-            </div>
-        );
-    }
+    return (
+      <DatetimePickerTrigger
+        shortcuts={shortcuts} 
+        moment={this.state.moment}
+        onChange={this.handleChange}>
+        <input type="text" value={this.state.moment.format('YYYY-MM-DD HH:mm')} readOnly />
+      </DatetimePickerTrigger>
+    );
+  }
 }
 
-ReactDOM.render(<App/>, document.getElementById('container'));
+ReactDOM.render(
+  <App />,
+  document.getElementById('app2')
+);

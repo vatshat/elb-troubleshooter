@@ -1,6 +1,5 @@
 import React from 'react';
 import { func, object } from 'prop-types'
-import { timeParse } from 'd3-time-format'
 import WidgetContainer from './metrics/WidgetContainer'
 import * as GetMetricData from './metrics/GetMetricData';
 // import WidgetComponent from '../components/metrics/WidgetComponent'
@@ -26,18 +25,7 @@ const MetricsContainer = props => {
 
                         <WidgetContainer
                             errorMessage = {props.metricsReducer.errorMessage}
-                            data = { 
-                                metricWidget
-                                    .metricData
-                                    .map(x => {
-                                        return {
-                                            ...x,
-                                            date: timeParse("%Y-%m-%dT%H:%M:%SZ")(JSON.parse(JSON.stringify(x.date)))
-                                        }
-                                    })
-                                    .sort((a, b) => a.date - b.date)
-                            }
-                            dataMean = { metricWidget.metricData.reduce((total, dataPoint) => total + dataPoint.value, 0) / metricWidget.metricData.length }
+                            metricData = { metricWidget.metricData }                            
                             key = { metricWidget.id }
                             id = { metricWidget.id }
                             metricName = { metricWidget.label }

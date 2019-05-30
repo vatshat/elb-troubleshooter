@@ -3,7 +3,7 @@ import { array, oneOf, string } from 'prop-types'
 import { loadingSVG } from './LoadingSVG'
 
 // d3 imports
-import { line } from 'd3-shape'
+import { line, area } from 'd3-shape'
 import { brushX } from 'd3-brush'
 import { timeFormat } from 'd3-time-format'
 import { axisBottom, axisLeft } from 'd3-axis'
@@ -269,9 +269,20 @@ export default class D3SVGComponent extends React.Component {
 
         const { xScale, xScale2, yScale, yScale2, xAxis, xAxis2, yAxis } = this.updateAxis()
         
-        let drawFocusLine = line()
-            .x(d => xScale(d.date))
-            .y(d => yScale(d.value));
+        let 
+            drawFocusArea = area()
+                .x(d => {
+                    setTimeout(() => {
+                        let test = d;
+                    }, 1)
+                    return xScale(d.date);
+                })
+                .y0(d => yScale( d.value + (d.stDev * 2) ))
+                .y1(d => yScale( d.value - (d.stDev * 2) )),
+
+            drawFocusLine = line()
+                .x(d => xScale(d.date))
+                .y(d => yScale(d.value));
 
         const brushed = () => {
             const selection = event.selection;
@@ -283,6 +294,9 @@ export default class D3SVGComponent extends React.Component {
 
             this.focusGroup.selectAll(".line")
                 .attr("d", drawFocusLine);
+
+            this.focusGroup.selectAll(".area")
+                .attr("d", drawFocusArea);
         }
             
         const brush = brushX()
@@ -409,7 +423,7 @@ export default class D3SVGComponent extends React.Component {
 
             { //tooltips
                 const bisectDate = bisector(d => d.date).left,
-                        formatDate = timeFormat("%d-%b-%y");
+                        formatDate = timeFormat("%Y-%m-%dT%H:%M:%S.%LZ");
 
                 let mousemove = () => {
 
@@ -462,6 +476,35 @@ export default class D3SVGComponent extends React.Component {
                 }
 
             }
+
+            { // area graph
+
+                let 
+                    areaData = data.filter(x => "stDev" in x ),
+                    focusJoinArea = this.focusWidget.selectAll(".area").data([areaData]);
+
+                // [Update] transition from previous paths to new paths
+
+                this.focusWidget.selectAll('.area').attr('d', drawFocusArea)
+
+                // [Enter] any new data
+                focusJoinArea.enter()
+                    .append('path')
+                    .attr('class', 'area')
+                    .style('fill', 'lightsteelblue')
+                    .style('opacity', true ? '0.4' : '0' ) //add switch here
+                    .attr('d', drawFocusArea);
+
+                // [Exit]
+                focusJoinArea.exit()
+                    .remove();
+
+                // focusJoinArea
+                //     .transition()
+                //     .delay(1000)
+                //     .ease(easeLinear)
+                //     .style('stroke-width', this.props.drawLine ? '2px' : '0px')
+            }            
         }
 
         { // context G

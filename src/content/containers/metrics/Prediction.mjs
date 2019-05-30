@@ -39,41 +39,21 @@ tf.tidy(() => {
                             [predictedTestInputs.length, predictedTestInputs[0].length]
                         ).div(tf.scalar(10))
                     ).mul(10),
-                    unnormalize = tensor => Array.from(tensor.mul(stdDev).add(moments.mean).dataSync()),                    
-                    returnValue = {
-                        "actualTestValueOutputs": unnormalize(tf.tensor1d(actualTestValueOutputs)),
-                        "predictedTestOutputs": unnormalize(predictedTestOutputs),
-                        "totalInputValues": unnormalize(tf.tensor1d(totalInputValues)),
-                        "actualPredictionOutputs": unnormalize(actualPredictionOutputs),
-                        totalDates,
-                    },
+                    unnormalize = tensor => Array.from(tensor.mul(stdDev).add(moments.mean).dataSync()),
 
                     // add stDev to prediction 
-                    average = data => data.reduce((sum, value) => sum + value) / data.length,
-                    standardDeviation = values => Math.sqrt(average(values.map(value => (value - average(values)) ** 2))),                    
-                    bollinger = JSON.parse(JSON.stringify(returnValue["actualPredictionOutputs"]));
-
-                    for (let index = 0; index < bollinger.length; index++) {
-                        let
-                            arrCurrPos = bollinger.length - index + 1,
-                            valCurrPos = bollinger.length - index - 1;
-
-                        bollinger[valCurrPos] = {
-                            stdDev: standardDeviation([
-                                                        ...returnValue["totalInputValues"],
-                                                        ...returnValue["actualPredictionOutputs"],
-                                                    ].slice(0, arrCurrPos)
-                                    ),
-                            returnValue: bollinger[valCurrPos],
-                        }
-
-                    }
+                    average = data => ( data.length > 0 ? data.reduce((sum, value) => sum + value) / data.length : 0),
+                    standardDeviation = values => Math.sqrt(average(values.map(value => (value - average(values)) ** 2))),
+                    bollinger = unnormalize(actualPredictionOutputs).map((x, i, a) => ({
+                        stDev: standardDeviation(a.slice(0, i)),
+                        value: x,
+                    }));
 
                 actualPredictionOutputs.dispose();
                 predictedTestOutputs.dispose();
 
                 return {
-                    ...returnValue,
+                    totalDates,
                     bollinger
                 }
             },

@@ -6,6 +6,7 @@ import { Collapse, Fade, Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import WidgetOptions from './WidgetOptions'
 
+
 // Pure JS implementation instead of using Draggable libary - https://www.kirupa.com/html5/drag.htm
 
 import D3SVGComponent from './D3SVGComponent'
@@ -120,11 +121,9 @@ class WidgetComponent extends React.Component {
                         /> */
                     }
 
-                    <div className={"widget-handle-drag"}>
-                        
+                    <div className={"widget-handle-drag"}>                        
                         {
-                            this.props.fetchMetricStatus == "success" ?
-                            <WidgetOptions { ...this.props } /> : null
+                            this.props.fetchMetricStatus == "success" ? <WidgetOptions { ...this.props } /> : null
                         }
 
                         <Fade in={open ? open : (!open)}>
@@ -145,10 +144,6 @@ class WidgetComponent extends React.Component {
                             <D3SVGComponent
                                 { ...this.state }
                                 { ...this.props }
-                                data = {
-                                    // add time feature here
-                                    this.props.data.slice(0, 250)
-                                }
                             />
                         </div>
                     </Collapse>

@@ -2,6 +2,7 @@ import React from 'react';
 import { func } from 'prop-types'
 import ListGroup from 'react-bootstrap/lib/ListGroup'
 import { Alert, Panel, Checkbox, ListGroupItem, Table } from 'react-bootstrap';
+import DateTimePicker from './DateTimePicker';
 
 class WidgetOptions extends React.Component {
 
@@ -91,7 +92,8 @@ class WidgetOptions extends React.Component {
                         </Panel.Body>
                     </Panel.Collapse>                    
                 </Panel>
-            );
+            ),
+            panelExpand = (predictionStatus == "training" || predictionStatus == "success");
 
         switch (predictionStatus) {
             case "initial":
@@ -165,18 +167,13 @@ class WidgetOptions extends React.Component {
             <div className={"widget-options"}>
                 <span className={"widget-drag col-sm-1"}></span>
 
-                <div 
-                    className={
-                        `col-sm-${
-                            (predictionStatus == "training" || predictionStatus == "success") ? 5: 9
-                        }`
-                    }
-                >
-                </div>
+                <div className={`col-sm-1`} ></div>
                 
-                <Panel className={`col-sm-${
-                    (predictionStatus == "training" || predictionStatus == "success") ? 6: 2
-                }`}>
+                <DateTimePicker { ...this.props } />
+
+                <div className={`col-sm-${ panelExpand ? 1: 5 }`} ></div>
+                                
+                <Panel className={`col-sm-${ panelExpand ? 6: 2 }`}>
                     <Panel.Heading>
                         <Panel.Title toggle>Widget Options:</Panel.Title>
                     </Panel.Heading>

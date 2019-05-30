@@ -1,6 +1,7 @@
 import React from 'react';
 import { func, oneOf } from 'prop-types';
 import WidgetComponent from '../../components/metrics/WidgetComponent';
+import { timeParse } from 'd3-time-format'
 
 import Prediction from './Prediction.mjs'
 import TensorFlowRNN from './TensorFlowRNN.mjs'
@@ -11,11 +12,45 @@ class WidgetContainer extends React.Component {
         predictionStatus: oneOf(['training', 'error', "success", "initial"]).isRequired,
     }
     
+    componentWillReceiveProps({ predictionStatus, predictedDatapoints }) {
+
+        if (
+            predictionStatus == "success" &&
+            "bollinger" in predictedDatapoints &&
+            predictedDatapoints.length !== this.props.predictedDatapoints.length
+        ) {
+            let
+                { totalDates, bollinger } = predictedDatapoints,
+                newData = [
+                    ...this.state.data,
+                    ...bollinger.map((x, i, a) => ({                        
+                            date: timeParse("%Y-%m-%dT%H:%M:%S.%LZ")(totalDates[totalDates.length - a.length + i]),
+                            value: x.value,
+                            stDev: x.stDev,                        
+                    }))
+                    .sort((a, b) => a.date - b.date),
+                ];
+
+            this.setState({
+                data:newData,
+                dataMean: newData.reduce((total, dataPoint) => total + dataPoint.value, 0) / newData.length,
+            })
+        }
+    }
+
     state = {
         drawLine: true,
         showTrainingCheckbox: false, 
         disableTraining: false,
         predictionStatus: "initial",
+        data: this.props.metricData.map(x => {
+                return {
+                    ...x,
+                    date: timeParse("%Y-%m-%dT%H:%M:%SZ")(JSON.parse(JSON.stringify(x.date)))
+                }
+            })
+            .sort((a, b) => a.date - b.date),
+        dataMean: this.props.metricData.reduce((total, dataPoint) => total + dataPoint.value, 0) / this.props.metricData.length,
     }
     
     stopTrainingHandler = checked => {
@@ -53,7 +88,7 @@ class WidgetContainer extends React.Component {
 
                     setTimeout(() => {
                         window.prediction(
-                            this.props.data, {
+                            this.state.data, {
                                 predictionProgressDispatch: this.props.predictionProgressDispatch,
                                 id: id,
                             }
@@ -92,6 +127,8 @@ class WidgetContainer extends React.Component {
 
     render() {
 
+        let { predictionStatus } = this.props
+
         return ( 
             <div>
 
@@ -99,9 +136,13 @@ class WidgetContainer extends React.Component {
                     { ...this.props }
                     { ...this.state }
 
+                    data = {
+                        // add time feature here
+                        this.state.data.slice(-250)
+                    }
+
                     predictionStatus = {
-                        this.props.predictionStatus == "training" ? 
-                                                        this.props.predictionStatus : this.state.predictionStatus
+                        this.props.predictionStatus == "training" ? predictionStatus : this.state.predictionStatus
                     }
 
                     stopTrainingHandler = { this.stopTrainingHandler }

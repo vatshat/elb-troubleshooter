@@ -56,13 +56,19 @@ div.widget-handle-drag {
     }
 
     form,
-    .glyphicon {
+    .glyphicon-chevron-up,
+    .glyphicon-question-sign {
         cursor: pointer;
         float: right;
         padding: 10px;
         margin: 10px;
     }
 
+    .timeRange label,
+    .timeRange > div {
+        margin: 5px 0;
+    }
+    
 }
 
 .widget-scrollbar {
