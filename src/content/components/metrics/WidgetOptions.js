@@ -11,14 +11,14 @@ class WidgetOptions extends React.Component {
         onChangePredictionHandler: func.isRequired,
         onChangeDrawLineHandler: func.isRequired,
     }
-    
-    state = { 
+
+    state = {
         open: true,
     }
 
     render() {
 
-        let 
+        let
             trainingElement,
             { predictionStatus, predictionProgress, showTrainingCheckbox } = this.props,
             resultsElement = predictionProgress => {
@@ -37,17 +37,17 @@ class WidgetOptions extends React.Component {
                                         {
                                             `The model currently has ${predictionProgress.slice(-1)[0].minLoss.loss} loss.`
                                         }
-                                    </p>                                    
+                                    </p>
                                     <p>
                                         {
                                             `Currently on epoch/iteration ${predictionProgress.slice(-1)[0].iteration} of training.`
                                         }
-                                    </p>                                    
+                                    </p>
                                     <p>
                                         {
                                             `This loss value hasn't improved in the past ${predictionProgress.slice(-1)[0].epoches} epoches/iteration.`
                                         }
-                                    </p>                                    
+                                    </p>
                                     <p>
                                         {
                                             `The model will stop being trained if the loss doesn't improve for 18 iterations or after 200 epoches.`
@@ -64,7 +64,7 @@ class WidgetOptions extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            predictionProgress.map((item, index) => 
+                                            predictionProgress.map((item, index) =>
                                                     <tr key={index}>
                                                         <td>{item.iteration}</td>
                                                         <td>{item.minLoss.epoches}</td>
@@ -74,7 +74,7 @@ class WidgetOptions extends React.Component {
                                         }
                                     </tbody>
                                 </Table>
-                            </div>                    
+                            </div>
                 )
             },
             trainingResults = (
@@ -85,12 +85,12 @@ class WidgetOptions extends React.Component {
                     <Panel.Collapse>
                         <Panel.Body>
                             {
-                                predictionProgress != undefined ? 
+                                predictionProgress != undefined ?
                                     resultsElement(predictionProgress)
                                     : null
                             }
                         </Panel.Body>
-                    </Panel.Collapse>                    
+                    </Panel.Collapse>
                 </Panel>
             ),
             panelExpand = (predictionStatus == "training" || predictionStatus == "success");
@@ -104,27 +104,27 @@ class WidgetOptions extends React.Component {
                 </button>
 
                 break;
-            
+
             case "error":
-                trainingElement = <div 
-                                        variant="danger" 
-                                        role="alert" 
+                trainingElement = <div
+                                        variant="danger"
+                                        role="alert"
                                         className="alert alert-danger"
-                                    > 
+                                    >
                                         Error occured during training
                                     </div>
                 break;
 
             case "training":
-                trainingElement = 
+                trainingElement =
                                 <div className="training-results">
-                                    <Alert 
+                                    <Alert
                                         variant="secondary">
                                         Training data...
                                         <hr />
                                         {
                                             showTrainingCheckbox ?
-                                                <Checkbox 
+                                                <Checkbox
                                                     inline
                                                     id={`stop-${this.props.id}`}
                                                     disabled={this.props.disableTraining}
@@ -139,11 +139,11 @@ class WidgetOptions extends React.Component {
                                     { showTrainingCheckbox ? trainingResults : null }
                                 </div>
                 break;
-            
+
             case "success":
-                trainingElement = 
+                trainingElement =
                                 <div className="training-results">
-                                    <Checkbox 
+                                    <Checkbox
                                         inline
                                         onChange={this.props.onChangePredictionHandler}
                                     >
@@ -152,54 +152,54 @@ class WidgetOptions extends React.Component {
                                     {trainingResults}
                                 </div>
                 break;
-                
+
             default:
-                trainingElement = <div 
-                                        variant="danger" 
-                                        role="alert" 
+                trainingElement = <div
+                                        variant="danger"
+                                        role="alert"
                                         className="alert alert-danger"
-                                    > 
+                                    >
                                         {`Some error occured can't continue with training`}
                                     </div>
         }
-        
+
         return (
             <div className={"widget-options"}>
                 <span className={"widget-drag col-sm-1"}></span>
 
                 <div className={`col-sm-1`} ></div>
-                
+
                 <DateTimePicker { ...this.props } />
 
                 <div className={`col-sm-${ panelExpand ? 1: 5 }`} ></div>
-                                
+
                 <Panel className={`col-sm-${ panelExpand ? 6: 2 }`}>
                     <Panel.Heading>
                         <Panel.Title toggle>Widget Options:</Panel.Title>
                     </Panel.Heading>
                     <Panel.Collapse>
-                        <Panel.Body>     
+                        <Panel.Body>
                             <ListGroup>
                                 <ListGroupItem>
                                     {trainingElement}
                                 </ListGroupItem>
                                 <ListGroupItem variant="secondary">
-                                    <Checkbox 
+                                    <Checkbox
                                         inline
                                         defaultChecked={true}
                                         onChange={this.props.onChangeDrawLineHandler}
-                                    >                            
+                                    >
                                         Draw Line
                                     </Checkbox>
                                 </ListGroupItem>
-                                <ListGroupItem variant="secondary">                                    
+                                <ListGroupItem variant="secondary">
                                     <Checkbox inline>Multi-AZ</Checkbox>
-                                </ListGroupItem>                            
+                                </ListGroupItem>
                             </ListGroup>
                         </Panel.Body>
                     </Panel.Collapse>
-                    
-                </Panel>   
+
+                </Panel>
             </div>
         )
     }

@@ -11,7 +11,7 @@ class WidgetContainer extends React.Component {
         predictionStatusDispatch: func.isRequired,
         predictionStatus: oneOf(['training', 'error', "success", "initial"]).isRequired,
     }
-    
+
     componentWillReceiveProps({ predictionStatus, predictedDatapoints }) {
 
         if (
@@ -23,10 +23,10 @@ class WidgetContainer extends React.Component {
                 { totalDates, bollinger } = predictedDatapoints,
                 newData = [
                     ...this.state.data,
-                    ...bollinger.map((x, i, a) => ({                        
+                    ...bollinger.map((x, i, a) => ({
                             date: timeParse("%Y-%m-%dT%H:%M:%S.%LZ")(totalDates[totalDates.length - a.length + i]),
                             value: x.value,
-                            stDev: x.stDev,                        
+                            stDev: x.stDev,
                     }))
                     .sort((a, b) => a.date - b.date),
                 ];
@@ -40,7 +40,7 @@ class WidgetContainer extends React.Component {
 
     state = {
         drawLine: true,
-        showTrainingCheckbox: false, 
+        showTrainingCheckbox: false,
         disableTraining: false,
         predictionStatus: "initial",
         data: this.props.metricData.map(x => {
@@ -52,7 +52,7 @@ class WidgetContainer extends React.Component {
             .sort((a, b) => a.date - b.date),
         dataMean: this.props.metricData.reduce((total, dataPoint) => total + dataPoint.value, 0) / this.props.metricData.length,
     }
-    
+
     stopTrainingHandler = checked => {
         if (checked) {
             this.setState({
@@ -63,7 +63,7 @@ class WidgetContainer extends React.Component {
 
     onChangeDrawLineHandler = eventChecked => {
         this.setState({
-            drawLine: eventChecked.target.checked, 
+            drawLine: eventChecked.target.checked,
         });
     }
 
@@ -75,11 +75,11 @@ class WidgetContainer extends React.Component {
 
                 this.props.predictionStatusDispatch(
                     eventChecked.target.checked == "show" ? "hide" : "show"
-                );                
+                );
             }
             else {
-                try { 
-                    this.props.predictionStatusDispatch("training"); 
+                try {
+                    this.props.predictionStatusDispatch("training");
                     const { id } = this.props;
 
                     this.setState({
@@ -94,14 +94,14 @@ class WidgetContainer extends React.Component {
                             }
                         ).then(datapoints => {
                             this.props.predictionStatusDispatch("success");
-                            
+
                             this.setState({ predictionStatus: "success" });
-        
+
                             this.props.predictionCompleteDispatch({
                                 id: id,
                                 datapoints: datapoints,
                             });
-                            
+
                             this.setState({
                                 showTrainingCheckbox: false
                             });
@@ -113,10 +113,10 @@ class WidgetContainer extends React.Component {
                         });
                     }, 2000);
 
-                } 
-                catch (e) { 
-                    this.props.predictionStatusDispatch("error"); 
-                    
+                }
+                catch (e) {
+                    this.props.predictionStatusDispatch("error");
+
                     this.setState({
                         showTrainingCheckbox: false
                     });
@@ -129,10 +129,10 @@ class WidgetContainer extends React.Component {
 
         let { predictionStatus } = this.props
 
-        return ( 
+        return (
             <div>
 
-                <WidgetComponent 
+                <WidgetComponent
                     { ...this.props }
                     { ...this.state }
 
