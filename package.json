@@ -33,7 +33,7 @@
         "abortcontroller-polyfill": "^1.2.3",
         "aws-sdk": "^2.401.0",
         "aws4": "^1.8.0",
-        "axios": "^0.18.0",
+        "axios": "^0.21.1",
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.3",
         "babel-loader": "^7.1.5",
